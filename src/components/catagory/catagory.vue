@@ -23,5 +23,8 @@
 </script>
 
 <style>
-
+    .catagory{
+        width: 65%;
+        text-align: center;
+    }
 </style>

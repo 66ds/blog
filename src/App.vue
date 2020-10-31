@@ -40,6 +40,7 @@ export default {
 #particles-js{
   width: 100%;
   height: calc(100%);
-  position: absolute;
+  position: fixed;
+  z-index: -999;
 }
 </style>

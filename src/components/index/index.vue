@@ -276,7 +276,6 @@
 <style>
     .index {
         width: 65%;
-        margin: 0 auto;
         display: flex;
         justify-content: space-between;
         margin-top: 20px;
@@ -336,6 +335,9 @@
         margin-right: 10px;
     }
 
+    .el-card {
+        background-color: unset!important;
+    }
     .el-card .item .el-link {
         display: block;
         line-height: 2.5;

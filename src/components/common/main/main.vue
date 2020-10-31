@@ -28,6 +28,8 @@
 <style>
     .el-main {
         margin-top: 60px;
-        z-index: 2;
+        padding: 20px 0 !important;
+        justify-content: center;
+        display: flex !important;
     }
 </style>

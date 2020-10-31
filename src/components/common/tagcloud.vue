@@ -1,7 +1,8 @@
 <template>
     <div class="tagcloud-all"
          ref="tagcloudall">
-        <a v-for="item in tagList" :href="item.url" :style="'color:' + item.color + ';top: 0;left: 0;filter:none;'" :key="item.color">{{item.name}}</a>
+        <a v-for="item in tagList" :href="item.url" :style="'color:' + item.color + ';top: 0;left: 0;filter:none;'"
+           :key="item.color">{{item.name}}</a>
     </div>
 </template>
 
@@ -183,36 +184,36 @@
             query() {
                 // 假装从接口拿回来的数据
                 let tagListOrg = [
-                    { name: '标签1', url: 'www.baidu.com' },
-                    { name: '标签2', url: 'www.baidu.com' },
-                    { name: '标签3', url: 'www.baidu.com' },
-                    { name: '标签4', url: 'www.baidu.com' },
-                    { name: '标签5', url: 'www.baidu.com' },
-                    { name: '标签6', url: 'www.baidu.com' },
-                    { name: '标签7', url: 'www.baidu.com' },
-                    { name: '标签8', url: 'www.baidu.com' },
-                    { name: '标签9', url: 'www.baidu.com' },
-                    { name: '标签10', url: 'www.baidu.com' },
-                    { name: '标签11', url: 'www.baidu.com' },
-                    { name: '标签12', url: 'www.baidu.com' },
-                    { name: '标签13', url: 'www.baidu.com' },
-                    { name: '标签14', url: 'www.baidu.com' },
-                    { name: '标签15', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签16', url: 'www.baidu.com' },
-                    { name: '标签17', url: 'www.baidu.com' }
+                    {name: '标签1', url: 'www.baidu.com'},
+                    {name: '标签2', url: 'www.baidu.com'},
+                    {name: '标签3', url: 'www.baidu.com'},
+                    {name: '标签4', url: 'www.baidu.com'},
+                    {name: '标签5', url: 'www.baidu.com'},
+                    {name: '标签6', url: 'www.baidu.com'},
+                    {name: '标签7', url: 'www.baidu.com'},
+                    {name: '标签8', url: 'www.baidu.com'},
+                    {name: '标签9', url: 'www.baidu.com'},
+                    {name: '标签10', url: 'www.baidu.com'},
+                    {name: '标签11', url: 'www.baidu.com'},
+                    {name: '标签12', url: 'www.baidu.com'},
+                    {name: '标签13', url: 'www.baidu.com'},
+                    {name: '标签14', url: 'www.baidu.com'},
+                    {name: '标签15', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签16', url: 'www.baidu.com'},
+                    {name: '标签17', url: 'www.baidu.com'}
                 ];
                 // 给tagList添加随机颜色
                 tagListOrg.forEach(item => {
@@ -251,7 +252,7 @@
                     }
                     setInterval(() => {
                         this.update()
-                    }, 60);            // 定时器执行 不能写setInterval(this.update(), 30)
+                    }, 10);            // 定时器执行 不能写setInterval(this.update(), 30)
                 })
             }
         },
@@ -268,18 +269,20 @@
         position: relative;
         cursor: pointer;
         height: 300px;
-    a {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        color: #fff;
-        font-weight: bold;
-        text-decoration: none;
-        padding: 3px 6px;
-    &:hover {
-         color: #FF0000;
-         letter-spacing: 2px;
-     }
-    }
+
+        a {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 3px 6px;
+
+            &:hover {
+                color: #FF0000;
+                letter-spacing: 2px;
+            }
+        }
     }
 </style>

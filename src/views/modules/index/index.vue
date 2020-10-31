@@ -29,15 +29,6 @@
         line-height: 60px;
     }
 
-    .el-aside {
-        background-color: #D3DCE6;
-        color: #333;
-        text-align: center;
-        line-height: 200px;
-    }
-
-
-
     body > .el-container {
         margin-bottom: 40px;
     }
