@@ -2,7 +2,7 @@
     <div class="tags">
             <div class="tag-cloud">
                 <div class="tag-cloud-title">目前共计 55 个标签</div>
-                <div  class="tag-cloud-tags" style="min-height: 350px;">
+                <div  class="tag-cloud-tags animated zoomIn" style="min-height: 350px;">
                     <li data-v-216999c2="" style="font-size: 30px; color: rgb(144, 91, 91);">PHP</li>
                     <li data-v-216999c2="" style="font-size: 19.92px; color: rgb(71, 128, 105);">MySQL</li>
                     <li data-v-216999c2="" style="font-size: 23.52px; color: rgb(73, 81, 61);">Python</li>

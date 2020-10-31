@@ -336,7 +336,7 @@
     }
 
     .el-card {
-        background-color: unset!important;
+        background-color: unset;
     }
     .el-card .item .el-link {
         display: block;

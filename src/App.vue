@@ -41,6 +41,6 @@ export default {
   width: 100%;
   height: calc(100%);
   position: fixed;
-  z-index: -999;
+  z-index: -1;
 }
 </style>
