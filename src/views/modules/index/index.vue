@@ -1,11 +1,11 @@
 <template>
     <div id="app">
-        <el-container>
+        <el-container class="is-vertical">
             <index-header/>
             <index-main>
                 <router-view></router-view>
             </index-main>
-            <el-footer></el-footer>
+            <index-footer></index-footer>
         </el-container>
     </div>
 </template>
@@ -13,24 +13,22 @@
 <script>
     import IndexHeader from '../../../components/common/header/header'
     import IndexMain from '../../../components/common/main/main'
+    import IndexFooter from '../../../components/common/footer/footer'
     export default {
         name: 'Index',
         components: {
             IndexHeader,
-            IndexMain
+            IndexMain,
+            IndexFooter
         }
     }
 </script>
 
 <style>
-   .el-footer {
-        color: #333;
-        text-align: center;
-        line-height: 60px;
+    .el-container.is-vertical {
+        -ms-flex-direction: column;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        flex-direction: column;
     }
-
-    body > .el-container {
-        margin-bottom: 40px;
-    }
-
 </style>

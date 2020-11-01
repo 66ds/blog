@@ -7,7 +7,7 @@ export default new VRouter({
         {
             path:'/',
             name:'main',
-            component: ()=>import("../components/index/index.vue")
+            component: ()=>import("../components/home/home.vue")
         },
         {
             path:'/tags',

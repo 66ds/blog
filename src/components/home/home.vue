@@ -11,7 +11,7 @@
                     <el-link icon="el-icon-chat-line-round">评论数:0</el-link>
                 </div>
                 <div>
-                    爱斯达克了解到看来大家都加端口连接阿达阿达dasdnhasldjasd大大大克拉拉我达瓦大环境案沙迪克敬爱的啊dasdjaskldjkldjlasdjldjaldasdasdada实打实的对话框
+                    爱斯达克了解到看来大家都加端口连接阿达阿达dasdnhasldjasd大大大克拉拉我达瓦大环境案沙迪克敬爱的啊呜哇我是你们，阿大开大实打实的对话框
                 </div>
                 <div>
                     <el-tag>标签一</el-tag>
@@ -326,9 +326,14 @@
     }
 
     .left-box-card > div > div:nth-child(3) {
-        line-height: 25px;
+        line-height: 35px;
         letter-spacing: 1px;
         font-size: 15px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
 
     .left-box-card > div > div:nth-child(4) > span {
@@ -338,6 +343,7 @@
     .el-card {
         background-color: unset;
     }
+
     .el-card .item .el-link {
         display: block;
         line-height: 2.5;
@@ -363,5 +369,20 @@
         display: inline-block;
         width: 50%;
         line-height: 2;
+    }
+
+    @media screen and (max-width: 900px) and (min-width: 0px) {
+        .right {
+            display: none;
+        }
+
+        .index {
+            width: 100%;
+        }
+
+        .left {
+            width: 100%;
+            padding: 0 20px;
+        }
     }
 </style>
