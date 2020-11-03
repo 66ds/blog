@@ -127,7 +127,7 @@
         display: none;
     }
 
-    @media screen and (max-width: 900px) and (min-width: 0px)
+    @media screen and (max-width: 1000px) and (min-width: 0px)
     {
         .el-menu-demo {
             display: none;

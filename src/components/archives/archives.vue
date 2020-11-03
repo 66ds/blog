@@ -1,20 +1,19 @@
 <template>
     <div class="archives">
         <el-row :gutter="10">
-            <el-col :sm="4" class="catagory-left">
+            <el-col :sm="4" class="archives-left">
                 <div>
                     <el-timeline :reverse="reverse">
                         <el-timeline-item
                                 v-for="(activity, index) in activities"
                                 :key="index"
                                 :timestamp="activity.timestamp">
-                            {{activity.content}}
                         </el-timeline-item>
                     </el-timeline>
                 </div>
             </el-col>
-            <el-col :sm="20" class="catagory-right">
-                <el-card class="right-catagory-card">
+            <el-col :sm="20" class="archives-right">
+                <el-card class="archives-right-card">
                     <div><a href="www.baidu.com">Java设计模式</a></div>
                     <div>
                         <el-link icon="el-icon-user">作者:Mr Qian</el-link>&nbsp;|&nbsp;
@@ -33,7 +32,7 @@
                         <el-tag type="warning">标签四</el-tag>
                     </div>
                 </el-card>
-                <el-card class="right-catagory-card">
+                <el-card class="archives-right-card">
                     <div><a href="www.baidu.com">Java设计模式</a></div>
                     <div>
                         <el-link icon="el-icon-user">作者:Mr Qian</el-link>&nbsp;|&nbsp;
@@ -52,7 +51,7 @@
                         <el-tag type="warning">标签四</el-tag>
                     </div>
                 </el-card>
-                <el-card class="right-catagory-card">
+                <el-card class="archives-right-card">
                     <div><a href="www.baidu.com">Java设计模式</a></div>
                     <div>
                         <el-link icon="el-icon-user">作者:Mr Qian</el-link>&nbsp;|&nbsp;
@@ -71,7 +70,7 @@
                         <el-tag type="warning">标签四</el-tag>
                     </div>
                 </el-card>
-                <el-card class="right-catagory-card">
+                <el-card class="archives-right-card">
                     <div><a href="www.baidu.com">Java设计模式</a></div>
                     <div>
                         <el-link icon="el-icon-user">作者:Mr Qian</el-link>&nbsp;|&nbsp;
@@ -156,6 +155,21 @@
                     }, {
                         content: '创建成功',
                         timestamp: '2018-04-11'
+                    }, {
+                        content: '创建成功',
+                        timestamp: '2018-04-11'
+                    }, {
+                        content: '创建成功',
+                        timestamp: '2018-04-11'
+                    }, {
+                        content: '创建成功',
+                        timestamp: '2018-04-11'
+                    }, {
+                        content: '创建成功',
+                        timestamp: '2018-04-11'
+                    }, {
+                        content: '创建成功',
+                        timestamp: '2018-04-11'
                     }]
             }
         },
@@ -173,26 +187,30 @@
         margin-top: 20px;
     }
 
-    .archives .catagory-left {
+    .archives .archives-left {
         position: fixed;
+        bottom: 120px;
+        top:100px;
+        overflow: auto;
+    }
+    .archives .archives-left::-webkit-scrollbar {
+        width: 0;
     }
 
-
-
-    .right-catagory-card {
+    .archives-right-card {
         width: 100%;
         margin-bottom: 20px;
     }
 
-    .right-catagory-card > div > div {
+    .archives-right-card > div > div {
         padding: 10px 0;
     }
 
-    .right-catagory-card > div > div:nth-child(1) {
+    .archives-right-card > div > div:nth-child(1) {
         font-size: 20px;
     }
 
-    .right-catagory-card > div > div:nth-child(3) {
+    .archives-right-card > div > div:nth-child(3) {
         line-height: 35px;
         letter-spacing: 1px;
         font-size: 15px;
@@ -203,7 +221,7 @@
         -webkit-box-orient: vertical;
     }
 
-    .right-catagory-card > div > div:nth-child(4) > span {
+    .archives-right-card > div > div:nth-child(4) > span {
         margin-right: 10px;
 
     }
@@ -215,19 +233,19 @@
     }
 
     @media screen and (min-width: 768px) {
-        .catagory-right {
+        .archives-right {
             margin-left: 17%;
         }
     }
     @media screen and (max-width: 768px){
-        .archives .catagory-left {
+        .archives .archives-left {
             z-index: 999;
             left: 0;
             top: 20%;
             width: 30%;
             background-color: #fff;
             padding: 0;
-            text-align: center;
+            overflow: auto;
         }
     }
 </style>

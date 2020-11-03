@@ -2,7 +2,7 @@
     <div class="article">
         <el-card class="article-box-card animated fadeIn">
             <h2>java设计模式</h2>
-            <div style="display: flex;justify-content: center">
+            <div style="text-align: center">
                 <el-link icon="el-icon-time">发表于:2020-9-7</el-link>&nbsp;|&nbsp;
                 <el-link icon="el-icon-s-unfold">分类:小数</el-link>&nbsp;|&nbsp;
                 <el-link icon="el-icon-view">阅读量:900</el-link>&nbsp;|&nbsp;
@@ -190,6 +190,13 @@
         padding-bottom: 10px;
     }
 
+    .article .el-link i {
+        font-size: 14px;
+        color: #437dff;
+        font-weight: 700;
+        padding: 0 5px 0 0;
+    }
+
     .article .content{
         padding-top: 20px;
     }
@@ -304,7 +311,7 @@
         line-height: 36px;
         margin-left: 70px;
     }
-    @media screen and (max-width: 900px) and (min-width: 0px){
+    @media screen and (max-width: 1000px) and (min-width: 0px){
         .article{
             width: 100%;
             padding: 0 20px;
@@ -313,5 +320,4 @@
             flex-direction: column;
         }
     }
-
 </style>
