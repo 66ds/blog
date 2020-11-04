@@ -297,27 +297,37 @@
         line-height: 18px;
         letter-spacing: 1px;
     }
-    .el-form .form-top{
+    .article .el-form .form-top{
         display: flex;
     }
-    .el-form .form-top .el-form-item {
+    .article .el-form .form-top .el-form-item {
         flex: 1;
     }
-    .el-form-item__content{
+    .article .el-form-item__content{
         line-height: 0px !important;
     }
-    .commnet-total {
+    .article .commnet-total {
         color: #303133;
         line-height: 36px;
         margin-left: 70px;
     }
+
     @media screen and (max-width: 1000px) and (min-width: 0px){
         .article{
             width: 100%;
             padding: 0 20px;
         }
-        .form-top{
+        .article .form-top{
             flex-direction: column;
+        }
+        .article .commnet-total{
+            margin-left: 0px;
+        }
+        .article .comment ul{
+            padding-left: 0px;
+        }
+        .article .el-form-item__label{
+            text-align: left;
         }
     }
 </style>

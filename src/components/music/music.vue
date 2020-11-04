@@ -1,6 +1,6 @@
 <template>
     <div class="music">
-        music
+        抱歉 还没开发完呢!
     </div>
 </template>
 

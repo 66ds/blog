@@ -29,14 +29,14 @@
             <div class="logo"><a href="www.baidu.com">Mr Qian的博客</a></div>
             <div :class="[isShow==false?'header-change animated rotateIn':'header-change animated rotateOut']"  v-bind:style="{'display':display}">
                 <ul>
-                    <li><a href="http://192.168.2.128:8080/">首页</a></li>
-                    <li><a href="http://192.168.2.128:8080/tags">标签</a></li>
-                    <li><a href="http://192.168.2.128:8080/catagory">分类</a></li>
-                    <li><a>归档</a></li>
-                    <li><a>留言板</a></li>
-                    <li><a>友链</a></li>
-                    <li><a>音乐站</a></li>
-                    <li><a>关于</a></li>
+                    <li><a href="http://192.168.0.106:8080/">首页</a></li>
+                    <li><a href="http://192.168.0.106:8080/tags">标签</a></li>
+                    <li><a href="http://192.168.0.106:8080/catagory">分类</a></li>
+                    <li><a href="http://192.168.0.106:8080/archives">归档</a></li>
+                    <li><a href="http://192.168.0.106:8080/message">留言板</a></li>
+                    <li><a href="http://192.168.0.106:8080/link">友链</a></li>
+                    <li><a href="http://192.168.0.106:8080/music">音乐站</a></li>
+                    <li><a href="http://192.168.0.106:8080/about">关于</a></li>
                 </ul>
             </div>
         </el-header>
