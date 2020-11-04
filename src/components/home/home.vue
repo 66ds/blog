@@ -1,6 +1,6 @@
 <template>
     <div class="index">
-        <div class="left">
+        <div class="left animated fadeInLeft">
             <el-card class="left-box-card">
                 <div><a href="www.baidu.com">Java设计模式</a></div>
                 <div>
@@ -155,7 +155,7 @@
             </el-card>
 
         </div>
-        <div class="right">
+        <div class="right animated fadeInRight">
             <el-card class="right-box-card">
                 <div slot="header" class="clearfix">
                     <i class="el-icon-picture" style="color: orange"></i>&nbsp;<span>我的名片</span>

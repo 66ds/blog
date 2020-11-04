@@ -1,7 +1,7 @@
 <template>
     <div class="catagory">
         <el-row :gutter="10">
-            <el-col :sm="4" class="catagory-left">
+            <el-col :sm="4" class="catagory-left animated fadeInLeft">
                 <div>
                     <el-link :underline="false">全部</el-link>
                     <el-link :underline="false">Nginx</el-link>
@@ -10,7 +10,7 @@
                     <el-link :underline="false">PHP</el-link>
                 </div>
             </el-col>
-            <el-col :sm="20" class="catagory-right">
+            <el-col :sm="20" class="catagory-right animated fadeInRight">
                 <el-card class="right-catagory-card">
                     <div><a href="www.baidu.com">Java设计模式</a></div>
                     <div>

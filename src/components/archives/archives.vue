@@ -1,7 +1,7 @@
 <template>
     <div class="archives">
         <el-row :gutter="10">
-            <el-col :sm="4" class="archives-left">
+            <el-col :sm="4" class="archives-left animated fadeInLeft">
                 <div>
                     <el-timeline :reverse="reverse">
                         <el-timeline-item
@@ -12,7 +12,7 @@
                     </el-timeline>
                 </div>
             </el-col>
-            <el-col :sm="20" class="archives-right">
+            <el-col :sm="20" class="archives-right animated fadeInRight">
                 <el-card class="archives-right-card">
                     <div><a href="www.baidu.com">Java设计模式</a></div>
                     <div>
