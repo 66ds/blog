@@ -5,38 +5,42 @@
                 <i :class="[isShow==true?'el-icon-s-operation':'el-icon-close']" @click="operate"></i>
             </div>
             <div class="header">
-                <el-menu router :default-active="this.$route.path" class="el-menu-demo animated bounce" :mode="mode"
+                <el-menu router :default-active="this.$route.path" class="el-menu-demo animated bounceIn" :mode="mode"
                          active-text-color="#409eff">
-                    <span class="header-title"><a href="www.baidu.com">Mr Qian</a></span>
+                    <!--<span class="header-title"><a href="www.baidu.com">登录</a></span>-->
                     <el-menu-item index="/"><i class="el-icon-s-home header-icon"></i>首页
                     </el-menu-item>
                     <el-menu-item index="/tags"><i class="el-icon-paperclip header-icon"></i> 标签
                     </el-menu-item>
                     <el-menu-item index="/catagory"><i class="el-icon-s-grid header-icon"></i>分类
                     </el-menu-item>
-                    <el-menu-item index="/archives"><i class="el-icon-delete-solid header-icon"></i>归档
+                    <el-menu-item index="/archives"><i class="el-icon-delete header-icon"></i>归档
                     </el-menu-item>
-                    <el-menu-item index="/message"><i class="el-icon-s-order header-icon"></i>留言板
+                    <el-menu-item index="/message"><i class="el-icon-document header-icon"></i>留言板
                     </el-menu-item>
                     <el-menu-item index="/link"><i class="el-icon-share header-icon"></i>友链
                     </el-menu-item>
                     <el-menu-item index="/music"><i class="el-icon-headset header-icon"></i>音乐站
                     </el-menu-item>
-                    <el-menu-item index="/about"><i class="el-icon-user-solid header-icon"></i>关于
+                    <el-menu-item index="/about"><i class="el-icon-user header-icon"></i>关于
+                    </el-menu-item>
+                    <el-menu-item index="/login"><i class="el-icon-key header-icon"></i>登录
+                    </el-menu-item>
+                    <el-menu-item index="/register"><i class="el-icon-edit header-icon"></i>注册
                     </el-menu-item>
                 </el-menu>
             </div>
             <div class="logo"><a href="www.baidu.com">Mr Qian的博客</a></div>
             <div :class="[isShow==false?'header-change animated rotateIn':'header-change animated rotateOut']"  v-bind:style="{'display':display}">
                 <ul>
-                    <li><a href="http://192.168.0.106:8080/">首页</a></li>
-                    <li><a href="http://192.168.0.106:8080/tags">标签</a></li>
-                    <li><a href="http://192.168.0.106:8080/catagory">分类</a></li>
-                    <li><a href="http://192.168.0.106:8080/archives">归档</a></li>
-                    <li><a href="http://192.168.0.106:8080/message">留言板</a></li>
-                    <li><a href="http://192.168.0.106:8080/link">友链</a></li>
-                    <li><a href="http://192.168.0.106:8080/music">音乐站</a></li>
-                    <li><a href="http://192.168.0.106:8080/about">关于</a></li>
+                    <li><a href="/">首页</a></li>
+                    <li><a href="/tags">标签</a></li>
+                    <li><a href="/catagory">分类</a></li>
+                    <li><a href="/archives">归档</a></li>
+                    <li><a href="/message">留言板</a></li>
+                    <li><a href="/link">友链</a></li>
+                    <li><a href="/music">音乐站</a></li>
+                    <li><a href="/about">关于</a></li>
                 </ul>
             </div>
         </el-header>

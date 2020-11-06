@@ -371,18 +371,18 @@
         line-height: 2;
     }
 
-    @media screen and (max-width: 900px) and (min-width: 0px) {
+    @media screen and (max-width: 1000px) and (min-width: 0px) {
         .right {
             display: none;
         }
 
         .index {
-            width: 100%;
+            width: 90%;
         }
 
         .left {
             width: 100%;
-            padding: 0 20px;
+            /*padding: 0 20px;*/
         }
     }
 </style>
