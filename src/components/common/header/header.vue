@@ -26,8 +26,6 @@
                     </el-menu-item>
                     <el-menu-item index="/login"><i class="el-icon-key header-icon"></i>登录
                     </el-menu-item>
-                    <el-menu-item index="/register"><i class="el-icon-edit header-icon"></i>注册
-                    </el-menu-item>
                 </el-menu>
             </div>
             <div class="logo"><a href="www.baidu.com">Mr Qian的博客</a></div>
