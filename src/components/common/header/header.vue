@@ -10,7 +10,7 @@
                     <!--<span class="header-title"><a href="www.baidu.com">登录</a></span>-->
                     <el-menu-item index="/"><i class="el-icon-s-home header-icon"></i>首页
                     </el-menu-item>
-                    <el-menu-item index="/tags"><i class="el-icon-paperclip header-icon"></i> 标签
+                    <el-menu-item index="/labels"><i class="el-icon-paperclip header-icon"></i> 标签
                     </el-menu-item>
                     <el-menu-item index="/catagory"><i class="el-icon-s-grid header-icon"></i>分类
                     </el-menu-item>
@@ -32,7 +32,7 @@
             <div :class="[isShow==false?'header-change animated rotateIn':'header-change animated rotateOut']"  v-bind:style="{'display':display}">
                 <ul>
                     <li><a href="/">首页</a></li>
-                    <li><a href="/tags">标签</a></li>
+                    <li><a href="/labels">标签</a></li>
                     <li><a href="/catagory">分类</a></li>
                     <li><a href="/archives">归档</a></li>
                     <li><a href="/message">留言板</a></li>

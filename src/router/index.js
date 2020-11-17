@@ -14,9 +14,9 @@ export default new VRouter({
             component: ()=>import("../components/home/home.vue")
         },
         {
-            path:'/tags',
-            name:'tags',
-            component: ()=>import("../components/tags/tags.vue")
+            path:'/labels',
+            name:'labels',
+            component: ()=>import("../components/labels/labels.vue")
         },
         {
             path:'/catagory',
