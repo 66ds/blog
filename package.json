@@ -13,6 +13,7 @@
     "core-js": "^3.6.5",
     "element-ui": "^2.13.2",
     "jquery": "^3.5.1",
+    "mavon-editor": "^2.9.0",
     "v-tag-cloud": "^1.0.3",
     "vue": "^2.6.11",
     "vue-quill-editor": "^3.0.6",
@@ -33,9 +34,9 @@
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
-    "root": true,
+    "root": false,
     "env": {
-      "node": true
+      "node": false
     },
     "extends": [
       "plugin:vue/essential",

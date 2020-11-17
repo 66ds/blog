@@ -24,7 +24,7 @@
                     </el-menu-item>
                     <el-menu-item index="/about"><i class="el-icon-user header-icon"></i>关于
                     </el-menu-item>
-                    <el-menu-item @click="login"><i class="el-icon-key header-icon"></i>登录
+                    <el-menu-item index="/login"><i class="el-icon-key header-icon"></i>登录
                     </el-menu-item>
                 </el-menu>
             </div>

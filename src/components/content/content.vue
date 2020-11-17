@@ -1,16 +1,16 @@
 <template>
     <div class="article">
         <el-card class="article-box-card animated fadeIn">
-            <h2>java设计模式</h2>
-            <div style="text-align: center">
-                <el-link icon="el-icon-time">发表于:2020-9-7</el-link>&nbsp;|&nbsp;
+            <h2 class="title">{{articleInfo.articleTitle}}</h2>
+            <div style="text-align: center;">
+                <el-link icon="el-icon-time">发表于:{{articleInfo.articleDate}}</el-link>&nbsp;|&nbsp;
                 <el-link icon="el-icon-s-unfold">分类:小数</el-link>&nbsp;|&nbsp;
-                <el-link icon="el-icon-view">阅读量:900</el-link>&nbsp;|&nbsp;
-                <el-link icon="el-icon-chat-line-round">文字字数:0</el-link>&nbsp;|&nbsp;
-                <el-link icon="el-icon-chat-line-round">阅读时间:0</el-link>
+                <el-link icon="el-icon-view">阅读量:{{articleInfo.articleViews}}</el-link>&nbsp;|&nbsp;
+                <el-link icon="el-icon-chat-line-round">文字字数:{{articleInfo.articleCommentCount}}</el-link>&nbsp;|&nbsp;
+                <el-link icon="el-icon-chat-line-round">阅读时间:{{articleInfo.articleLikeCount}}</el-link>
             </div>
-            <div class="content">
-                爱斯达克了解到看来大家都加端口连接阿达阿达dasdnhasldjasd大大大克拉拉我达瓦大环境案沙迪克敬爱的啊呜哇我是你们，阿大开大实打实的对话框
+            <div class="content markdown-body" v-html="articleInfo.articleContent">
+
             </div>
             <div class="prev-next">
                 <div class="prev">
@@ -120,6 +120,7 @@
 </template>
 
 <script>
+    import {articlesInfoApi} from './../../api/articles'
     export default {
         data() {
             return {
@@ -134,6 +135,7 @@
                     resource: '',
                     desc: ''
                 },
+                articleInfo:{},
                 rules: {
                     name: [
                         { required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -174,6 +176,12 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             }
+        },
+        created() {
+            const id = this.$route.params.id
+            articlesInfoApi(id).then(res=>{
+               this.articleInfo = res.data
+            })
         }
     }
 </script>
@@ -184,10 +192,10 @@
         margin: 30px auto 0px;
     }
 
-    .article h2 {
+    .article .title{
         font-size: 20px;
         text-align: center;
-        padding-bottom: 10px;
+        padding-bottom: 20px;
     }
 
     .article .el-link i {

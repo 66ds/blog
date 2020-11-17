@@ -1,5 +1,9 @@
 import Vue from 'vue'
 import VRouter from 'vue-router'
+const originalPush = VRouter.prototype.push
+VRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err)
+}
 Vue.use(VRouter)
 export default new VRouter({
     mode:'history',
@@ -45,7 +49,7 @@ export default new VRouter({
             component: ()=>import("../components/about/about.vue")
         },
         {
-            path:'/content',
+            path:'/content/:id',
             name:'content',
             component: ()=>import("../components/content/content.vue")
         }
