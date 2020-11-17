@@ -24,9 +24,7 @@
                     </el-menu-item>
                     <el-menu-item index="/about"><i class="el-icon-user header-icon"></i>关于
                     </el-menu-item>
-                    <el-menu-item index="/login"><i class="el-icon-key header-icon"></i>登录
-                    </el-menu-item>
-                    <el-menu-item index="/register"><i class="el-icon-edit header-icon"></i>注册
+                    <el-menu-item @click="login"><i class="el-icon-key header-icon"></i>登录
                     </el-menu-item>
                 </el-menu>
             </div>
@@ -74,6 +72,9 @@
             operate(){
                 this.display = "block"//这里解决了页面导航栏第一次闪烁问题
                 this.isShow=!this.isShow
+            },
+            login(){
+               location.href="http://localhost:8080/#/login"
             }
         }
     }
