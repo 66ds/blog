@@ -1,6 +1,10 @@
 <template>
     <div class="index">
-        <div class="left animated fadeInLeft">
+        <div class="left animated fadeIn">
+            <div  v-loading="loading"
+                  element-loading-text="拼命加载中"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(0, 0, 0, 1)"></div>
             <el-card class="left-box-card" v-for="item in tableData" :key="item.articleId">
                 <div><a href="#">{{item.articleTitle}}</a></div>
                 <div>
@@ -141,6 +145,7 @@
                 },
                 pageTotal:0,
                 labelId:'',
+                loading:true
             }
         },
         methods: {
@@ -151,9 +156,11 @@
             },
             //获取所有文章
             async articlesList(){
+                this.loading = true;
                 const res = await articlesListApi(this.query)
                 this.tableData = res.data.list;
                 this.pageTotal = res.data.totalCount || 0;
+                this.loading = false;
             },
             typeClass(i){
                 if(i/2%2 == 0){
