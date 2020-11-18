@@ -3,7 +3,7 @@
             <div class="tag-cloud">
                 <div class="tag-cloud-title">目前共计 {{data.length}} 个标签</div>
                 <div  class="tag-cloud-tags animated zoomIn" style="min-height: 350px;">
-                    <li  style="font-size: 14.88px; color: rgb(70, 93, 115);" v-for="(item,i) in data" :key="i">{{item.labelName}}</li>
+                    <li  style="font-size: 14.88px;" v-for="(item,i) in data" :key="i" :style="randomRgb(item)">{{item.labelName}}</li>
 <!--                    <li data-v-216999c2="" style="font-size: 19.92px; color: rgb(71, 128, 105);">MySQL</li>-->
 <!--                    <li data-v-216999c2="" style="font-size: 23.52px; color: rgb(73, 81, 61);">Python</li>-->
 <!--                    <li data-v-216999c2="" style="font-size: 14.88px; color: rgb(70, 93, 115);">数据库</li>-->
@@ -71,7 +71,18 @@
                 data:{},
             }
         },
-        methods: {},
+        methods: {
+            randomRgb(){
+                let R = Math.floor(Math.random() * 255);
+                let G = Math.floor(Math.random() * 255);
+                let B = Math.floor(Math.random() * 255);
+                return {
+                    fontSize:Math.random()*5+15+'px',
+                    color: 'rgb(' + R + ',' + G + ',' + B + ')'
+                };
+            }
+        },
+
         created() {
             labelsListApi().then(res=>{
                 this.data = res.data

@@ -4,10 +4,10 @@
             <h2 class="title">{{articleInfo.articleTitle}}</h2>
             <div style="text-align: center;">
                 <el-link icon="el-icon-time">发表于:{{articleInfo.articleDate}}</el-link>&nbsp;|&nbsp;
-                <el-link icon="el-icon-s-unfold">分类:小数</el-link>&nbsp;|&nbsp;
+                <el-link icon="el-icon-s-unfold">分类:{{articleInfo.sortName}}</el-link>&nbsp;|&nbsp;
                 <el-link icon="el-icon-view">阅读量:{{articleInfo.articleViews}}</el-link>&nbsp;|&nbsp;
-                <el-link icon="el-icon-chat-line-round">文字字数:{{articleInfo.articleCommentCount}}</el-link>&nbsp;|&nbsp;
-                <el-link icon="el-icon-chat-line-round">阅读时间:{{articleInfo.articleLikeCount}}</el-link>
+                <el-link icon="el-icon-chat-line-round">评论数:{{articleInfo.articleCommentCount}}</el-link>&nbsp;|&nbsp;
+                <el-link icon="el-icon-chat-line-round">阅读时间:{{readTime}}</el-link>
             </div>
             <div class="content markdown-body" v-html="articleInfo.articleContent">
 
@@ -78,7 +78,6 @@
                     <quill-editor
                             v-model="content"
                             ref="myQuillEditor"
-                            :options="editorOption"
                             @change="onEditorChange($event)"
                     >
                     </quill-editor>
@@ -135,6 +134,11 @@
                     resource: '',
                     desc: ''
                 },
+                readTime:'',
+                editorOption:'',
+                content:'',
+                beginTime:new Date().getSeconds(),
+                interval:'',
                 articleInfo:{},
                 rules: {
                     name: [
@@ -175,14 +179,33 @@
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
+            },
+            countdown() {
+                const that = this
+                that.interval = setInterval(() => {
+                        that.readTime = new Date().getSeconds() - that.beginTime
+                        let day = parseInt(that.readTime / 60 / 60 / 24)
+                        let hr = parseInt(that.readTime / 60 / 60 % 24)
+                        let min = parseInt(that.readTime / 60 % 60)
+                        let sec = parseInt(that.readTime % 60)
+
+                        day = day > 9 ? day : '0' + day
+                        hr = hr > 9 ? hr : '0' + hr
+                        min = min > 9 ? min : '0' + min
+                        sec = sec > 9 ? sec : '0' + sec
+                        that.readTime = `${day}天${hr}时${min}分${sec}秒`
+                }, 1000);
             }
         },
-        created() {
-            const id = this.$route.params.id
-            articlesInfoApi(id).then(res=>{
-               this.articleInfo = res.data
-            })
-        }
+    created() {
+        this.countdown();
+        articlesInfoApi(this.$route.params.id).then(res => {
+            this.articleInfo = res.data;
+        })
+    },
+    beforeDestroy() {
+        clearInterval(this.interval)
+    }
     }
 </script>
 

@@ -7,6 +7,9 @@
 </template>
 
 <script>
+    import {labelsListApi} from "../../api/labels";
+
+    '../../api/labels'
     export default {
         name: "tagcloud",
         data() {
@@ -32,7 +35,8 @@
                 sb: 0,
                 cb: 0,
                 sc: 0,
-                cc: 0
+                cc: 0,
+                data:[]
             }
         },
         methods: {
@@ -183,38 +187,7 @@
             // 网络请求 拿到tagList
             query() {
                 // 假装从接口拿回来的数据
-                let tagListOrg = [
-                    {name: '标签1', url: 'www.baidu.com'},
-                    {name: '标签2', url: 'www.baidu.com'},
-                    {name: '标签3', url: 'www.baidu.com'},
-                    {name: '标签4', url: 'www.baidu.com'},
-                    {name: '标签5', url: 'www.baidu.com'},
-                    {name: '标签6', url: 'www.baidu.com'},
-                    {name: '标签7', url: 'www.baidu.com'},
-                    {name: '标签8', url: 'www.baidu.com'},
-                    {name: '标签9', url: 'www.baidu.com'},
-                    {name: '标签10', url: 'www.baidu.com'},
-                    {name: '标签11', url: 'www.baidu.com'},
-                    {name: '标签12', url: 'www.baidu.com'},
-                    {name: '标签13', url: 'www.baidu.com'},
-                    {name: '标签14', url: 'www.baidu.com'},
-                    {name: '标签15', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签16', url: 'www.baidu.com'},
-                    {name: '标签17', url: 'www.baidu.com'}
-                ];
+                let tagListOrg = this.data;
                 // 给tagList添加随机颜色
                 tagListOrg.forEach(item => {
                     item.color = "rgb(" + this.getRandomNum() + "," + this.getRandomNum() + "," + this.getRandomNum() + ")";
@@ -258,7 +231,16 @@
         },
         created() {
             this.$nextTick(() => {
-                this.query();
+                labelsListApi().then(res=>{
+                    let tags = res.data.map(item=>{
+                        let tag = {name:item.labelName,url:'#'}
+                        return tag
+                    })
+                    this.data = tags;
+                    this.query();
+                }).catch(e=>{
+                    this.$message.error(e)
+                })
             })
         }
     }

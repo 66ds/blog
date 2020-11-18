@@ -10,7 +10,7 @@
                 <div>
                     <el-link icon="el-icon-user">作者:Mr Qian</el-link>&nbsp;|&nbsp;
                     <el-link icon="el-icon-time">发表于:{{item.articleDate}}</el-link>&nbsp;|&nbsp;
-                    <el-link icon="el-icon-s-unfold">分类:小数</el-link>&nbsp;|&nbsp;
+                    <el-link icon="el-icon-s-unfold">分类:{{item.sortName}}</el-link>&nbsp;|&nbsp;
                     <el-link icon="el-icon-view">阅读量:{{item.articleViews}}</el-link>&nbsp;|&nbsp;
                     <el-link icon="el-icon-chat-line-round">评论数:{{item.articleCommentCount}}</el-link>&nbsp;|&nbsp;
                     <el-link icon="el-icon-chat-line-round">赞数:{{item.articleLikeCount}}</el-link>
@@ -21,9 +21,6 @@
                     <el-tag v-for="(label,i) in item.labelsEntityList" :key="label.labelId" :type="typeClass(i)">
                         {{label.labelName}}
                     </el-tag>
-                    <!--<el-tag type="success">标签二</el-tag>-->
-                    <!--<el-tag type="info">标签三</el-tag>-->
-                    <!--<el-tag type="warning">标签四</el-tag>-->
                 </div>
             </el-card>
             <div class="pagination">
@@ -40,7 +37,7 @@
         <div class="right animated fadeInRight">
             <el-card class="right-box-card">
                 <div slot="header" class="clearfix">
-                    <i class="el-icon-picture" style="color: orange"></i>&nbsp;<span>我的名片</span>
+                    <i class="el-icon-picture" style="color: orange"></i>&nbsp;<span>楼主名片</span>
                 </div>
                 <div class="text item">
                     网名:我是一颗小蔡
@@ -60,7 +57,7 @@
             </el-card>
             <el-card class="right-box-card">
                 <div slot="header" class="clearfix">
-                    <i class="el-icon-paperclip" style="color: #437dff"></i>&nbsp;<span>我的标签云</span>
+                    <i class="el-icon-paperclip" style="color: #437dff"></i>&nbsp;<span>标签云</span>
                 </div>
                 <div style="font-size: 20px">
                     <tag-cloud></tag-cloud>
