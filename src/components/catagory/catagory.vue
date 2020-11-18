@@ -3,104 +3,132 @@
         <el-row :gutter="10">
             <el-col :sm="4" class="catagory-left animated fadeInLeft">
                 <div>
-                    <el-link :underline="false">全部</el-link>
-                    <el-link :underline="false">Nginx</el-link>
-                    <el-link :underline="false">Java</el-link>
-                    <el-link :underline="false">Linyux</el-link>
-                    <el-link :underline="false">PHP</el-link>
+                    <el-link @click="change(item.sortId)" :underline="false" v-for="(item,i) in sortsData" :key="i" v-text="item.sortName" :class="{color:id == item.sortId}">全部</el-link>
                 </div>
             </el-col>
-            <el-col :sm="20" class="catagory-right animated fadeInRight">
-                <el-card class="right-catagory-card">
-                    <div><a href="www.baidu.com">Java设计模式</a></div>
+            <el-col :sm="20" class="catagory-right animated fadeIn">
+                <div v-loading="loading"
+                     element-loading-text="加载全部中"
+                     element-loading-spinner="el-icon-loading"
+                     element-loading-background="rgba(0, 0, 0, 1)"></div>
+                <el-card class="right-catagory-card" v-for="item in articlesData" :key="item.articleId">
+                    <div><a href="javascript:void(0)" @click="articleDetail(item.articleId)">{{item.articleTitle}}</a></div>
                     <div>
                         <el-link icon="el-icon-user">作者:Mr Qian</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-time">发表于:2020-9-7</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-s-unfold">分类:小数</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-view">阅读量:900</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-chat-line-round">评论数:0</el-link>
+                        <el-link icon="el-icon-time">发表于:{{item.articleDate}}</el-link>&nbsp;|&nbsp;
+                        <el-link icon="el-icon-s-unfold">分类:{{item.sortName}}</el-link>&nbsp;|&nbsp;
+                        <el-link icon="el-icon-view">阅读量:{{item.articleViews}}</el-link>&nbsp;|&nbsp;
+                        <el-link icon="el-icon-chat-line-round">评论数:{{item.articleCommentCount}}</el-link>&nbsp;|&nbsp;
+                        <el-link icon="el-icon-chat-line-round">赞数:{{item.articleLikeCount}}</el-link>
+                    </div>
+                    <div v-html="item.articleIntroduce">
                     </div>
                     <div>
-                        爱斯达克了解到看来大家都加端口连接阿达阿达dasdnhasldjasd大大大克拉拉我达瓦大环境案沙迪克敬爱的啊dasdjaskldjkldjlasdjldjaldasdasdada实打实的对话框
-                    </div>
-                    <div>
-                        <el-tag>标签一</el-tag>
-                        <el-tag type="success">标签二</el-tag>
-                        <el-tag type="info">标签三</el-tag>
-                        <el-tag type="warning">标签四</el-tag>
+                        <el-tag v-for="(label,i) in item.labelsEntityList" :key="label.labelId" :type="typeClass(i)">
+                            {{label.labelName}}
+                        </el-tag>
                     </div>
                 </el-card>
-                <el-card class="right-catagory-card">
-                    <div><a href="www.baidu.com">Java设计模式</a></div>
-                    <div>
-                        <el-link icon="el-icon-user">作者:Mr Qian</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-time">发表于:2020-9-7</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-s-unfold">分类:小数</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-view">阅读量:900</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-chat-line-round">评论数:0</el-link>
-                    </div>
-                    <div>
-                        爱斯达克了解到看来大家都加端口连接阿达阿达dasdnhasldjasd大大大克拉拉我达瓦大环境案沙迪克敬爱的啊dasdjaskldjkldjlasdjldjaldasdasdada实打实的对话框
-                    </div>
-                    <div>
-                        <el-tag>标签一</el-tag>
-                        <el-tag type="success">标签二</el-tag>
-                        <el-tag type="info">标签三</el-tag>
-                        <el-tag type="warning">标签四</el-tag>
-                    </div>
-                </el-card>
-                <el-card class="right-catagory-card">
-                    <div><a href="www.baidu.com">Java设计模式</a></div>
-                    <div>
-                        <el-link icon="el-icon-user">作者:Mr Qian</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-time">发表于:2020-9-7</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-s-unfold">分类:小数</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-view">阅读量:900</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-chat-line-round">评论数:0</el-link>
-                    </div>
-                    <div>
-                        爱斯达克了解到看来大家都加端口连接阿达阿达dasdnhasldjasd大大大克拉拉我达瓦大环境案沙迪克敬爱的啊dasdjaskldjkldjlasdjldjaldasdasdada实打实的对话框
-                    </div>
-                    <div>
-                        <el-tag>标签一</el-tag>
-                        <el-tag type="success">标签二</el-tag>
-                        <el-tag type="info">标签三</el-tag>
-                        <el-tag type="warning">标签四</el-tag>
-                    </div>
-                </el-card>
-                <el-card class="right-catagory-card">
-                    <div><a href="www.baidu.com">Java设计模式</a></div>
-                    <div>
-                        <el-link icon="el-icon-user">作者:Mr Qian</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-time">发表于:2020-9-7</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-s-unfold">分类:小数</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-view">阅读量:900</el-link>&nbsp;|&nbsp;
-                        <el-link icon="el-icon-chat-line-round">评论数:0</el-link>
-                    </div>
-                    <div>
-                        爱斯达克了解到看来大家都加端口连接阿达阿达dasdnhasldjasd大大大克拉拉我达瓦大环境案沙迪克敬爱的啊dasdjaskldjkldjlasdjldjaldasdasdada实打实的对话框
-                    </div>
-                    <div>
-                        <el-tag>标签一</el-tag>
-                        <el-tag type="success">标签二</el-tag>
-                        <el-tag type="info">标签三</el-tag>
-                        <el-tag type="warning">标签四</el-tag>
-                    </div>
-                </el-card>
+                <div class="pagination">
+                    <el-pagination
+                            layout="prev, pager, next"
+                            :current-page="query.page"
+                            :page-size="query.limit"
+                            :total="pageTotal"
+                            @current-change="handlePageChange"
+                    ></el-pagination>
+                </div>
             </el-col>
         </el-row>
     </div>
 </template>
 
 <script>
+    import {sortsListInfo,selectlistBySortId} from "../../api/sorts";
+    import {articlesListApi} from './../../api/articles'
     export default {
         data() {
-            return {}
+            return {
+                sortsData:[],
+                articlesData:[],
+                query: {
+                    page: 1,
+                    limit: 10
+                },
+                pageTotal: 0,
+                loading: true,
+                id:''
+            }
         },
-        methods: {},
-        components: {},
+        methods: {
+            async sortsList(){
+                try{
+                    const res = await sortsListInfo();
+                    this.sortsData = res.data;
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            async articlesList(query){
+                try{
+                    this.loading = true;
+                    const res = await articlesListApi(query);
+                    this.articlesData = res.data.list;
+                    this.pageTotal = res.data.totalCount || 0;
+                    this.loading = false;
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            async selectlistBySortId(id,query){
+                try{
+                    this.loading = true;
+                    const res = await selectlistBySortId(id,query);
+                    //分类下没文章
+                    if(res.data == null){
+                        this.loading = false;
+                        this.$message.warning("该分类下无文章")
+                    }
+                    this.articlesData = res.data.list;
+                    this.pageTotal = res.data.totalCount || 0;
+                    this.loading = false;
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            articleDetail(id){
+                this.$router.push({
+                    path: "/content/"+id
+                })
+            },
+            // 分页导航
+            handlePageChange(val) {
+                this.$set(this.query, 'page', val);
+                this.articlesList(this.query)
+            },
+            typeClass(i) {
+                if (i / 2 % 2 == 0) {
+                    return ""
+                }
+                if (i / 2 % 2 == 1) {
+                    return "success"
+                }
+                if ((i - 1) / 2 % 2 == 0) {
+                    return "warning"
+                }
+                if ((i - 1) / 2 % 2 == 1) {
+                    return "danger"
+                }
+            },
+            change(id){
+                this.id = id;
+                this.$set(this.query,"page",1);
+                this.selectlistBySortId(id,this.query)
+            }
+        },
         created() {
-
+            this.sortsList();
+            this.articlesList(this.query);
         }
     }
 </script>
@@ -113,6 +141,10 @@
 
     .catagory .catagory-left {
         position: fixed;
+    }
+
+    .catagory .color{
+        color:#409EFF;
     }
 
     .catagory .catagory-left .el-link.el-link--default {
