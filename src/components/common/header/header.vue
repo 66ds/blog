@@ -30,7 +30,7 @@
                     <!--<div class="user-avator">-->
                     <!--<img src=""/>-->
                     <!--</div>-->
-                    <el-dropdown trigger="hover" v-else>
+                    <el-dropdown trigger="hover"  @command="skip" v-else>
                      <span class="el-dropdown-link">
                             欢迎你:{{userInfo.userTelephoneNumber}}<i class="el-icon-arrow-down el-icon--right"></i>
                      </span>
@@ -41,7 +41,7 @@
                             <el-dropdown-item icon="el-icon-user">个人中心</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-view">我的关注</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-camera">我的相册</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-edit-outline">后台管理</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-edit-outline" command="admin-manager">后台管理</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-switch-button">安全退出</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -106,6 +106,11 @@
                     this.userInfo = res.data;
                 }catch (e) {
                     this.$message.error(e)
+                }
+            },
+            skip(command){
+                if(command == "admin-manager"){
+                    window.open("http://127.0.0.1:8080","_blank")
                 }
             }
         },
