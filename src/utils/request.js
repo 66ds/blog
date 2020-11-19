@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { MessageBox } from 'element-ui';
+import Vue from 'vue'
 
 //axios.defaults.headers.common['Authorization'] = localStorage.getItem("token");//设置请求头token
 
@@ -31,16 +32,19 @@ service.interceptors.request.use(
 );
 service.interceptors.response.use(
     response => {
+        const res = response.data
         if (response.status === 200) {
-            if(response.data.code === 10008){
-                MessageBox.alert(response.data.msg, {
+            if(res.code === 10008){
+                MessageBox.alert(res.msg, {
                     confirmButtonText: '确定',
                     callback: action => {
-                        location.href="/login"
+                        Vue.router.push({
+                            path: "/"
+                        })
                     }
                 });
             }else{
-                return response.data;
+                return res;
             }
         } else {
             return Promise.reject("Internet Error");

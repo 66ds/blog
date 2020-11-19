@@ -35,12 +35,14 @@
                             欢迎你:{{userInfo.userTelephoneNumber}}<i class="el-icon-arrow-down el-icon--right"></i>
                      </span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item icon="el-icon-plus">我的博客</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-circle-plus">我的分类</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-circle-plus-outline">我的标签</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-check">个人中心</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-check">我的好友</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-circle-check">安全退出</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-edit">我的博客</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-s-grid">我的分类</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-paperclip">我的标签</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-user">个人中心</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-view">我的关注</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-camera">我的相册</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-edit-outline">后台管理</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-switch-button">安全退出</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-menu>
@@ -86,7 +88,9 @@
                     this.isShow = true;
                 }
             }
-            this.userInfoById();
+            if(this.token!=null){
+                this.userInfoById();
+            }
         },
         methods: {
             handleSelect(key, keyPath) {
@@ -98,13 +102,21 @@
             },
             async userInfoById(){
                 try{
-                    const token = this.$store.getters.getToken;
-                    const res = await userInfoByIdApi(token);
-                    console.log(res)
+                    const res = await userInfoByIdApi(this.token);
                     this.userInfo = res.data;
                 }catch (e) {
                     this.$message.error(e)
                 }
+            }
+        },
+        computed:{
+            token(){
+                return this.$store.getters.getToken;
+            }
+        },
+        watch:{
+            token:function () {
+                this.userInfoById();
             }
         }
     }

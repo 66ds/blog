@@ -22,7 +22,7 @@ export const userInfoByIdApi=(token)=>{
     return request({
         url:"/api/v1/pri/user/info",
         method:'post',
-        header:{
+        headers:{
             token
         }
     })

@@ -73,7 +73,7 @@
                                         //设置后端的token令牌
                                         this.$store.commit('setToken',res.data);
                                         //跳转
-                                        location.href="/"
+                                        this.$router.push("/")
                                     }
                                 })
                             }
