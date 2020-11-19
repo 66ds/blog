@@ -24,12 +24,30 @@
                     </el-menu-item>
                     <el-menu-item index="/about"><i class="el-icon-user header-icon"></i>关于
                     </el-menu-item>
-                    <el-menu-item index="/login"><i class="el-icon-key header-icon"></i>登录
+                    <el-menu-item index="/login" v-if="userInfo == null"><i class="el-icon-key header-icon"></i>登录
                     </el-menu-item>
+                    <!--&lt;!&ndash; 用户头像 &ndash;&gt;-->
+                    <!--<div class="user-avator">-->
+                    <!--<img src=""/>-->
+                    <!--</div>-->
+                    <el-dropdown trigger="hover" v-else>
+                     <span class="el-dropdown-link">
+                            欢迎你:{{userInfo.userTelephoneNumber}}<i class="el-icon-arrow-down el-icon--right"></i>
+                     </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item icon="el-icon-plus">我的博客</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-circle-plus">我的分类</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-circle-plus-outline">我的标签</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-check">个人中心</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-check">我的好友</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-circle-check">安全退出</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
                 </el-menu>
             </div>
             <div class="logo"><a href="www.baidu.com">Mr Qian的博客</a></div>
-            <div :class="[isShow==false?'header-change animated rotateIn':'header-change animated rotateOut']"  v-bind:style="{'display':display}">
+            <div :class="[isShow==false?'header-change animated rotateIn':'header-change animated rotateOut']"
+                 v-bind:style="{'display':display}">
                 <ul>
                     <li><a href="/">首页</a></li>
                     <li><a href="/labels">标签</a></li>
@@ -39,6 +57,7 @@
                     <li><a href="/link">友链</a></li>
                     <li><a href="/music">音乐站</a></li>
                     <li><a href="/about">关于</a></li>
+                    <li><a href="/login">登录</a></li>
                 </ul>
             </div>
         </el-header>
@@ -47,34 +66,45 @@
 
 <script>
 
+    import {userInfoByIdApi} from "../../../api/users";
+
     export default {
         data() {
             return {
                 activeIndex: '1',
-                mode:'horizontal',
-                isShow:true,
-                display: "none"
+                mode: 'horizontal',
+                isShow: true,
+                display: "none",
+                userInfo:null
             };
         },
         created() {
-            window.onresize = ()=>{
+            window.onresize = () => {
                 this.display = "none"
-                if(window.innerWidth <= 900){
+                if (window.innerWidth <= 900) {
                     //动态设置教师风采样式
                     this.isShow = true;
                 }
             }
+            this.userInfoById();
         },
         methods: {
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
             },
-            operate(){
+            operate() {
                 this.display = "block"//这里解决了页面导航栏第一次闪烁问题
-                this.isShow=!this.isShow
+                this.isShow = !this.isShow
             },
-            login(){
-               location.href="http://localhost:8080/#/login"
+            async userInfoById(){
+                try{
+                    const token = this.$store.getters.getToken;
+                    const res = await userInfoByIdApi(token);
+                    console.log(res)
+                    this.userInfo = res.data;
+                }catch (e) {
+                    this.$message.error(e)
+                }
             }
         }
     }
@@ -128,15 +158,15 @@
         border-bottom: none;
     }
 
-    .mNavBtn,.logo {
+    .mNavBtn, .logo {
         display: none;
     }
 
-    @media screen and (max-width: 1000px) and (min-width: 0px)
-    {
+    @media screen and (max-width: 1000px) and (min-width: 0px) {
         .el-menu-demo {
             display: none;
         }
+
         .mNavBtn {
             display: block;
             position: absolute;
@@ -145,6 +175,7 @@
             cursor: pointer;
             font-size: 22px;
         }
+
         .logo {
             display: block;
             line-height: 60px;
@@ -159,10 +190,21 @@
     .header-change {
         background-color: #fff;
     }
-    .header-change li{
+
+    .header-change li {
         text-align: center;
         line-height: 40px;
         border-bottom: 1px solid #e6e6e6;
+    }
+
+    .el-dropdown-link {
+        cursor: pointer;
+        line-height: 60px;
+        margin-left: 20px;
+        color: #909399;
+    }
+    .el-icon-arrow-down {
+        font-size: 15px;
     }
 
 </style>

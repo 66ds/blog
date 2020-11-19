@@ -8,6 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import './assets/styles/reset.css'
 import './assets/styles/border.css'
 import router from './router/index'
+import store from './store/index'
 import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
@@ -19,5 +20,6 @@ Vue.use(animated)
 Vue.use(VueQuillEditor);
 new Vue({
   render: h => h(App),
-  router
+  router,
+  store
 }).$mount('#app')

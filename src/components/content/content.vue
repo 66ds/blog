@@ -51,12 +51,6 @@
                 <div class="article-end">-------------本文结束<i class="el-icon-star-on"></i>感谢您的阅读-------------
                 </div>
             </div>
-            <div class="tags">
-                <el-tag>标签一</el-tag>
-                <el-tag type="success">标签二</el-tag>
-                <el-tag type="info">标签三</el-tag>
-                <el-tag type="warning">标签四</el-tag>
-            </div>
         </el-card>
         <el-card class="article-box-card animated fadeIn">
             <div class="tips">
@@ -89,7 +83,7 @@
             </el-form>
             <div class="commnet-total"><span>共2条评论</span></div>
             <div class="comment">
-                <ul>
+                <ul style="list-style: none">
                     <li class="who">
                         <span class="page">1.</span>
                         <span class="user">44</span>
@@ -101,7 +95,7 @@
                         外阿胶为和爱我和哦亲而后安慰i2121313大会上扩军多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多爱斯达克就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看家
                     </li>
                 </ul>
-                <ul>
+                <ul style="list-style: none">
                     <li class="who">
                         <span class="page">2.</span>
                         <span class="user">44</span>
@@ -195,7 +189,7 @@
                         sec = sec > 9 ? sec : '0' + sec
                         that.readTime = `${day}天${hr}时${min}分${sec}秒`
                 }, 1000);
-            }
+            },
         },
     created() {
         this.countdown();
@@ -277,6 +271,10 @@
         border-left: 3px solid #ff1700;
         background-color: #f9f9f9;
         line-height: 2;
+    }
+
+    .article .introduce  .post-copyright{
+        list-style: none;
     }
     .article .thank .article-end{
         text-align: center;

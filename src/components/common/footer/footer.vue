@@ -32,5 +32,8 @@
         text-align: center;
         line-height: 25px;
         letter-spacing: 1px;
+        width: 100%;
+        /*position: absolute;*/
+        /*bottom: 0;*/
     }
 </style>

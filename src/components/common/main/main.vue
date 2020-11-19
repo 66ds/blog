@@ -31,5 +31,6 @@
         padding: 20px 0 !important;
         justify-content: center;
         display: flex !important;
+        min-height: calc(100vh - 140px)
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="about">
         <h2>关于我</h2>
-        <div class="content el-row animated bounceInDown">
+        <div class="content el-row animated fadeIn">
             <div class="markdown-body">
                 <h3><strong>关&nbsp; 于&nbsp; 我</strong></h3>
 

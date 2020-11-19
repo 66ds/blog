@@ -29,7 +29,7 @@
                         </el-tag>
                     </div>
                 </el-card>
-                <div class="pagination">
+                <div class="pagination" v-if="!loading">
                     <el-pagination
                             layout="prev, pager, next"
                             :current-page="query.page"
@@ -87,7 +87,7 @@
                     //分类下没文章
                     if(res.data == null){
                         this.loading = false;
-                        this.$message.warning("该分类下无文章")
+                        return this.$message.warning("该分类下无文章")
                     }
                     this.articlesData = res.data.list;
                     this.pageTotal = res.data.totalCount || 0;

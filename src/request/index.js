@@ -6,7 +6,7 @@ axios.defaults.headers.common['Authorization'] = localStorage.getItem("token");/
 const service = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
     // easy-mock服务挂了，暂时不使用了
-    baseURL: 'http://127.0.0.1:12000/',
+    baseURL: 'http://192.168.2.128:12000/',
     timeout: 5000
 });
 
@@ -33,16 +33,19 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     response => {
         if (response.status === 200) {
-            if(response.data.code === 10008){
-                MessageBox.alert(response.data.msg, {
-                    confirmButtonText: '确定',
-                    callback: action => {
-                        location.href="/login"
-                    }
-                });
-            }else{
-                return response.data;
-            }
+            // if(response.data.code === 10008){
+            //     MessageBox.alert(response.data.msg, {
+            //         confirmButtonText: '确定',
+            //         callback: action => {
+            //             this.$router.push({
+            //                 path: "/login"
+            //             })
+            //         }
+            //     });
+            // }else{
+            //     return response.data;
+            // }
+            return response.data;
         } else {
             return Promise.reject("Internet Error");
         }

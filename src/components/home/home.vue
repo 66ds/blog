@@ -23,7 +23,7 @@
                     </el-tag>
                 </div>
             </el-card>
-            <div class="pagination">
+            <div class="pagination" v-if="!loading">
                 <el-pagination
                         layout="prev, pager, next"
                         :current-page="query.page"

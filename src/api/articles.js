@@ -26,10 +26,21 @@ export const articlesInfoApi=(id)=>{
 /**
  * 查询所有文章的时间信息
  */
-export const articlesTimeListInfo = ()=>{
+export const articlesTimeListApi = ()=>{
     return request({
         url:"/api/v1/pub/articles/timeList",
         method:"get"
+    })
+}
+
+/*8
+查询时间对应的文字
+ */
+export const articleListByTimeApi = (time,query)=>{
+    return request({
+        url:"/api/v1/pub/articles/list/"+time,
+        method:"post",
+        data:query
     })
 }
 
