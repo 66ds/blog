@@ -34,18 +34,7 @@ service.interceptors.response.use(
     response => {
         const res = response.data
         if (response.status === 200) {
-            if(res.code === 10008){
-                MessageBox.alert(res.msg, {
-                    confirmButtonText: '确定',
-                    callback: action => {
-                        Vue.router.push({
-                            path: "/"
-                        })
-                    }
-                });
-            }else{
-                return res;
-            }
+            return res;
         } else {
             return Promise.reject("Internet Error");
         }

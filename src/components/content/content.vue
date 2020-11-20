@@ -38,7 +38,7 @@
                     <li data-v-f5ca42f6="" class="post-copyright-author"><strong data-v-f5ca42f6="">本文作者： </strong>Mr.Yong
                     </li>
                     <li data-v-f5ca42f6="" class="post-copyright-link"><strong data-v-f5ca42f6="">本文链接：</strong> <a
-                            data-v-f5ca42f6="" href="/view/94" title="客户端连接MySQL8提示 caching-sha2-password 问题">https://www.myong.top/view/94</a>
+                            data-v-f5ca42f6="" href="/view/94" title="客户端连接MySQL8提示 caching-sha2-password 问题">{{location}}</a>
                     </li>
                     <li data-v-f5ca42f6="" class="post-copyright-license"><strong data-v-f5ca42f6="">版权声明： </strong>本博客所有文章除特别声明外，均采用
                         <a data-v-f5ca42f6="" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener"
@@ -48,7 +48,7 @@
                 </ul>
             </div>
             <div class="thank">
-                <div class="article-end">-------------本文结束<i class="el-icon-star-on"></i>感谢您的阅读-------------
+                <div class="article-end">-------------本文结束感谢您的阅读.亲,举手之劳,点个赞呗<i :class="likeClass" @click="like"></i>-------------
                 </div>
             </div>
         </el-card>
@@ -114,6 +114,7 @@
 
 <script>
     import {articlesInfoApi} from './../../api/articles'
+    import {selectListLikeApi,likeArticleApi} from './../../api/like-article'
     export default {
         data() {
             return {
@@ -128,6 +129,8 @@
                     resource: '',
                     desc: ''
                 },
+                location:document.location,
+                likeClass:"el-icon-star-off",
                 readTime:'',
                 editorOption:'',
                 content:'',
@@ -190,12 +193,58 @@
                         that.readTime = `${day}天${hr}时${min}分${sec}秒`
                 }, 1000);
             },
+            async likeArticle(id,token){
+                try{
+                    const res = await likeArticleApi(id,token)
+                    if(res.code != 0){
+                        return this.$message.warning(res.msg)
+                    }
+                    if(res.data == null){
+                        this.likeClass = "el-icon-star-off"
+                        this.$message.success("取消成功");
+                    }else{
+                        this.likeClass = "el-icon-star-on"
+                        this.$message.success("点赞成功");
+                    }
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            like(){
+                const token = this.$store.getters.getToken;
+                //未登录
+                token == ''?this.$message.warning("点赞,请先登录"): this.likeArticle(this.$route.params.id,token)
+            },
+            async articlesInfo(id){
+                try{
+                    const res = await articlesInfoApi(id)
+                    this.articleInfo = res.data;
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            async selectListLike(id){
+                try{
+                    const token = this.$store.getters.getToken;
+                    const res = await selectListLikeApi(id,token)
+                    //已点赞
+                    if(res.data != null) {
+                        this.likeClass = "el-icon-star-on"
+                    }
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            }
         },
     created() {
+        //文章计时
         this.countdown();
-        articlesInfoApi(this.$route.params.id).then(res => {
-            this.articleInfo = res.data;
-        })
+        const id = this.$route.params.id;
+        this.articlesInfo(id);
+        //已登录,则判断该用户有么有点赞文章
+        if(this.token != ''){
+            this.selectListLike(id)
+        }
     },
     beforeDestroy() {
         clearInterval(this.interval)
@@ -281,6 +330,10 @@
         color: #ccc;
         font-size: 16px;
         padding: 20px 0;
+    }
+
+    .article .thank .article-end i{
+        cursor: pointer;
     }
     .article .tags>span {
         margin-right: 10px;

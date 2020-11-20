@@ -38,7 +38,7 @@ service.interceptors.response.use(
             //         confirmButtonText: '确定',
             //         callback: action => {
             //             this.$router.push({
-            //                 path: "/login"
+            //                 path: "/"
             //             })
             //         }
             //     });
