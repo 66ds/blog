@@ -232,6 +232,7 @@
         created() {
             this.$nextTick(() => {
                 labelsListApi().then(res=>{
+                    if(res == undefined) return
                     let tags = res.data.map(item=>{
                         let tag = {name:item.labelName,url:'#'}
                         return tag

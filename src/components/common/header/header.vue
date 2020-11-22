@@ -88,7 +88,7 @@
                     this.isShow = true;
                 }
             }
-            if(this.token!=null){
+            if(this.token!=''){
                 this.userInfoById();
             }
         },

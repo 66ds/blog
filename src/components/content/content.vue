@@ -54,25 +54,27 @@
         </el-card>
         <el-card class="article-box-card animated fadeIn">
             <div class="tips">
-                <p><i class="el-icon-info" style="color: red;font-size: 14px;"></i> 留言说明: </p>
+                <p><i class="el-icon-info" style="color: red;font-size: 14px;"></i> 评论说明: </p>
                 <p data-v-0eafe26a="">务必填写有效的邮箱地址，否则不会收到回复信息的~</p>
             </div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="70px" class="demo-ruleForm">
-                <div class="form-top">
-                    <el-form-item label="昵称" prop="name">
-                        <el-input v-model="ruleForm.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="邮箱" prop="name">
-                        <el-input v-model="ruleForm.name"></el-input>
-                    </el-form-item>
-                </div>
-
                 <el-form-item label="内容" prop="desc">
                     <!-- 图片上传组件辅助-->
+                    <el-upload
+                            id="upimg"
+                            v-show="false"
+                            class="upload-demo"
+                            :action="imgUploadUrl"
+                            :on-success="handleSuccess"
+                            :headers="{token:token}"
+                            multiple
+                    >
+                        <el-button size="small" type="primary">点击上传</el-button>
+                    </el-upload>
                     <quill-editor
-                            v-model="content"
-                            ref="myQuillEditor"
-                            @change="onEditorChange($event)"
+                            v-model="ruleForm.desc"
+                            :options="editorOption"
+                            ref="QuillEditor"
                     >
                     </quill-editor>
                 </el-form-item>
@@ -114,53 +116,67 @@
 
 <script>
     import {articlesInfoApi} from './../../api/articles'
-    import {selectListLikeApi,likeArticleApi} from './../../api/like-article'
+    import {selectListLikeApi, likeArticleApi} from './../../api/like-article'
+
+    const toolbarOptions = [
+        ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+        ['blockquote', 'code-block'],
+
+        [{header: 1}, {header: 2}], // custom button values
+        [{list: 'ordered'}, {list: 'bullet'}],
+        [{script: 'sub'}, {script: 'super'}], // superscript/subscript
+        [{indent: '-1'}, {indent: '+1'}], // outdent/indent
+        [{direction: 'rtl'}], // text direction
+
+        [{size: ['small', false, 'large', 'huge']}], // custom dropdown
+        [{header: [1, 2, 3, 4, 5, 6, false]}],
+
+        [{color: []}, {background: []}], // dropdown with defaults from theme
+        [{font: []}],
+        [{align: []}],
+        ['link', 'image', 'video'],
+        ['clean'] // remove formatting button
+    ]
     export default {
         data() {
             return {
-                isShow: false,
+                // 上传图片接口地址
+                imgUploadUrl: 'http://127.0.0.1:12000/api/v1/pri/oos/upload',
+                // 富文本编辑器工具栏
+                editorOption: {
+                    modules: {
+                        toolbar: {
+                            container: toolbarOptions, // 工具栏
+                            handlers: {
+                                image: function (value) {
+                                    if (value) {
+                                        // 调用element的图片上传组件
+                                        // （这里是用的原生js的选择dom方法）
+                                        document.querySelector('#upimg button').click()
+                                    } else {
+                                        this.quill.format('image', false)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 ruleForm: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
                     desc: ''
                 },
-                location:document.location,
-                likeClass:"el-icon-star-off",
-                readTime:'',
-                editorOption:'',
-                content:'',
-                beginTime:new Date().getSeconds(),
-                interval:'',
-                articleInfo:{},
                 rules: {
-                    name: [
-                        { required: true, message: '请输入活动名称', trigger: 'blur' },
-                        { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-                    ],
-                    region: [
-                        { required: true, message: '请选择活动区域', trigger: 'change' }
-                    ],
-                    date1: [
-                        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-                    ],
-                    date2: [
-                        { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-                    ],
-                    type: [
-                        { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-                    ],
-                    resource: [
-                        { required: true, message: '请选择活动资源', trigger: 'change' }
-                    ],
                     desc: [
-                        { required: true, message: '请填写内容', trigger: 'blur' }
+                        {required: true, message: '请填写内容', trigger: 'blur'}
                     ]
-                }
+                },
+                readTime: '',
+                isShow: false,
+                interval: '',
+                articleInfo: {},
+                location: document.location,
+                likeClass: "el-icon-star-off",
+                beginTime: new Date().getSeconds(),
+                token: this.$store.getters.getToken
             }
         },
         methods: {
@@ -180,75 +196,90 @@
             countdown() {
                 const that = this
                 that.interval = setInterval(() => {
-                        that.readTime = new Date().getSeconds() - that.beginTime
-                        let day = parseInt(that.readTime / 60 / 60 / 24)
-                        let hr = parseInt(that.readTime / 60 / 60 % 24)
-                        let min = parseInt(that.readTime / 60 % 60)
-                        let sec = parseInt(that.readTime % 60)
+                    that.readTime = new Date().getSeconds() - that.beginTime
+                    let day = parseInt(that.readTime / 60 / 60 / 24)
+                    let hr = parseInt(that.readTime / 60 / 60 % 24)
+                    let min = parseInt(that.readTime / 60 % 60)
+                    let sec = parseInt(that.readTime % 60)
 
-                        day = day > 9 ? day : '0' + day
-                        hr = hr > 9 ? hr : '0' + hr
-                        min = min > 9 ? min : '0' + min
-                        sec = sec > 9 ? sec : '0' + sec
-                        that.readTime = `${day}天${hr}时${min}分${sec}秒`
+                    day = day > 9 ? day : '0' + day
+                    hr = hr > 9 ? hr : '0' + hr
+                    min = min > 9 ? min : '0' + min
+                    sec = sec > 9 ? sec : '0' + sec
+                    that.readTime = `${day}天${hr}时${min}分${sec}秒`
                 }, 1000);
             },
-            async likeArticle(id,token){
-                try{
-                    const res = await likeArticleApi(id,token)
-                    if(res.code != 0){
-                        return this.$message.warning(res.msg)
-                    }
-                    if(res.data == null){
+            async likeArticle(id, token) {
+                try {
+                    const res = await likeArticleApi(id, token)
+                    if(res == undefined) return
+                    if (res.data == null) {
                         this.likeClass = "el-icon-star-off"
                         this.$message.success("取消成功");
-                    }else{
+                    } else {
                         this.likeClass = "el-icon-star-on"
                         this.$message.success("点赞成功");
                     }
-                }catch (e) {
+                } catch (e) {
                     this.$message.error(e)
                 }
             },
-            like(){
-                const token = this.$store.getters.getToken;
+            like() {
                 //未登录
-                token == ''?this.$message.warning("点赞,请先登录"): this.likeArticle(this.$route.params.id,token)
+                this.likeArticle(this.$route.params.id, this.token)
             },
-            async articlesInfo(id){
-                try{
+            async articlesInfo(id) {
+                try {
                     const res = await articlesInfoApi(id)
+                    if(res == undefined) return
                     this.articleInfo = res.data;
-                }catch (e) {
+                } catch (e) {
                     this.$message.error(e)
                 }
             },
-            async selectListLike(id){
-                try{
+            async selectListLike(id) {
+                try {
                     const token = this.$store.getters.getToken;
-                    const res = await selectListLikeApi(id,token)
+                    const res = await selectListLikeApi(id, token)
+                    if(res == undefined) return
                     //已点赞
-                    if(res.data != null) {
+                    if (res.data != null) {
                         this.likeClass = "el-icon-star-on"
                     }
-                }catch (e) {
+                } catch (e) {
                     this.$message.error(e)
                 }
+            },
+            // element的upload组件上传图片成功后调用的函数
+            handleSuccess(res) {
+                // 获取富文本组件实例
+                let quill = this.$refs.QuillEditor.quill
+                if (res.code != 0) {
+                    return this.$message.error('清先登录')
+                }
+                this.$message.success('上传成功')
+                // 获取光标所在位置
+                let length = quill.getSelection().index
+                // 插入图片，res为服务器返回的图片链接地址
+                quill.insertEmbed(length, 'image', res.data)
+                // 调整光标到最后
+                quill.setSelection(length + 1)
+
             }
         },
-    created() {
-        //文章计时
-        this.countdown();
-        const id = this.$route.params.id;
-        this.articlesInfo(id);
-        //已登录,则判断该用户有么有点赞文章
-        if(this.token != ''){
-            this.selectListLike(id)
+        created() {
+            //文章计时
+            this.countdown();
+            const id = this.$route.params.id;
+            this.articlesInfo(id);
+            //已登录,则判断该用户有么有点赞文章
+            if (this.token != '') {
+                this.selectListLike(id)
+            }
+        },
+        beforeDestroy() {
+            clearInterval(this.interval)
         }
-    },
-    beforeDestroy() {
-        clearInterval(this.interval)
-    }
     }
 </script>
 
@@ -258,7 +289,7 @@
         margin: 30px auto 0px;
     }
 
-    .article .title{
+    .article .title {
         font-size: 20px;
         text-align: center;
         padding-bottom: 20px;
@@ -271,9 +302,10 @@
         padding: 0 5px 0 0;
     }
 
-    .article .content{
+    .article .content {
         padding-top: 20px;
     }
+
     .article-box-card {
         width: 100%;
         margin-bottom: 20px;
@@ -322,93 +354,99 @@
         line-height: 2;
     }
 
-    .article .introduce  .post-copyright{
+    .article .introduce .post-copyright {
         list-style: none;
     }
-    .article .thank .article-end{
+
+    .article .thank .article-end {
         text-align: center;
         color: #ccc;
         font-size: 16px;
         padding: 20px 0;
     }
 
-    .article .thank .article-end i{
+    .article .thank .article-end i {
         cursor: pointer;
     }
-    .article .tags>span {
+
+    .article .tags > span {
         margin-right: 10px;
     }
-    .article .tips{
+
+    .article .tips {
         line-height: 2;
         padding: 10px 0 20px;
         border-bottom: 1px solid #ccc;
         margin: 0 0 20px;
     }
-    .article .comment ul{
+
+    .article .comment ul {
         border-bottom: 1px solid #ececec;
         padding-left: 70px;
     }
-    .article .comment .who{
-        margin-top:5px;
+
+    .article .comment .who {
+        margin-top: 5px;
         line-height: 30px;
         display: flex;
         align-items: center;
     }
-    .article .comment .who .page{
+
+    .article .comment .who .page {
         margin-right: 10px;
     }
-    .article .comment .who .user{
+
+    .article .comment .who .user {
         color: #1abc9c;
         margin-right: 10px;
     }
-    .article .comment .who .sys,.exe{
+
+    .article .comment .who .sys, .exe {
         text-align: center;
         font-size: 12px;
         background-color: #ededed;
         padding: 0 10px;
         margin-right: 10px;
     }
-    .article .comment .who .time{
+
+    .article .comment .who .time {
         flex: 1;
         text-align: right;
         color: #999;
         font-size: 12px;
     }
-    .article .comment .write{
+
+    .article .comment .write {
         padding: 10px 0;
         line-height: 18px;
         letter-spacing: 1px;
     }
-    .article .el-form .form-top{
-        display: flex;
-    }
-    .article .el-form .form-top .el-form-item {
-        flex: 1;
-    }
-    .article .el-form-item__content{
+
+    .article .el-form-item__content {
         line-height: 0px !important;
     }
+
     .article .commnet-total {
         color: #303133;
         line-height: 36px;
         margin-left: 70px;
     }
 
-    @media screen and (max-width: 1000px) and (min-width: 0px){
-        .article{
+    @media screen and (max-width: 1000px) and (min-width: 0px) {
+        .article {
             width: 100%;
             padding: 0 20px;
         }
-        .article .form-top{
-            flex-direction: column;
-        }
-        .article .commnet-total{
+
+        .article .commnet-total {
             margin-left: 0px;
         }
-        .article .comment ul{
+
+        .article .comment ul {
             padding-left: 0px;
         }
-        .article .el-form-item__label{
+
+        .article .el-form-item__label {
             text-align: left;
         }
     }

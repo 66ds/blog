@@ -7,7 +7,7 @@
         <el-card class="message-box-card animated fadeIn">
             <div class="tips">
                 <p><i class="el-icon-info" style="color: red;font-size: 14px;"></i> 留言说明: </p>
-                <p data-v-0eafe26a="">务必填写有效的邮箱地址，否则不会收到回复信息的~</p>
+                <p data-v-0eafe26a="">务必填写有效的内容o，否则不会收到回复信息的~</p>
             </div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="70px" class="demo-ruleForm">
                 <div class="form-top">
@@ -69,6 +69,8 @@
     export default {
         data() {
             return{
+                // 上传图片接口地址
+                imgUploadUrl: 'http://xxxxxxxx/fileUpload',
                 ruleForm: {
                     name: '',
                     region: '',

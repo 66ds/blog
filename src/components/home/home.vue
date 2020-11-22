@@ -158,6 +158,7 @@
             async articlesList() {
                 this.loading = true;
                 const res = await articlesListApi(this.query)
+                if(res == undefined) return
                 this.tableData = res.data.list;
                 this.pageTotal = res.data.totalCount || 0;
                 this.loading = false;

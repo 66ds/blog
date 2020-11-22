@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { MessageBox } from 'element-ui';
-import Vue from 'vue'
+import { Message } from 'element-ui';
 
-//axios.defaults.headers.common['Authorization'] = localStorage.getItem("token");//设置请求头token
+// axios.defaults.headers.common['Authorization'] = localStorage.getItem("token");//设置请求头token
 
 const service = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
@@ -26,19 +25,28 @@ service.interceptors.request.use(
         }
         return config
     },
+    // eslint-disable-next-line no-unused-vars
     error => {
         return Promise.reject("Internet Error");
     }
 );
 service.interceptors.response.use(
-    response => {
-        const res = response.data
-        if (response.status === 200) {
-            return res;
+    res => {
+        if (res.status === 200) {
+            if(res.data.code === 10008){
+                 Message.error(res.data.msg)
+            }
+            else if(res.data.code === 0){
+                return res.data;
+            }
+            else {
+                 Message.error(res.data.msg)
+            }
         } else {
             return Promise.reject("Internet Error");
         }
     },
+    // eslint-disable-next-line no-unused-vars
     error => {
         return Promise.reject("Internet Error");
     }

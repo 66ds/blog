@@ -31,6 +31,7 @@
 
         created() {
             labelsListApi().then(res=>{
+                if(res == undefined) return
                 this.data = res.data;
             }).catch((e)=>{
                 this.$message.error(e);

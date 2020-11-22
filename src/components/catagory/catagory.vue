@@ -64,6 +64,7 @@
             async sortsList(){
                 try{
                     const res = await sortsListInfo();
+                    if(res == undefined) return
                     this.sortsData = res.data;
                 }catch (e) {
                     this.$message.error(e)
@@ -73,6 +74,7 @@
                 try{
                     this.loading = true;
                     const res = await articlesListApi(query);
+                    if(res == undefined) return
                     this.articlesData = res.data.list;
                     this.pageTotal = res.data.totalCount || 0;
                     this.loading = false;
@@ -84,6 +86,7 @@
                 try{
                     this.loading = true;
                     const res = await selectlistBySortId(id,query);
+                    if(res == undefined) return
                     //分类下没文章
                     if(res.data == null){
                         this.loading = false;

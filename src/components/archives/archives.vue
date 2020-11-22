@@ -73,6 +73,7 @@
         methods: {
             async articlesTimeList() {
                 const res = await articlesTimeListApi()
+                if(res == undefined) return
                 if (res.data != null) {
                     this.activities = res.data.map(item => {
                         return {timestamp: item}
@@ -83,6 +84,7 @@
                 try {
                     this.loading = true;
                     const res = await articlesListApi(query);
+                    if(res == undefined) return
                     this.articlesData = res.data.list;
                     this.pageTotal = res.data.totalCount || 0;
                     this.loading = false;
@@ -94,6 +96,7 @@
                 try{
                     this.loading = true;
                     const res = await articleListByTimeApi(time,query);
+                    if(res == undefined) return
                     if(res.data.list.length == 0){
                         this.loading = false;
                         return this.$message.warning("该归档下无文章")
