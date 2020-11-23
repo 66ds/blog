@@ -117,7 +117,7 @@
 <script>
     import {articlesInfoApi} from './../../api/articles'
     import {selectListLikeApi, likeArticleApi} from './../../api/like-article'
-
+    import {addCommentApi} from '../../api/comments'
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'], // toggled buttons
         ['blockquote', 'code-block'],
@@ -176,22 +176,31 @@
                 location: document.location,
                 likeClass: "el-icon-star-off",
                 beginTime: new Date().getSeconds(),
-                token: this.$store.getters.getToken
+                token: this.$store.getters.getToken,
+                articleId:this.$route.params.id
             }
         },
         methods: {
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        this.addComment(this.ruleForm.desc,this.articleId,0,this.token)
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
+            },
+            async addComment(content,articleId,parentCommentId,token){
+                try{
+                    const res = await addCommentApi(content,articleId,parentCommentId,token) ;
+                    if(res == undefined) return
+                    this.$message.success("评论成功")
+                }catch (e) {
+                    this.$message.error(e)
+                }
             },
             countdown() {
                 const that = this
@@ -270,11 +279,10 @@
         created() {
             //文章计时
             this.countdown();
-            const id = this.$route.params.id;
-            this.articlesInfo(id);
+            this.articlesInfo(this.articleId);
             //已登录,则判断该用户有么有点赞文章
             if (this.token != '') {
-                this.selectListLike(id)
+                this.selectListLike(this.articleId)
             }
         },
         beforeDestroy() {
