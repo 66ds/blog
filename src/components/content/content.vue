@@ -83,31 +83,32 @@
                     <el-button @click="resetForm('ruleForm')">重置</el-button>
                 </el-form-item>
             </el-form>
-            <div class="commnet-total"><span>共2条评论</span></div>
+            <div class="commnet-total"><span>共{{commentsInfo.length}}条评论</span></div>
             <div class="comment">
-                <ul style="list-style: none">
+                <ul style="list-style: none" v-for="(item,i) in commentsInfo" :key="i">
                     <li class="who">
-                        <span class="page">1.</span>
+                        <span class="page">{{i+1}}.</span>
                         <span class="user">44</span>
-                        <span class="sys">win10</span>
-                        <span class="exe">chrome</span>
-                        <span class="time">2017-7-11</span>
+                        <span class="sys">{{item.commentSys}}</span>
+                        <span class="exe">{{item.commentChrome}}</span>
+                        <span class="time">{{item.commentDate}}</span>
+                        <span class="dig"><i class="el-icon-star-off"></i>&nbsp;{{item.commentLikeCount}}</span>
                     </li>
                     <li class="write">
-                        外阿胶为和爱我和哦亲而后安慰i2121313大会上扩军多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多爱斯达克就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看家
+                        {{item.commentContent}}
                     </li>
-                </ul>
-                <ul style="list-style: none">
-                    <li class="who">
-                        <span class="page">2.</span>
-                        <span class="user">44</span>
-                        <span class="sys">win10</span>
-                        <span class="exe">chrome</span>
-                        <span class="time">2017-7-11</span>
-                    </li>
-                    <li class="write">
-                        外阿胶为和爱我和哦亲而后安慰i2121313大会上扩军多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多爱斯达克就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看家
-                    </li>
+                    <div v-for="(item,key) in commentsInfo[i].children" :key="key">
+                        <li class="who" style="padding-left: 40px;">
+                            <span class="user">44</span>
+                            <span class="sys">{{item.commentSys}}</span>
+                            <span class="exe">{{item.commentChrome}}</span>
+                            <span class="time">{{item.commentDate}}</span>
+                            <span class="dig"><i class="el-icon-star-off"></i>&nbsp;3</span>
+                        </li>
+                        <li class="write" style="padding-left: 30px;">
+                            {{item.commentContent}}
+                        </li>
+                    </div>
                 </ul>
             </div>
         </el-card>
@@ -117,7 +118,7 @@
 <script>
     import {articlesInfoApi} from './../../api/articles'
     import {selectListLikeApi, likeArticleApi} from './../../api/like-article'
-    import {addCommentApi} from '../../api/comments'
+    import {addCommentApi,selectListApi} from '../../api/comments'
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'], // toggled buttons
         ['blockquote', 'code-block'],
@@ -173,6 +174,7 @@
                 isShow: false,
                 interval: '',
                 articleInfo: {},
+                commentsInfo:[],
                 location: document.location,
                 likeClass: "el-icon-star-off",
                 beginTime: new Date().getSeconds(),
@@ -259,6 +261,30 @@
                     this.$message.error(e)
                 }
             },
+            async selectList(articleId){
+                try{
+                    const res = await selectListApi(articleId)
+                    if(res == undefined) return
+                    //遍历数据展示在评论列表上
+                    res.data.forEach(item => {
+                        let arr = new Array();
+                        item.children = this.getChildren(item.children,arr)
+                        this.commentsInfo.push(item)
+                    })
+                    console.log(this.commentsInfo)
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            getChildren(item,arr){
+                if(item.length != 0){
+                    item.forEach(res => {
+                        arr.push(res);
+                        this.getChildren(res.children,arr)
+                    })
+                }
+                return arr
+            },
             // element的upload组件上传图片成功后调用的函数
             handleSuccess(res) {
                 // 获取富文本组件实例
@@ -279,7 +305,10 @@
         created() {
             //文章计时
             this.countdown();
+            //获取文章信息
             this.articlesInfo(this.articleId);
+            //获取文章下的所有评论
+            this.selectList(this.articleId);
             //已登录,则判断该用户有么有点赞文章
             if (this.token != '') {
                 this.selectListLike(this.articleId)
@@ -409,7 +438,7 @@
         margin-right: 10px;
     }
 
-    .article .comment .who .sys, .exe {
+    .article .comment .who .sys, .exe,.time{
         text-align: center;
         font-size: 12px;
         background-color: #ededed;
@@ -417,7 +446,7 @@
         margin-right: 10px;
     }
 
-    .article .comment .who .time {
+    .article .comment .who .dig {
         flex: 1;
         text-align: right;
         color: #999;
