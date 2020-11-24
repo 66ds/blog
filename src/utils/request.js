@@ -27,7 +27,7 @@ service.interceptors.request.use(
     },
     // eslint-disable-next-line no-unused-vars
     error => {
-        return Promise.reject("Internet Error");
+        return Promise.reject("网络错误");
     }
 );
 service.interceptors.response.use(
@@ -43,12 +43,12 @@ service.interceptors.response.use(
                  Message.error(res.data.msg)
             }
         } else {
-            return Promise.reject("Internet Error");
+            return Promise.reject("网络错误");
         }
     },
     // eslint-disable-next-line no-unused-vars
     error => {
-        return Promise.reject("Internet Error");
+        return Promise.reject("网络错误");
     }
 );
 

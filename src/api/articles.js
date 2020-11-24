@@ -34,7 +34,7 @@ export const articlesTimeListApi = ()=>{
 }
 
 /*8
-查询时间对应的文字
+查询时间对应的文章
  */
 export const articleListByTimeApi = (time,query)=>{
     return request({

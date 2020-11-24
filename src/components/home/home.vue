@@ -8,7 +8,7 @@
             <el-card class="left-box-card" v-for="item in tableData" :key="item.articleId">
                 <div><a href="javascript:void(0)" @click="articleDetail(item.articleId)">{{item.articleTitle}}</a></div>
                 <div>
-                    <el-link icon="el-icon-user">作者:Mr Qian</el-link>&nbsp;|&nbsp;
+                    <el-link icon="el-icon-user">作者:{{item.userNickname}}</el-link>&nbsp;|&nbsp;
                     <el-link icon="el-icon-time">发表于:{{item.articleDate}}</el-link>&nbsp;|&nbsp;
                     <el-link icon="el-icon-s-unfold">分类:{{item.sortName}}</el-link>&nbsp;|&nbsp;
                     <el-link icon="el-icon-view">阅读量:{{item.articleViews}}</el-link>&nbsp;|&nbsp;

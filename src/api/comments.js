@@ -22,12 +22,23 @@ export const addCommentApi = (commentContent,articleId,parentCommentId,token) =>
 /**
  * 获取文章对应的所有评论列表
  * @param articleId
- * @returns {AxiosPromise}
+ * @param query
  */
-export const selectListApi = (articleId) =>{
+export const selectListApi = (articleId,query) =>{
     return request({
         url: '/api/v1/pub/comments/list/'+articleId,
-        method:'get'
+        method:'post',
+        data:query
     })
 }
 
+
+/**
+ * 根据父commentId获取用户信息
+ */
+export const selectUserInfoApi = (parentCommentId) =>{
+    return request({
+        url: '/api/v1/pub/comments/users/'+parentCommentId,
+        method:'get'
+    })
+}

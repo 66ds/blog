@@ -15,7 +15,7 @@ export const userLoginApi=(userTelephoneNumber,userPassword)=>{
 
 
 /**
- * 获取用户的个人信息
+ * 获取用户的个人信息(登录)
  * @param token
  */
 export const userInfoByIdApi=(token)=>{

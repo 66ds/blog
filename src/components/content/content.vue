@@ -3,6 +3,7 @@
         <el-card class="article-box-card animated fadeIn">
             <h2 class="title">{{articleInfo.articleTitle}}</h2>
             <div style="text-align: center;">
+                <el-link icon="el-icon-user">作者:{{articleInfo.userNickname}}</el-link>&nbsp;|&nbsp;
                 <el-link icon="el-icon-time">发表于:{{articleInfo.articleDate}}</el-link>&nbsp;|&nbsp;
                 <el-link icon="el-icon-s-unfold">分类:{{articleInfo.sortName}}</el-link>&nbsp;|&nbsp;
                 <el-link icon="el-icon-view">阅读量:{{articleInfo.articleViews}}</el-link>&nbsp;|&nbsp;
@@ -35,7 +36,7 @@
             </div>
             <div class="introduce">
                 <ul class="post-copyright">
-                    <li data-v-f5ca42f6="" class="post-copyright-author"><strong data-v-f5ca42f6="">本文作者： </strong>Mr.Yong
+                    <li data-v-f5ca42f6="" class="post-copyright-author"><strong data-v-f5ca42f6="">本文作者： </strong>{{articleInfo.userNickname}}
                     </li>
                     <li data-v-f5ca42f6="" class="post-copyright-link"><strong data-v-f5ca42f6="">本文链接：</strong> <a
                             data-v-f5ca42f6="" href="/view/94" title="客户端连接MySQL8提示 caching-sha2-password 问题">{{location}}</a>
@@ -59,24 +60,25 @@
             </div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="70px" class="demo-ruleForm">
                 <el-form-item label="内容" prop="desc">
-                    <!-- 图片上传组件辅助-->
-                    <el-upload
-                            id="upimg"
-                            v-show="false"
-                            class="upload-demo"
-                            :action="imgUploadUrl"
-                            :on-success="handleSuccess"
-                            :headers="{token:token}"
-                            multiple
-                    >
-                        <el-button size="small" type="primary">点击上传</el-button>
-                    </el-upload>
-                    <quill-editor
-                            v-model="ruleForm.desc"
-                            :options="editorOption"
-                            ref="QuillEditor"
-                    >
-                    </quill-editor>
+                    <!--&lt;!&ndash; 图片上传组件辅助&ndash;&gt;-->
+                    <!--<el-upload-->
+                            <!--id="upimg"-->
+                            <!--v-show="false"-->
+                            <!--class="upload-demo"-->
+                            <!--:action="imgUploadUrl"-->
+                            <!--:on-success="handleSuccess"-->
+                            <!--:headers="{token:token}"-->
+                            <!--multiple-->
+                    <!--&gt;-->
+                        <!--<el-button size="small" type="primary">点击上传</el-button>-->
+                    <!--</el-upload>-->
+                    <!--<quill-editor-->
+                            <!--v-model="ruleForm.desc"-->
+                            <!--:options="editorOption"-->
+                            <!--ref="QuillEditor"-->
+                    <!--&gt;-->
+                    <!--</quill-editor>-->
+                    <el-input type="textarea" v-model="ruleForm.desc" maxlength="100"  show-word-limit :autosize="{ minRows: 4, maxRows: 5}"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
@@ -88,7 +90,7 @@
                 <ul style="list-style: none" v-for="(item,i) in commentsInfo" :key="i">
                     <li class="who">
                         <span class="page">{{i+1}}.</span>
-                        <span class="user">44</span>
+                        <span class="user">{{item.usersEntity.userNickname}}</span>
                         <span class="sys">{{item.commentSys}}</span>
                         <span class="exe">{{item.commentChrome}}</span>
                         <span class="time">{{item.commentDate}}</span>
@@ -97,19 +99,29 @@
                     <li class="write">
                         {{item.commentContent}}
                     </li>
-                    <div v-for="(item,key) in commentsInfo[i].children" :key="key">
-                        <li class="who" style="padding-left: 40px;">
-                            <span class="user">44</span>
-                            <span class="sys">{{item.commentSys}}</span>
-                            <span class="exe">{{item.commentChrome}}</span>
-                            <span class="time">{{item.commentDate}}</span>
-                            <span class="dig"><i class="el-icon-star-off"></i>&nbsp;3</span>
-                        </li>
-                        <li class="write" style="padding-left: 30px;">
-                            {{item.commentContent}}
-                        </li>
+                        <div    v-for="(comments,j) in commentsInfo[i].children" :key="j">
+                            <li class="who" style="padding-left: 40px;">
+                                <span class="page">{{i+1}}.{{j+1}}</span>
+                                <span class="user">{{comments.usersEntity.userNickname}}&nbsp;回复:{{comments.parentUsersEntity.userNickname}}</span>
+                                <span class="sys">{{comments.commentSys}}</span>
+                                <span class="exe">{{comments.commentChrome}}</span>
+                                <span class="time">{{comments.commentDate}}</span>
+                                <span class="dig"><i class="el-icon-star-off"></i>&nbsp;{{comments.commentLikeCount}}</span>
+                            </li>
+                            <li class="write" style="padding-left: 30px;">
+                                {{comments.commentContent}}
+                            </li>
                     </div>
                 </ul>
+                <div class="pagination" style="text-align: center">
+                    <el-pagination
+                            layout="prev, pager, next"
+                            :current-page="query.page"
+                            :page-size="query.limit"
+                            :total="pageTotal"
+                            @current-change="handlePageChange"
+                    ></el-pagination>
+                </div>
             </div>
         </el-card>
     </div>
@@ -170,6 +182,11 @@
                         {required: true, message: '请填写内容', trigger: 'blur'}
                     ]
                 },
+                query: {
+                    page: 1,
+                    limit: 10
+                },
+                pageTotal: 0,
                 readTime: '',
                 isShow: false,
                 interval: '',
@@ -179,7 +196,7 @@
                 likeClass: "el-icon-star-off",
                 beginTime: new Date().getSeconds(),
                 token: this.$store.getters.getToken,
-                articleId:this.$route.params.id
+                articleId:this.$route.params.id,
             }
         },
         methods: {
@@ -200,26 +217,28 @@
                     const res = await addCommentApi(content,articleId,parentCommentId,token) ;
                     if(res == undefined) return
                     this.$message.success("评论成功")
+                    //重新文章下的所有评论
+                    this.selectList(this.articleId);
                 }catch (e) {
                     this.$message.error(e)
                 }
             },
-            countdown() {
-                const that = this
-                that.interval = setInterval(() => {
-                    that.readTime = new Date().getSeconds() - that.beginTime
-                    let day = parseInt(that.readTime / 60 / 60 / 24)
-                    let hr = parseInt(that.readTime / 60 / 60 % 24)
-                    let min = parseInt(that.readTime / 60 % 60)
-                    let sec = parseInt(that.readTime % 60)
-
-                    day = day > 9 ? day : '0' + day
-                    hr = hr > 9 ? hr : '0' + hr
-                    min = min > 9 ? min : '0' + min
-                    sec = sec > 9 ? sec : '0' + sec
-                    that.readTime = `${day}天${hr}时${min}分${sec}秒`
-                }, 1000);
-            },
+            // countdown() {
+            //     const that = this
+            //     that.interval = setInterval(() => {
+            //         that.readTime = new Date().getSeconds() - that.beginTime
+            //         let day = parseInt(that.readTime / 60 / 60 / 24)
+            //         let hr = parseInt(that.readTime / 60 / 60 % 24)
+            //         let min = parseInt(that.readTime / 60 % 60)
+            //         let sec = parseInt(that.readTime % 60)
+            //
+            //         day = day > 9 ? day : '0' + day
+            //         hr = hr > 9 ? hr : '0' + hr
+            //         min = min > 9 ? min : '0' + min
+            //         sec = sec > 9 ? sec : '0' + sec
+            //         that.readTime = `${day}天${hr}时${min}分${sec}秒`
+            //     }, 1000);
+            // },
             async likeArticle(id, token) {
                 try {
                     const res = await likeArticleApi(id, token)
@@ -261,17 +280,19 @@
                     this.$message.error(e)
                 }
             },
-            async selectList(articleId){
+            async selectList(articleId,query){
                 try{
-                    const res = await selectListApi(articleId)
+                    const res = await selectListApi(articleId,query)
                     if(res == undefined) return
                     //遍历数据展示在评论列表上
-                    res.data.forEach(item => {
+                    this.commentsInfo.splice(0)
+                    res.data.list.forEach(item => {
                         let arr = new Array();
                         item.children = this.getChildren(item.children,arr)
                         this.commentsInfo.push(item)
                     })
-                    console.log(this.commentsInfo)
+                    //分页数
+                    this.pageTotal = res.data.totalCount || 0;
                 }catch (e) {
                     this.$message.error(e)
                 }
@@ -285,12 +306,12 @@
                 }
                 return arr
             },
-            // element的upload组件上传图片成功后调用的函数
+            //element的upload组件上传图片成功后调用的函数
             handleSuccess(res) {
                 // 获取富文本组件实例
                 let quill = this.$refs.QuillEditor.quill
                 if (res.code != 0) {
-                    return this.$message.error('清先登录')
+                    return this.$message.error('请先登录')
                 }
                 this.$message.success('上传成功')
                 // 获取光标所在位置
@@ -300,15 +321,20 @@
                 // 调整光标到最后
                 quill.setSelection(length + 1)
 
-            }
+            },
+            // 分页导航
+            handlePageChange(val) {
+                this.$set(this.query, 'page', val);
+                this.selectList(this.articleId,this.query)
+            },
         },
         created() {
             //文章计时
-            this.countdown();
+            // this.countdown();
             //获取文章信息
             this.articlesInfo(this.articleId);
             //获取文章下的所有评论
-            this.selectList(this.articleId);
+            this.selectList(this.articleId,this.query);
             //已登录,则判断该用户有么有点赞文章
             if (this.token != '') {
                 this.selectListLike(this.articleId)
@@ -468,6 +494,11 @@
         line-height: 36px;
         margin-left: 70px;
     }
+
+    .article .ul,.el-pager{
+        padding-left:0px !important;
+    }
+
 
     @media screen and (max-width: 1000px) and (min-width: 0px) {
         .article {
