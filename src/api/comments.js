@@ -24,7 +24,7 @@ export const addCommentApi = (commentContent,articleId,parentCommentId,token) =>
  * @param articleId
  * @param query
  */
-export const selectListApi = (articleId,query) =>{
+export const selectCommentListApi = (articleId,query) =>{
     return request({
         url: '/api/v1/pub/comments/list/'+articleId,
         method:'post',

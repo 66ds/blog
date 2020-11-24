@@ -1,10 +1,10 @@
 import request from '../utils/request';
 
 /**
- * 文章列表查询
+ * 查看用户是否点赞了文章
  * @param token
  */
-export const selectListLikeApi = (articleId,token) => {
+export const selectArticleListLikeApi = (articleId,token) => {
     return request({
         url: '/api/v1/pri/likearticleuser/list/'+articleId,
         method: 'post',
@@ -15,7 +15,7 @@ export const selectListLikeApi = (articleId,token) => {
 };
 
 /**
- * 点赞文章
+ * 用户点赞文章
  * @param articleId
  * @param token
  */

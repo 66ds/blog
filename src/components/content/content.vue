@@ -7,8 +7,7 @@
                 <el-link icon="el-icon-time">发表于:{{articleInfo.articleDate}}</el-link>&nbsp;|&nbsp;
                 <el-link icon="el-icon-s-unfold">分类:{{articleInfo.sortName}}</el-link>&nbsp;|&nbsp;
                 <el-link icon="el-icon-view">阅读量:{{articleInfo.articleViews}}</el-link>&nbsp;|&nbsp;
-                <el-link icon="el-icon-chat-line-round">评论数:{{articleInfo.articleCommentCount}}</el-link>&nbsp;|&nbsp;
-                <el-link icon="el-icon-chat-line-round">阅读时间:{{readTime}}</el-link>
+                <el-link icon="el-icon-chat-line-round">评论数:{{totalCount}}</el-link>
             </div>
             <div class="content markdown-body" v-html="articleInfo.articleContent">
 
@@ -85,28 +84,43 @@
                     <el-button @click="resetForm('ruleForm')">重置</el-button>
                 </el-form-item>
             </el-form>
-            <div class="commnet-total"><span>共{{commentsInfo.length}}条评论</span></div>
-            <div class="comment">
+            <div class="commnet-total"><span>共{{totalCount}}条评论</span><span v-if="totalCount==0">,快来成为第一个评论的吧~</span></div>
+            <div class="comment" v-loading="loading"
+                 element-loading-text="拼命加载中"
+                 element-loading-spinner="el-icon-loading"
+                 >
                 <ul style="list-style: none" v-for="(item,i) in commentsInfo" :key="i">
                     <li class="who">
-                        <span class="page">{{i+1}}.</span>
+<!--                        <span class="page">{{i+1}}.</span>-->
                         <span class="user">{{item.usersEntity.userNickname}}</span>
                         <span class="sys">{{item.commentSys}}</span>
                         <span class="exe">{{item.commentChrome}}</span>
                         <span class="time">{{item.commentDate}}</span>
-                        <span class="dig"><i class="el-icon-star-off"></i>&nbsp;{{item.commentLikeCount}}</span>
+                        <span @click="isActive = item.commentId,commentDesc=''" :class="{'commentActive':isActive == item.commentId,'reply':true}">回复</span>
+                        <span @click="isActive = ''" :class="{'commentActive':isActive != item.commentId,'reply':true}">取消回复</span>
+                        <span @click="reply(item.commentId)" :class="{'commentActive':isActive != item.commentId,'reply':true}">发表评论</span>
+                        <span class="dig" @click="dig(item.commentId,item)"><i :class="commentsList.includes(item.commentId)?'el-icon-star-on':'el-icon-star-off'"></i>&nbsp;{{item.commentLikeCount}}</span>
+                    </li>
+                    <li  :class="{'commentActive':isActive != item.commentId}"  class="animated rubberBand">
+                        <el-input type="textarea" v-model="commentDesc" maxlength="100"  show-word-limit :autosize="{ minRows: 2, maxRows: 5}"></el-input>
                     </li>
                     <li class="write">
                         {{item.commentContent}}
                     </li>
-                        <div    v-for="(comments,j) in commentsInfo[i].children" :key="j">
+                        <div  v-for="(comments,j) in commentsInfo[i].children" :key="j" style="border-bottom: 1px solid #ececec;">
                             <li class="who" style="padding-left: 40px;">
-                                <span class="page">{{i+1}}.{{j+1}}</span>
+<!--                                <span class="page">{{i+1}}.{{j+1}}</span>-->
                                 <span class="user">{{comments.usersEntity.userNickname}}&nbsp;回复:{{comments.parentUsersEntity.userNickname}}</span>
                                 <span class="sys">{{comments.commentSys}}</span>
                                 <span class="exe">{{comments.commentChrome}}</span>
                                 <span class="time">{{comments.commentDate}}</span>
-                                <span class="dig"><i class="el-icon-star-off"></i>&nbsp;{{comments.commentLikeCount}}</span>
+                                <span @click="isActive = comments.commentId,commentDesc=''" :class="{'commentActive':isActive == comments.commentId,'reply':true}">回复</span>
+                                <span @click="isActive = ''" :class="{'commentActive':isActive != comments.commentId,'reply':true}">取消回复</span>
+                                <span @click="reply(comments.commentId)" :class="{'commentActive':isActive != comments.commentId,'reply':true}">发表评论</span>
+                                <span class="dig" @click="dig(comments.commentId,comments)"><i :class="commentsList.includes(comments.commentId)?'el-icon-star-on':'el-icon-star-off'"></i>&nbsp;{{comments.commentLikeCount}}</span>
+                            </li>
+                            <li  :class="{'commentActive':isActive != comments.commentId}" class="animated rubberBand">
+                                <el-input type="textarea" v-model="commentDesc" maxlength="100"  show-word-limit :autosize="{ minRows: 2, maxRows: 5}"></el-input>
                             </li>
                             <li class="write" style="padding-left: 30px;">
                                 {{comments.commentContent}}
@@ -129,8 +143,9 @@
 
 <script>
     import {articlesInfoApi} from './../../api/articles'
-    import {selectListLikeApi, likeArticleApi} from './../../api/like-article'
-    import {addCommentApi,selectListApi} from '../../api/comments'
+    import {selectArticleListLikeApi, likeArticleApi} from './../../api/like-article'
+    import {selectCommentListLikeApi,likeCommentApi} from './../../api/like-comment'
+    import {addCommentApi,selectCommentListApi} from '../../api/comments'
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'], // toggled buttons
         ['blockquote', 'code-block'],
@@ -186,15 +201,18 @@
                     page: 1,
                     limit: 10
                 },
+                commentDesc:'',
                 pageTotal: 0,
-                readTime: '',
+                totalCount:0,
                 isShow: false,
-                interval: '',
+                loading:true,
                 articleInfo: {},
                 commentsInfo:[],
+                commentsList:[],
+                isActive:'',
                 location: document.location,
                 likeClass: "el-icon-star-off",
-                beginTime: new Date().getSeconds(),
+                likeCommentClass:"el-icon-star-off",
                 token: this.$store.getters.getToken,
                 articleId:this.$route.params.id,
             }
@@ -203,6 +221,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        //添加评论
                         this.addComment(this.ruleForm.desc,this.articleId,0,this.token)
                     } else {
                         return false;
@@ -212,36 +231,27 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
+            //公共模块 添加评论并重新刷新评论
             async addComment(content,articleId,parentCommentId,token){
                 try{
                     const res = await addCommentApi(content,articleId,parentCommentId,token) ;
                     if(res == undefined) return
                     this.$message.success("评论成功")
+                    //删除上面textarea内容
+                    this.ruleForm.desc = ""
                     //重新文章下的所有评论
-                    this.selectList(this.articleId);
+                    this.$set(this.query, 'page', 1);
+                    this.selectCommentList(this.articleId,this.query);
+                    //消除当前下面textarea的内容
+                    this.isActive = ''
                 }catch (e) {
                     this.$message.error(e)
                 }
             },
-            // countdown() {
-            //     const that = this
-            //     that.interval = setInterval(() => {
-            //         that.readTime = new Date().getSeconds() - that.beginTime
-            //         let day = parseInt(that.readTime / 60 / 60 / 24)
-            //         let hr = parseInt(that.readTime / 60 / 60 % 24)
-            //         let min = parseInt(that.readTime / 60 % 60)
-            //         let sec = parseInt(that.readTime % 60)
-            //
-            //         day = day > 9 ? day : '0' + day
-            //         hr = hr > 9 ? hr : '0' + hr
-            //         min = min > 9 ? min : '0' + min
-            //         sec = sec > 9 ? sec : '0' + sec
-            //         that.readTime = `${day}天${hr}时${min}分${sec}秒`
-            //     }, 1000);
-            // },
-            async likeArticle(id, token) {
+            //点赞文章
+            async likeArticle(articleId, token) {
                 try {
-                    const res = await likeArticleApi(id, token)
+                    const res = await likeArticleApi(articleId, token)
                     if(res == undefined) return
                     if (res.data == null) {
                         this.likeClass = "el-icon-star-off"
@@ -254,23 +264,52 @@
                     this.$message.error(e)
                 }
             },
+            //点赞评论
+            async likeComment(commentId,token,comment){
+                try {
+                    const res = await likeCommentApi(commentId, token)
+                    if(res == undefined) return
+                    if (res.data == null) {
+                        this.$set(comment,"commentLikeCount",comment.commentLikeCount-1)
+                        this.$message.success("取消成功");
+                    } else {
+                        this.$set(comment,"commentLikeCount",comment.commentLikeCount+1)
+                        this.$message.success("点赞成功");
+                    }
+                    //已登录,则判断该用户有么有有没有点赞评论
+                    this.selectCommentListLike(this.articleId,this.token)
+
+                } catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            //点赞文章
             like() {
                 //未登录
                 this.likeArticle(this.$route.params.id, this.token)
+            },
+            //点赞评论
+            dig(commentId,comment){
+                //未登录
+                this.likeComment(commentId,this.token,comment)
             },
             async articlesInfo(id) {
                 try {
                     const res = await articlesInfoApi(id)
                     if(res == undefined) return
                     this.articleInfo = res.data;
+                    //已登录,则判断该用户有么有点赞文章
+                    if (this.token != '') {
+                        this.selectArticleListLike(this.articleId)
+                    }
                 } catch (e) {
                     this.$message.error(e)
                 }
             },
-            async selectListLike(id) {
+            async selectArticleListLike(id) {
                 try {
                     const token = this.$store.getters.getToken;
-                    const res = await selectListLikeApi(id, token)
+                    const res = await selectArticleListLikeApi(id, token)
                     if(res == undefined) return
                     //已点赞
                     if (res.data != null) {
@@ -280,9 +319,19 @@
                     this.$message.error(e)
                 }
             },
-            async selectList(articleId,query){
+            async selectCommentListLike(articleId,token){
+              try{
+                  const res = await selectCommentListLikeApi(articleId,token)
+                  if(res == undefined) return
+                  this.commentsList = res.data
+              }catch (e) {
+                  this.$message.error(e)
+              }
+            },
+            async selectCommentList(articleId,query){
                 try{
-                    const res = await selectListApi(articleId,query)
+                    this.loading = true
+                    const res = await selectCommentListApi(articleId,query)
                     if(res == undefined) return
                     //遍历数据展示在评论列表上
                     this.commentsInfo.splice(0)
@@ -291,8 +340,13 @@
                         item.children = this.getChildren(item.children,arr)
                         this.commentsInfo.push(item)
                     })
+                    this.loading = false
+                    this.totalCount = res.data.totalCount || 0
                     //分页数
                     this.pageTotal = res.data.totalCount || 0;
+                    if (this.token != '') {
+                        this.selectCommentListLike(this.articleId,this.token)
+                    }
                 }catch (e) {
                     this.$message.error(e)
                 }
@@ -325,23 +379,23 @@
             // 分页导航
             handlePageChange(val) {
                 this.$set(this.query, 'page', val);
-                this.selectList(this.articleId,this.query)
+                this.selectCommentList(this.articleId,this.query)
             },
+            //回复评论(添加评论)
+            reply(parentId){
+                if(this.commentDesc == ''){
+                    return this.$message.warning("请填写内容")
+                }else{
+                    //添加评论
+                    this.addComment(this.commentDesc,this.articleId,parentId,this.token)
+                }
+            }
         },
         created() {
-            //文章计时
-            // this.countdown();
             //获取文章信息
             this.articlesInfo(this.articleId);
             //获取文章下的所有评论
-            this.selectList(this.articleId,this.query);
-            //已登录,则判断该用户有么有点赞文章
-            if (this.token != '') {
-                this.selectListLike(this.articleId)
-            }
-        },
-        beforeDestroy() {
-            clearInterval(this.interval)
+            this.selectCommentList(this.articleId,this.query);
         }
     }
 </script>
@@ -464,10 +518,16 @@
         margin-right: 10px;
     }
 
-    .article .comment .who .sys, .exe,.time{
+    .article .comment .who .reply {
+        color: #5893c2;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+    .article .comment .who .sys, .exe,.time,.reply{
         text-align: center;
         font-size: 12px;
-        background-color: #ededed;
+        /*background-color: #ededed;*/
         padding: 0 10px;
         margin-right: 10px;
     }
@@ -477,6 +537,10 @@
         text-align: right;
         color: #999;
         font-size: 12px;
+    }
+
+    .article .comment .commentActive{
+        display: none;
     }
 
     .article .comment .write {
