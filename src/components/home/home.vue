@@ -39,18 +39,31 @@
             <div slot="header" class="clearfix">
                 <i class="el-icon-picture" style="color: orange"></i>&nbsp;<span>{{userCardData.userName}}的名片</span>
             </div>
-            <div class="text item" style="display: flex !important;">
-                <dl>昵称:{{userCardData.userName}}</dl>
-                <dl>文章:{{userCardData.allArticlesNumber}}</dl>
-                <dl>赞数:{{userCardData.allArticlesLikeNumber}}</dl>
-                <dl>访问:{{userCardData.allArticleViewsNumber}}</dl>
+            <div class="item" style="display: flex">
+                <dl class="text-align">
+                    <dt><span class="count"></span>{{userCardData.userName}}</dt>
+                    <dd>昵称</dd>
+                </dl>
+                <dl class="text-align">
+                    <dt><span class="count"></span>{{userCardData.allArticlesNumber}}</dt>
+                    <dd>文章</dd>
+                </dl>
+                <dl class="text-align">
+                    <dt><span class="count"></span>{{userCardData.allArticlesLikeNumber}}</dt>
+                    <dd>赞数</dd>
+                </dl>
+                <dl class="text-align">
+                    <dt><span class="count"></span>{{userCardData.allArticleViewsNumber}}</dt>
+                    <dd>访问</dd>
+                </dl>
+                <dl class="text-align">
+                    <dt><span class="count"></span>{{userCardData.allArticlesCommentsNumber}}</dt>
+                    <dd>评论</dd>
+                </dl>
             </div>
-            <div class="text item">
-                评论:{{userCardData.allArticlesCommentsNumber}}
-            </div>
-            <div class="text item">
-                <el-button type="info" circle>私信</el-button>
-                <el-button type="danger" circle>关注</el-button>
+            <div class="item">
+                <el-button type="info">私信</el-button>
+                <el-button type="danger">关注</el-button>
             </div>
             </el-card>
             <el-card class="right-box-card">
@@ -65,15 +78,15 @@
                 <div slot="header" class="clearfix">
                     <i class="el-icon-star-on" style="color: red"></i>&nbsp;<span>最热文章</span>
                 </div>
-                <div class="text item">
-                    <el-link :underline="false"  v-for="(item,key) in newTableHotData"><i>{{key+1}}</i>{{item.articleIntroduce}}</el-link>
+                <div class="item">
+                    <el-link :underline="false"  v-for="(item,key) in newTableHotData" :key="key"><i>{{key+1}}</i>{{item.articleIntroduce}}</el-link>
                 </div>
             </el-card>
             <el-card class="right-box-card">
                 <div slot="header" class="clearfix">
                     <i class="el-icon-s-order" style="color: green"></i>&nbsp;<span>文章归档</span>
                 </div>
-                <div class="text item circle">
+                <div class="item circle">
                     <el-link :underline="false" v-for="(item,key) in newTableTimeData" :key="key">{{item}}</el-link>
                 </div>
             </el-card>
@@ -81,15 +94,15 @@
                 <div slot="header" class="clearfix">
                     <i class="el-icon-star-on" style="color: red"></i>&nbsp;<span>最新文章</span>
                 </div>
-                <div class="text item">
-                    <el-link :underline="false" v-for="(item,key) in newTableData"><i>{{key+1}}</i>{{item.articleIntroduce}}</el-link>
+                <div class="item">
+                    <el-link :underline="false" v-for="(item,key) in newTableData" :key="key"><i>{{key+1}}</i>{{item.articleIntroduce}}</el-link>
                 </div>
             </el-card>
             <el-card class="right-box-card">
                 <div slot="header" class="clearfix">
                     <i class="el-icon-link" style="color: red"></i>&nbsp;<span>友链</span>
                 </div>
-                <div class="text item circle">
+                <div class="item circle">
                     <el-link :underline="false">小明博客</el-link>
                     <el-link :underline="false">2017-8-10</el-link>
                     <el-link :underline="false">2017-8-10</el-link>
@@ -236,11 +249,8 @@
         width: 65%;
     }
 
-    .text {
-        font-size: 15px;
-    }
-
     .item {
+        font-size: 15px;
         margin-bottom: 18px;
     }
 
@@ -291,6 +301,25 @@
         background-color: unset;
     }
 
+    .el-card .item .count{
+        color: #4a4d52;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 22px;
+    }
+
+    .el-card .item .text-align{
+        text-align: center;
+        flex: 1;
+    }
+
+    .el-card .item dd{
+        color: #999aaa;
+        font-size: 14px;
+        line-height: 22px;
+        padding: 3px 0;
+    }
+
     .el-card .item .el-link {
         display: block;
         line-height: 2.5;
@@ -302,6 +331,7 @@
         font-weight: 700;
         padding: 0 5px 0 0;
     }
+
 
     .el-card .item .el-link .el-link--inner {
         clear: both;
@@ -317,6 +347,9 @@
         width: 50%;
         line-height: 2;
     }
+
+
+
 
     @media screen and (max-width: 1000px) and (min-width: 0px) {
         .right {

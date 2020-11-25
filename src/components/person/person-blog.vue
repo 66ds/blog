@@ -39,31 +39,38 @@
                 <div slot="header" class="clearfix">
                     <i class="el-icon-picture" style="color: orange"></i>&nbsp;<span>{{userCardData.userName}}的名片</span>
                 </div>
-                <div class="text item">
-                    昵称:{{userCardData.userName}}
+                <div class="item" style="display: flex">
+                    <dl class="text-align">
+                        <dt><span class="count"></span>{{userCardData.userName}}</dt>
+                        <dd>昵称</dd>
+                    </dl>
+                    <dl class="text-align">
+                        <dt><span class="count"></span>{{userCardData.allArticlesNumber}}</dt>
+                        <dd>文章</dd>
+                    </dl>
+                    <dl class="text-align">
+                        <dt><span class="count"></span>{{userCardData.allArticlesLikeNumber}}</dt>
+                        <dd>赞数</dd>
+                    </dl>
+                    <dl class="text-align">
+                        <dt><span class="count"></span>{{userCardData.allArticleViewsNumber}}</dt>
+                        <dd>访问</dd>
+                    </dl>
+                    <dl class="text-align">
+                        <dt><span class="count"></span>{{userCardData.allArticlesCommentsNumber}}</dt>
+                        <dd>评论</dd>
+                    </dl>
                 </div>
-                <div class="text item">
-                    文章:{{userCardData.allArticlesNumber}}
-                </div>
-                <div class="text item">
-                    赞数:{{userCardData.allArticlesLikeNumber}}
-                </div>
-                <div class="text item">
-                    访问:{{userCardData.allArticleViewsNumber}}
-                </div>
-                <div class="text item">
-                    评论:{{userCardData.allArticlesCommentsNumber}}
-                </div>
-                <div class="text item">
-                    <el-button type="info" circle>私信</el-button>
-                    <el-button type="danger" circle>关注</el-button>
+                <div class="item">
+                    <el-button type="info">私信</el-button>
+                    <el-button type="danger">关注</el-button>
                 </div>
             </el-card>
             <el-card class="right-box-card">
                 <div slot="header" class="clearfix">
                     <i class="el-icon-star-on" style="color: red"></i>&nbsp;<span>最热文章</span>
                 </div>
-                <div class="text item">
+                <div class="item">
                     <el-link :underline="false"  v-for="(item,key) in newTableHotData" :key="key"><i>{{key+1}}</i>{{item.articleIntroduce}}</el-link>
                 </div>
             </el-card>
@@ -71,7 +78,7 @@
                 <div slot="header" class="clearfix">
                     <i class="el-icon-star-on" style="color: red"></i>&nbsp;<span>最新文章</span>
                 </div>
-                <div class="text item">
+                <div class="item">
                     <el-link :underline="false" v-for="(item,key) in newTableData" :key="key"><i>{{key+1}}</i>{{item.articleIntroduce}}</el-link>
                 </div>
             </el-card>
@@ -110,6 +117,9 @@
                     this.loading = true;
                     const res = await articlesListApi(this.query)
                     if(res == undefined) return
+                    if(res.data.list.length == 0){
+                        this.$message.success("该用户暂时还没有发表文章o~")
+                    }
                     this.tableData = res.data.list;
                     this.pageTotal = res.data.totalCount || 0;
                     this.loading = false;
@@ -192,11 +202,8 @@
         width: 65%;
     }
 
-    .person-blog .text {
-        font-size: 15px;
-    }
-
     .person-blog .item {
+        font-size: 15px;
         margin-bottom: 18px;
     }
 
@@ -245,6 +252,25 @@
 
     .person-blog .el-card {
         background-color: unset;
+    }
+
+    .person-blog .el-card .item .count{
+        color: #4a4d52;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 22px;
+    }
+
+    .person-blog .el-card .item dd{
+        color: #999aaa;
+        font-size: 14px;
+        line-height: 22px;
+        padding: 3px 0;
+    }
+
+    .person-blog .el-card .item .text-align{
+        text-align: center;
+        flex: 1;
     }
 
     .person-blog .el-card .item .el-link {

@@ -99,7 +99,7 @@
                         <span @click="isActive = item.commentId,commentDesc=''" :class="{'commentActive':isActive == item.commentId,'reply':true}">回复</span>
                         <span @click="isActive = ''" :class="{'commentActive':isActive != item.commentId,'reply':true}">取消回复</span>
                         <span @click="reply(item.commentId)" :class="{'commentActive':isActive != item.commentId,'reply':true}">发表评论</span>
-                        <span class="dig" @click="dig(item.commentId,item)"><i :class="commentsList.includes(item.commentId)?'el-icon-star-on':'el-icon-star-off'"></i>&nbsp;{{item.commentLikeCount}}</span>
+                        <span class="dig"><i :class="commentsList.includes(item.commentId)?'el-icon-star-on':'el-icon-star-off'" @click="dig(item.commentId,item)" style="cursor: pointer"></i>&nbsp;{{item.commentLikeCount}}</span>
                     </li>
                     <li  :class="{'commentActive':isActive != item.commentId}"  class="animated rubberBand">
                         <el-input type="textarea" v-model="commentDesc" maxlength="100"  show-word-limit :autosize="{ minRows: 2, maxRows: 5}"></el-input>
@@ -117,7 +117,7 @@
                                 <span @click="isActive = comments.commentId,commentDesc=''" :class="{'commentActive':isActive == comments.commentId,'reply':true}">回复</span>
                                 <span @click="isActive = ''" :class="{'commentActive':isActive != comments.commentId,'reply':true}">取消回复</span>
                                 <span @click="reply(comments.commentId)" :class="{'commentActive':isActive != comments.commentId,'reply':true}">发表评论</span>
-                                <span class="dig" @click="dig(comments.commentId,comments)"><i :class="commentsList.includes(comments.commentId)?'el-icon-star-on':'el-icon-star-off'"></i>&nbsp;{{comments.commentLikeCount}}</span>
+                                <span class="dig"><i @click="dig(comments.commentId,comments)" :class="commentsList.includes(comments.commentId)?'el-icon-star-on':'el-icon-star-off'" style="cursor: pointer"></i>&nbsp;{{comments.commentLikeCount}}</span>
                             </li>
                             <li  :class="{'commentActive':isActive != comments.commentId}" class="animated rubberBand">
                                 <el-input type="textarea" v-model="commentDesc" maxlength="100"  show-word-limit :autosize="{ minRows: 2, maxRows: 5}"></el-input>

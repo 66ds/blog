@@ -32,13 +32,13 @@
                     <!--</div>-->
                     <el-dropdown trigger="hover"  @command="skip" v-else>
                      <span class="el-dropdown-link">
-                            欢迎你:{{userInfo.userTelephoneNumber}}<i class="el-icon-arrow-down el-icon--right"></i>
+                            欢迎你:{{userInfo.userNickname}}<i class="el-icon-arrow-down el-icon--right"></i>
                      </span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item icon="el-icon-edit">我的博客</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-s-grid">我的分类</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-paperclip">我的标签</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-user">个人中心</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-user" command="userInfo">个人中心</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-view">我的关注</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-camera">我的相册</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-edit-outline" command="admin-manager">后台管理</el-dropdown-item>
@@ -127,6 +127,9 @@
                             document.getElementsByTagName("body")[0].className=action;
                         }
                     });
+                }
+                if(command == "userInfo"){
+                    this.$router.push("/person-info")
                 }
             }
         },
