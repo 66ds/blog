@@ -27,3 +27,15 @@ export const userInfoByIdApi=(token)=>{
         }
     })
 }
+
+/**
+ * 获取某用户的名片信息
+ * @param userId
+ */
+export const userCardInfoById=(userId)=>{
+    return request({
+        url:"/api/v1/pub/users/card/"+userId,
+        method:'post',
+    })
+}
+

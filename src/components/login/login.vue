@@ -72,8 +72,8 @@
                                     onClose:()=>{
                                         //设置后端的token令牌
                                         this.$store.commit('setToken',res.data);
-                                        //跳转
-                                        this.$router.push("/")
+                                        //跳转到之前的页面
+                                        this.$router.go(-1);
                                     }
                                 })
                             }

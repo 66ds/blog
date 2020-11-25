@@ -57,7 +57,13 @@ export default new VRouter({
             path:'/login',
             name:'login',
             component: ()=>import("../components/login/login.vue")
+        },
+        {
+            path:'/person-blog/:id',
+            name:'personBlog',
+            component: ()=>import("../components/person/person-blog.vue")
         }
+
 
     ]
 })

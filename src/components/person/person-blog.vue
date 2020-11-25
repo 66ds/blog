@@ -1,5 +1,5 @@
 <template>
-    <div class="index">
+    <div class="person-blog">
         <div class="left animated fadeIn">
             <div v-loading="loading"
                  element-loading-text="拼命加载中"
@@ -34,31 +34,29 @@
             </div>
 
         </div>
-        <div class="right animated fadeInRight">
-            <el-card class="right-box-card">
-            <div slot="header" class="clearfix">
-                <i class="el-icon-picture" style="color: orange"></i>&nbsp;<span>{{userCardData.userName}}的名片</span>
-            </div>
-            <div class="text item" style="display: flex !important;">
-                <dl>昵称:{{userCardData.userName}}</dl>
-                <dl>文章:{{userCardData.allArticlesNumber}}</dl>
-                <dl>赞数:{{userCardData.allArticlesLikeNumber}}</dl>
-                <dl>访问:{{userCardData.allArticleViewsNumber}}</dl>
-            </div>
-            <div class="text item">
-                评论:{{userCardData.allArticlesCommentsNumber}}
-            </div>
-            <div class="text item">
-                <el-button type="info" circle>私信</el-button>
-                <el-button type="danger" circle>关注</el-button>
-            </div>
-            </el-card>
+        <div class="right animated fadeIn">
             <el-card class="right-box-card">
                 <div slot="header" class="clearfix">
-                    <i class="el-icon-paperclip" style="color: #437dff"></i>&nbsp;<span>标签云</span>
+                    <i class="el-icon-picture" style="color: orange"></i>&nbsp;<span>{{userCardData.userName}}的名片</span>
                 </div>
-                <div style="font-size: 20px">
-                    <tag-cloud></tag-cloud>
+                <div class="text item">
+                    昵称:{{userCardData.userName}}
+                </div>
+                <div class="text item">
+                    文章:{{userCardData.allArticlesNumber}}
+                </div>
+                <div class="text item">
+                    赞数:{{userCardData.allArticlesLikeNumber}}
+                </div>
+                <div class="text item">
+                    访问:{{userCardData.allArticleViewsNumber}}
+                </div>
+                <div class="text item">
+                    评论:{{userCardData.allArticlesCommentsNumber}}
+                </div>
+                <div class="text item">
+                    <el-button type="info" circle>私信</el-button>
+                    <el-button type="danger" circle>关注</el-button>
                 </div>
             </el-card>
             <el-card class="right-box-card">
@@ -66,15 +64,7 @@
                     <i class="el-icon-star-on" style="color: red"></i>&nbsp;<span>最热文章</span>
                 </div>
                 <div class="text item">
-                    <el-link :underline="false"  v-for="(item,key) in newTableHotData"><i>{{key+1}}</i>{{item.articleIntroduce}}</el-link>
-                </div>
-            </el-card>
-            <el-card class="right-box-card">
-                <div slot="header" class="clearfix">
-                    <i class="el-icon-s-order" style="color: green"></i>&nbsp;<span>文章归档</span>
-                </div>
-                <div class="text item circle">
-                    <el-link :underline="false" v-for="(item,key) in newTableTimeData" :key="key">{{item}}</el-link>
+                    <el-link :underline="false"  v-for="(item,key) in newTableHotData" :key="key"><i>{{key+1}}</i>{{item.articleIntroduce}}</el-link>
                 </div>
             </el-card>
             <el-card class="right-box-card">
@@ -82,26 +72,7 @@
                     <i class="el-icon-star-on" style="color: red"></i>&nbsp;<span>最新文章</span>
                 </div>
                 <div class="text item">
-                    <el-link :underline="false" v-for="(item,key) in newTableData"><i>{{key+1}}</i>{{item.articleIntroduce}}</el-link>
-                </div>
-            </el-card>
-            <el-card class="right-box-card">
-                <div slot="header" class="clearfix">
-                    <i class="el-icon-link" style="color: red"></i>&nbsp;<span>友链</span>
-                </div>
-                <div class="text item circle">
-                    <el-link :underline="false">小明博客</el-link>
-                    <el-link :underline="false">2017-8-10</el-link>
-                    <el-link :underline="false">2017-8-10</el-link>
-                    <el-link :underline="false">2017-8-10</el-link>
-                    <el-link :underline="false">2017-8-10</el-link>
-                    <el-link :underline="false">2017-8-10</el-link>
-                    <el-link :underline="false">2017-8-10</el-link>
-                    <el-link :underline="false">2017-8-10</el-link>
-                    <el-link :underline="false">2017-8-10</el-link>
-                    <el-link :underline="false">2017-8-10</el-link>
-                    <el-link :underline="false">2017-8-10</el-link>
-                    <el-link :underline="false">2017-8-10</el-link>
+                    <el-link :underline="false" v-for="(item,key) in newTableData" :key="key"><i>{{key+1}}</i>{{item.articleIntroduce}}</el-link>
                 </div>
             </el-card>
         </div>
@@ -109,23 +80,21 @@
 </template>
 
 <script>
-    import TagCloud from '../common/tagcloud'
-    import {articlesListApi,articlesTimeListApi,selectHotListApi} from './../../api/articles'
+    import {articlesListApi,selectHotListApi} from './../../api/articles'
     import {userCardInfoById} from './../../api/users'
     export default {
         data() {
             return {
                 tableData: [],
                 newTableData:[],
-                newTableTimeData:[],
                 newTableHotData:[],
                 userCardData:{},
                 query: {
                     page: 1,
-                    limit: 10
+                    limit: 10,
+                    userId:this.$route.params.id
                 },
                 pageTotal: 0,
-                labelId: '',
                 loading: true
             }
         },
@@ -141,31 +110,22 @@
                     this.loading = true;
                     const res = await articlesListApi(this.query)
                     if(res == undefined) return
+                    this.tableData = res.data.list;
+                    this.pageTotal = res.data.totalCount || 0;
+                    this.loading = false;
                     //当前页数为1
                     if(this.query.page == 1){
                         this.newTableData = res.data.list
                     }
-                    this.tableData = res.data.list;
-                    this.pageTotal = res.data.totalCount || 0;
-                    this.loading = false;
                 }catch (e) {
+                    this.loading = false;
                     this.$message.error(e)
                 }
             },
-            //查询10条的文章归档时间
-            async articlesTimeList() {
-              try{
-                  const res = await articlesTimeListApi();
-                  if(res == undefined) return
-                  this.newTableTimeData = res.data.slice(0,10);
-              }catch (e) {
-                  this.$message.error(e)
-              }
-            },
             //查询10条最火文章
-            async selectHotList() {
+            async selectHotList(userId) {
                 try {
-                    const res = await selectHotListApi();
+                    const res = await selectHotListApi(userId);
                     if(res == undefined) return
                     this.newTableHotData = res.data.list
                 }catch (e) {
@@ -203,9 +163,6 @@
                 })
             }
         },
-        components: {
-            TagCloud
-        },
         created() {
             const h = this.$createElement;
             this.$notify({
@@ -213,66 +170,65 @@
                 message: h('i', {style: 'color: teal'}, '小白开发网站,请多多指教'),
             });
             this.articlesList()
-            this.articlesTimeList();
-            this.selectHotList();
-            this.userCardInfo(3)//此处的3是管理员的id默认
+            this.selectHotList(this.query.userId);
+            this.userCardInfo(this.query.userId)
         }
     }
 </script>
 
 <style>
-    .index {
+    .person-blog {
         width: 65%;
         display: flex;
         justify-content: space-between;
         margin-top: 20px;
     }
 
-    .right {
+    .person-blog .right {
         width: 30%;
     }
 
-    .left {
+    .person-blog .left {
         width: 65%;
     }
 
-    .text {
+    .person-blog .text {
         font-size: 15px;
     }
 
-    .item {
+    .person-blog .item {
         margin-bottom: 18px;
     }
 
-    .clearfix:before,
-    .clearfix:after {
+    .person-blog .clearfix:before,
+    .person-blog .clearfix:after {
         display: table;
         content: "";
     }
 
-    .clearfix:after {
+    .person-blog .clearfix:after {
         clear: both
     }
 
-    .right-box-card {
+    .person-blog .right-box-card {
         width: 100%;
         margin-bottom: 20px;
     }
 
-    .left-box-card {
+    .person-blog .left-box-card {
         width: 100%;
         margin-bottom: 20px;
     }
 
-    .left-box-card > div > div {
+    .person-blog .left-box-card > div > div {
         padding: 10px 0;
     }
 
-    .left-box-card > div > div:nth-child(1) {
+    .person-blog .left-box-card > div > div:nth-child(1) {
         font-size: 20px;
     }
 
-    .left-box-card > div > div:nth-child(3) {
+    .person-blog .left-box-card > div > div:nth-child(3) {
         line-height: 35px;
         letter-spacing: 1px;
         font-size: 15px;
@@ -283,27 +239,27 @@
         -webkit-box-orient: vertical;
     }
 
-    .left-box-card > div > div:nth-child(4) > span {
+    .person-blog .left-box-card > div > div:nth-child(4) > span {
         margin-right: 10px;
     }
 
-    .el-card {
+    .person-blog .el-card {
         background-color: unset;
     }
 
-    .el-card .item .el-link {
+    .person-blog .el-card .item .el-link {
         display: block;
         line-height: 2.5;
     }
 
-    .el-card i {
+    .person-blog .el-card i {
         font-size: 14px;
         color: #437dff;
         font-weight: 700;
         padding: 0 5px 0 0;
     }
 
-    .el-card .item .el-link .el-link--inner {
+    .person-blog .el-card .item .el-link .el-link--inner {
         clear: both;
         display: -webkit-box;
         overflow: hidden;
@@ -312,22 +268,17 @@
         -webkit-line-clamp: 1;
     }
 
-    .el-card .circle .el-link {
-        display: inline-block;
-        width: 50%;
-        line-height: 2;
-    }
 
     @media screen and (max-width: 1000px) and (min-width: 0px) {
-        .right {
+        .person-blog .right {
             display: none;
         }
 
-        .index {
+        .person-blog {
             width: 90%;
         }
 
-        .left {
+        .person-blog .left {
             width: 100%;
             /*padding: 0 20px;*/
         }

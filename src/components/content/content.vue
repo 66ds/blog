@@ -12,16 +12,16 @@
             <div class="content markdown-body" v-html="articleInfo.articleContent">
 
             </div>
-            <div class="prev-next">
-                <div class="prev">
-                    <span>上一篇:</span>
-                    <a href="www.baidu.com">Java设计模式</a>
-                </div>
-                <div class="next">
-                    <span>下一篇:</span>
-                    <a href="www.baidu.com">Java设计模式</a>
-                </div>
-            </div>
+            <!--<div class="prev-next">-->
+                <!--<div class="prev">-->
+                    <!--<span>上一篇:</span>-->
+                    <!--<a href="www.baidu.com">Java设计模式</a>-->
+                <!--</div>-->
+                <!--<div class="next">-->
+                    <!--<span>下一篇:</span>-->
+                    <!--<a href="www.baidu.com">Java设计模式</a>-->
+                <!--</div>-->
+            <!--</div>-->
             <div class="reward-container">
                 <button type="button" class="el-button el-button--primary" @click="isShow=!isShow">
                     <span>打赏</span>
@@ -92,7 +92,7 @@
                 <ul style="list-style: none" v-for="(item,i) in commentsInfo" :key="i">
                     <li class="who">
 <!--                        <span class="page">{{i+1}}.</span>-->
-                        <span class="user">{{item.usersEntity.userNickname}}</span>
+                        <span class="user" @click="$router.push('/person-blog/'+item.usersEntity.userId)">{{item.usersEntity.userNickname}}</span>
                         <span class="sys">{{item.commentSys}}</span>
                         <span class="exe">{{item.commentChrome}}</span>
                         <span class="time">{{item.commentDate}}</span>
@@ -110,7 +110,7 @@
                         <div  v-for="(comments,j) in commentsInfo[i].children" :key="j" style="border-bottom: 1px solid #ececec;">
                             <li class="who" style="padding-left: 40px;">
 <!--                                <span class="page">{{i+1}}.{{j+1}}</span>-->
-                                <span class="user">{{comments.usersEntity.userNickname}}&nbsp;回复:{{comments.parentUsersEntity.userNickname}}</span>
+                                <span class="user" @click="$router.push('/person-blog/'+comments.usersEntity.userId)">{{comments.usersEntity.userNickname}}&nbsp;回复:{{comments.parentUsersEntity.userNickname}}</span>
                                 <span class="sys">{{comments.commentSys}}</span>
                                 <span class="exe">{{comments.commentChrome}}</span>
                                 <span class="time">{{comments.commentDate}}</span>
@@ -308,8 +308,7 @@
             },
             async selectArticleListLike(id) {
                 try {
-                    const token = this.$store.getters.getToken;
-                    const res = await selectArticleListLikeApi(id, token)
+                    const res = await selectArticleListLikeApi(id, this.token)
                     if(res == undefined) return
                     //已点赞
                     if (res.data != null) {
@@ -344,6 +343,7 @@
                     this.totalCount = res.data.totalCount || 0
                     //分页数
                     this.pageTotal = res.data.totalCount || 0;
+                    //是否登录 获取评论的所有赞
                     if (this.token != '') {
                         this.selectCommentListLike(this.articleId,this.token)
                     }
@@ -516,6 +516,7 @@
     .article .comment .who .user {
         color: #1abc9c;
         margin-right: 10px;
+        cursor: pointer;
     }
 
     .article .comment .who .reply {

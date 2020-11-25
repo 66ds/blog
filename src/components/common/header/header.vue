@@ -42,7 +42,7 @@
                             <el-dropdown-item icon="el-icon-view">我的关注</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-camera">我的相册</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-edit-outline" command="admin-manager">后台管理</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-switch-button">安全退出</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-switch-button" command="logOut">安全退出</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-menu>
@@ -109,8 +109,24 @@
                 }
             },
             skip(command){
+                //跳转到后台
                 if(command == "admin-manager"){
                     window.open("http://127.0.0.1:8080","_blank")
+                }
+                //登出
+                if(command == "logOut"){
+                    document.getElementsByTagName("body")[0].className="el-popup-parent--hidden";
+                    this.$alert('确定登出系统?','登出系统',{
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            //清除后端的token令牌
+                            this.$store.commit('setToken','');
+                            this.$message.success("退出成功")
+                            //跳回首页
+                            this.$router.push("/")
+                            document.getElementsByTagName("body")[0].className=action;
+                        }
+                    });
                 }
             }
         },
@@ -120,8 +136,12 @@
             }
         },
         watch:{
-            token:function () {
-                this.userInfoById();
+            token:function (newval) {
+                if(newval != ''){
+                    this.userInfoById();
+                }else{
+                    this.userInfo = null
+                }
             }
         }
     }
@@ -146,6 +166,10 @@
         width: 65%;
         margin: 0 auto;
         position: relative;
+    }
+
+    .el-popup-parent--hidden{
+        overflow: hidden !important;
     }
 
     .header-title {

@@ -14,7 +14,7 @@ export const articlesListApi = (query) => {
 
 
 /**
- * 单偏文章查询
+ * 单篇文章查询
  */
 export const articlesInfoApi=(id)=>{
     return request({
@@ -33,8 +33,10 @@ export const articlesTimeListApi = ()=>{
     })
 }
 
-/*8
-查询时间对应的文章
+/**
+ * 查询时间对应的文章
+ * @param time
+ * @param query
  */
 export const articleListByTimeApi = (time,query)=>{
     return request({
@@ -44,3 +46,15 @@ export const articleListByTimeApi = (time,query)=>{
     })
 }
 
+/**
+ * 查询10条最火文章(没有id传过来就是所有文章)
+ */
+export const selectHotListApi = (userId)=>{
+    return request({
+        url:"/api/v1/pub/articles/hot/",
+        method:"get",
+        params:{
+            userId
+        }
+    })
+}

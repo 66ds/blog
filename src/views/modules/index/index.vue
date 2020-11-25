@@ -2,10 +2,10 @@
     <div id="app">
         <el-container class="is-vertical">
             <index-header/>
-            <index-main>
-                <router-view></router-view>
-            </index-main>
-            <index-footer></index-footer>
+                <index-main>
+                    <router-view></router-view>
+                </index-main>
+                <index-footer></index-footer>
         </el-container>
     </div>
 </template>
