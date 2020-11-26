@@ -190,7 +190,6 @@
                 try {
                     const res = await userCardInfoById(userId);
                     if(res == undefined) return;
-                    console.log(res)
                     this.userCardData = res.data;
                 }catch (e) {
                     this.$message.error(e)

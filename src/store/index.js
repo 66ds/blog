@@ -6,23 +6,36 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        token: ''
+        token: '',
+        user:null
     },
     getters: {
         getToken(state) {
             return state.token;
+        },
+        getUser(state){
+            return state.user;
         }
     },
     mutations: {
         setToken(state, token) {
             state.token = token;
+        },
+        setUser(state,data){
+            state.user=data;
         }
     },
     //异步调用
     //context.commit
     //this.$store.dispatch
-    actions: {}
-    ,
+    actions: {
+        setToken({ commit }, data){
+            commit('setToken', data)
+        },
+        setUser({ commit }, data){
+            commit('setUser', data)
+        }
+    },
     modules: {},
     plugins: [createPersistedState({
         storage: window.sessionStorage

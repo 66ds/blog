@@ -7,7 +7,6 @@
             <div class="header">
                 <el-menu router :default-active="this.$route.path" class="el-menu-demo animated bounceIn" :mode="mode"
                          active-text-color="#409eff">
-                    <!--<span class="header-title"><a href="www.baidu.com">登录</a></span>-->
                     <el-menu-item index="/"><i class="el-icon-s-home header-icon"></i>首页
                     </el-menu-item>
                     <el-menu-item index="/labels"><i class="el-icon-paperclip header-icon"></i> 标签
@@ -93,9 +92,6 @@
             }
         },
         methods: {
-            handleSelect(key, keyPath) {
-                console.log(key, keyPath);
-            },
             operate() {
                 this.display = "block"//这里解决了页面导航栏第一次闪烁问题
                 this.isShow = !this.isShow
@@ -103,7 +99,10 @@
             async userInfoById(){
                 try{
                     const res = await userInfoByIdApi(this.token);
-                    this.userInfo = res.data;
+                    if(res == undefined) return;
+                    //保存用户的个人信息
+                    this.$store.dispatch("setUser",res.data)
+                    this.userInfo = this.$store.getters.getUser
                 }catch (e) {
                     this.$message.error(e)
                 }
@@ -123,7 +122,9 @@
                         lockScroll:true
                     }).then(() => {
                         //清除后端的token令牌
-                        this.$store.commit('setToken','');
+                        this.$store.dispatch("setToken",'')
+                        //清楚用户信息
+                        this.$store.dispatch("setUser",null)
                         this.$message.success("退出成功")
                         //跳回首页
                         this.$router.push("/")
@@ -148,7 +149,7 @@
                 if(newval != ''){
                     this.userInfoById();
                 }else{
-                    this.userInfo = null
+                    this.userInfo = this.$store.getters.getUser
                 }
             }
         }

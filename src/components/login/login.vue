@@ -71,7 +71,7 @@
                                     duration: 1000,
                                     onClose:()=>{
                                         //设置后端的token令牌
-                                        this.$store.commit('setToken',res.data);
+                                        this.$store.dispatch("setToken",res.data)
                                         //跳转到之前的页面
                                         this.$router.go(-1);
                                     }
