@@ -115,18 +115,23 @@
                 }
                 //登出
                 if(command == "logOut"){
-                    document.getElementsByTagName("body")[0].className="el-popup-parent--hidden";
-                    this.$alert('确定登出系统?','登出系统',{
+                    // document.getElementsByTagName("body")[0].className="el-popup-parent--hidden";
+                    this.$confirm('确定登出系统?','登出系统', {
                         confirmButtonText: '确定',
-                        callback: action => {
-                            //清除后端的token令牌
-                            this.$store.commit('setToken','');
-                            this.$message.success("退出成功")
-                            //跳回首页
-                            this.$router.push("/")
-                            document.getElementsByTagName("body")[0].className=action;
-                        }
+                        cancelButtonText: '取消',
+                        type: 'warning',
+                        lockScroll:true
+                    }).then(() => {
+                        //清除后端的token令牌
+                        this.$store.commit('setToken','');
+                        this.$message.success("退出成功")
+                        //跳回首页
+                        this.$router.push("/")
+                        // document.getElementsByTagName("body")[0].className='';
+                    }).catch(() => {
+                        // document.getElementsByTagName("body")[0].className='';
                     });
+
                 }
                 if(command == "userInfo"){
                     this.$router.push("/person-info")
