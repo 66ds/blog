@@ -123,8 +123,8 @@
                         //清楚用户信息
                         this.$store.dispatch("setUser",null)
                         this.$message.success("退出成功")
-                        //跳回首页
-                        this.$router.push("/")
+                        //刷新当前页
+                        location.reload()
                         // document.getElementsByTagName("body")[0].className='';
                     }).catch(() => {
                         // document.getElementsByTagName("body")[0].className='';

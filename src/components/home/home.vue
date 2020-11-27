@@ -63,7 +63,8 @@
             </div>
             <div class="item">
                 <el-button type="info">私信</el-button>
-                <el-button type="danger">关注</el-button>
+                <el-button type="danger" @click="follow" v-if="isFollow">关注</el-button>
+                <el-button @click="follow" v-else>已关注</el-button>
             </div>
             </el-card>
             <el-card class="right-box-card">
@@ -125,6 +126,7 @@
     import TagCloud from '../common/tagcloud'
     import {articlesListApi,articlesTimeListApi,selectHotListApi} from './../../api/articles'
     import {userCardInfoById} from './../../api/users'
+    import {saveAttentionInfoApi,selectAttentionInfoApi} from '../../api/attention'
     export default {
         data() {
             return {
@@ -139,7 +141,9 @@
                 },
                 pageTotal: 0,
                 labelId: '',
-                loading: true
+                loading: true,
+                isFollow:true,
+                token:this.$store.getters.getToken
             }
         },
         methods: {
@@ -195,6 +199,31 @@
                     this.$message.error(e)
                 }
             },
+            //添加用户的关注信息
+            async saveAttentionInfo(attentionId,token){
+                try{
+                    const res = await saveAttentionInfoApi(attentionId,token)
+                    if(res == undefined) return;
+                    this.isFollow = !this.isFollow;
+                    this.$message.success(res.msg);
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            //判断登陆者是不是关注了已用户
+            async selectAttentionInfo(attentionId,token){
+                try{
+                    const res = await selectAttentionInfoApi(attentionId,token)
+                    if(res == undefined) return;
+                    if(res.data != null){
+                        this.isFollow = false
+                    }else{
+                        this.isFollow = true
+                    }
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
             typeClass(i) {
                 if (i / 2 % 2 == 0) {
                     return ""
@@ -213,21 +242,24 @@
                 this.$router.push({
                     path: "/content/"+id
                 })
+            },
+            //关注别人
+            follow(){
+                this.saveAttentionInfo(3,this.token)
             }
         },
         components: {
             TagCloud
         },
         created() {
-            const h = this.$createElement;
-            this.$notify({
-                title: 'Mr Qian的信息',
-                message: h('i', {style: 'color: teal'}, '小白开发网站,请多多指教'),
-            });
             this.articlesList()
             this.articlesTimeList();
             this.selectHotList();
             this.userCardInfo(3)//此处的3是管理员的id默认
+            //如果登录了
+            if(this.token != ''){
+                this.selectAttentionInfo(3,this.token)
+            }
         }
     }
 </script>
