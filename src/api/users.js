@@ -39,3 +39,18 @@ export const userCardInfoById=(userId)=>{
     })
 }
 
+
+/**
+ * 修改用户的个人信息(已登录)
+ * @param user
+ */
+export const updateUserInfoByIdApi = (user,token)=>{
+    return request({
+        url:"/api/v1/pri/users/update",
+        method:"post",
+        data:user,
+        headers:{
+            token
+        }
+    })
+}

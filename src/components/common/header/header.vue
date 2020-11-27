@@ -23,15 +23,11 @@
                     </el-menu-item>
                     <el-menu-item index="/about"><i class="el-icon-user header-icon"></i>关于
                     </el-menu-item>
-                    <el-menu-item index="/login" v-if="userInfo == null"><i class="el-icon-key header-icon"></i>登录
+                    <el-menu-item index="/login" v-if="$store.getters.getUser == null"><i class="el-icon-key header-icon"></i>登录
                     </el-menu-item>
-                    <!--&lt;!&ndash; 用户头像 &ndash;&gt;-->
-                    <!--<div class="user-avator">-->
-                    <!--<img src=""/>-->
-                    <!--</div>-->
-                    <el-dropdown trigger="hover"  @command="skip" v-else>
+                    <el-dropdown trigger="hover"  @command="skip" v-if="$store.getters.getUser != null">
                      <span class="el-dropdown-link">
-                            欢迎你:{{userInfo.userNickname}}<i class="el-icon-arrow-down el-icon--right"></i>
+                             欢迎你:{{$store.getters.getUser.userNickname}}<i class="el-icon-arrow-down el-icon--right"></i>
                      </span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item icon="el-icon-edit">我的博客</el-dropdown-item>
@@ -44,6 +40,9 @@
                             <el-dropdown-item icon="el-icon-switch-button" command="logOut">安全退出</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
+                    <div style="float: right;" v-if="$store.getters.getUser != null">
+                        <el-avatar :size="60" :src="$store.getters.getUser.userProfilePhoto"></el-avatar>
+                    </div>
                 </el-menu>
             </div>
             <div class="logo"><a href="www.baidu.com">Mr Qian的博客</a></div>
@@ -75,8 +74,7 @@
                 activeIndex: '1',
                 mode: 'horizontal',
                 isShow: true,
-                display: "none",
-                userInfo:null
+                display: "none"
             };
         },
         created() {
@@ -102,7 +100,6 @@
                     if(res == undefined) return;
                     //保存用户的个人信息
                     this.$store.dispatch("setUser",res.data)
-                    this.userInfo = this.$store.getters.getUser
                 }catch (e) {
                     this.$message.error(e)
                 }
@@ -148,8 +145,6 @@
             token:function (newval) {
                 if(newval != ''){
                     this.userInfoById();
-                }else{
-                    this.userInfo = this.$store.getters.getUser
                 }
             }
         }

@@ -36,8 +36,8 @@
         </div>
         <div class="right animated fadeIn">
             <el-card class="right-box-card">
-                <div slot="header" class="clearfix">
-                    <i class="el-icon-picture" style="color: orange"></i>&nbsp;<span>{{userCardData.userName}}的名片</span>
+                <div slot="header" class="clearfix" style="height: 40px;">
+                    <el-avatar :size="40" :src="userCardData.userImg" style="float: left;margin-right: 10px;"></el-avatar><span style="float: left;line-height: 40px">{{userCardData.userName}}的名片</span>
                 </div>
                 <div class="item" style="display: flex">
                     <dl class="text-align">
@@ -147,7 +147,6 @@
                 try {
                     const res = await userCardInfoById(userId);
                     if(res == undefined) return;
-                    console.log(res)
                     this.userCardData = res.data;
                 }catch (e) {
                     this.$message.error(e)
