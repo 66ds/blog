@@ -67,6 +67,11 @@ export default new VRouter({
             path:'/person-info',
             name:'personInfo',
             component: ()=>import("../components/person/person-info.vue")
+        },
+        {
+            path:'/chat',
+            name:'chat',
+            component: ()=>import("../components/chat/chat.vue")
         }
 
 
