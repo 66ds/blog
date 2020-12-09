@@ -62,7 +62,7 @@
                 </dl>
             </div>
             <div class="item">
-                <el-button type="info">私信</el-button>
+                <el-button type="info" @click="sendLetter">私信</el-button>
                 <el-button type="danger" @click="follow" v-if="isFollow">关注</el-button>
                 <el-button @click="follow" v-else>已关注</el-button>
             </div>
@@ -246,6 +246,10 @@
             //关注别人
             follow(){
                 this.saveAttentionInfo(3,this.token)
+            },
+            //私信别人
+            sendLetter(){
+                  this.$router.push({path:'/chat'})
             }
         },
         components: {
