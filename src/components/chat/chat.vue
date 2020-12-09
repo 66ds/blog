@@ -13,171 +13,18 @@
                                     <object type="text/html" tabindex="-1" data="about:blank"
                                             style="display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; border: none; padding: 0px; margin: 0px; opacity: 0; z-index: -1000; pointer-events: none;"></object>
                                 </div>
-                                <div class="msg-item active-msg-item">
+                                <div class="msg-item" v-for="(item,key) in messageData" :key="key">
                                     <div class="left">
                                         <div class="headimg"><img
-                                                src="https://profile.csdnimg.cn/8/D/6/0_huangliniqng">
+                                                :src="item.userImg">
                                             <!----></div>
                                     </div>
                                     <div class="right"><p class="who-name">
-                                        <span class="who-msg">黄林晴</span><span
-                                            class="msg-relation">已关注</span>
+                                        <span class="who-msg">{{item.userName}}</span><span
+                                            class="msg-relation">{{item.isAttention == true?'已关注':'陌生人'}}</span>
                                     </p>
-                                        <p class="last-msg">[系统提醒消息]</p>
-                                        <div class="time">11:19</div>
-                                    </div>
-                                </div>
-                                <div class="msg-item">
-                                    <div class="left">
-                                        <div class="headimg"><img
-                                                src="https://profile.csdnimg.cn/5/C/1/0_weixin_43570367">
-                                            <!----></div>
-                                    </div>
-                                    <div class="right"><p class="who-name">
-                                        <span class="who-msg">扬帆向海</span><span
-                                            class="msg-relation">已关注</span>
-                                    </p>
-                                        <p class="last-msg">
-                                            我亲爱的读者粉丝朋友，你们好！我是扬帆向海，很冒昧的以这种方式交流(打扰啦)。写博客也有一年的时间了，原创110篇，访问量接近260w，粉丝数量接近3w。感谢你们的支持，曾通过四个多月的时间成为了CSDN博客专家！编程是枯燥无味的，编码的道路上我们携手前行！
-
-                                            由于很多粉丝在CSDN私信我，而我无法及时看到。如若方便可以关注公众号【程序猿编程】第一时间跟我交流，也欢迎从公众号加我个人微信(备注下来自csdn哦)。
-
-                                            用知识改变命运，用双手敲出我们的未来，让我们的家人过上更好的生活！
-
-                                        </p>
-                                        <div class="time">昨天</div>
-                                    </div>
-                                </div>
-                                <div class="msg-item">
-                                    <div class="left">
-                                        <div class="headimg"><img
-                                                src="https://profile.csdnimg.cn/2/2/3/0_AskSpirit">
-                                            <!----></div>
-                                    </div>
-                                    <div class="right"><p class="who-name">
-                                        <span class="who-msg">问答小精灵</span><span
-                                            class="msg-relation">陌生人</span></p>
-                                        <p class="last-msg">[图文消息]</p>
-                                        <div class="time">12-04</div>
-                                    </div>
-                                </div>
-                                <div class="msg-item">
-                                    <div class="left">
-                                        <div class="headimg"><img
-                                                src="https://profile.csdnimg.cn/2/2/3/0_AskSpirit">
-                                            <!----></div>
-                                    </div>
-                                    <div class="right"><p class="who-name">
-                                        <span class="who-msg">问答小精灵</span><span
-                                            class="msg-relation">陌生人</span></p>
-                                        <p class="last-msg">[图文消息]</p>
-                                        <div class="time">12-04</div>
-                                    </div>
-                                </div>
-                                <div class="msg-item">
-                                    <div class="left">
-                                        <div class="headimg"><img
-                                                src="https://profile.csdnimg.cn/2/2/3/0_AskSpirit">
-                                            <!----></div>
-                                    </div>
-                                    <div class="right"><p class="who-name">
-                                        <span class="who-msg">问答小精灵</span><span
-                                            class="msg-relation">陌生人</span></p>
-                                        <p class="last-msg">[图文消息]</p>
-                                        <div class="time">12-04</div>
-                                    </div>
-                                </div>
-                                <div class="msg-item">
-                                    <div class="left">
-                                        <div class="headimg"><img
-                                                src="https://profile.csdnimg.cn/2/2/3/0_AskSpirit">
-                                            <!----></div>
-                                    </div>
-                                    <div class="right"><p class="who-name">
-                                        <span class="who-msg">问答小精灵</span><span
-                                            class="msg-relation">陌生人</span></p>
-                                        <p class="last-msg">[图文消息]</p>
-                                        <div class="time">12-04</div>
-                                    </div>
-                                </div>
-                                <div class="msg-item">
-                                    <div class="left">
-                                        <div class="headimg"><img
-                                                src="https://profile.csdnimg.cn/2/2/3/0_AskSpirit">
-                                            <!----></div>
-                                    </div>
-                                    <div class="right"><p class="who-name">
-                                        <span class="who-msg">问答小精灵</span><span
-                                            class="msg-relation">陌生人</span></p>
-                                        <p class="last-msg">[图文消息]</p>
-                                        <div class="time">12-04</div>
-                                    </div>
-                                </div>
-                                <div class="msg-item">
-                                    <div class="left">
-                                        <div class="headimg"><img
-                                                src="https://profile.csdnimg.cn/2/2/3/0_AskSpirit">
-                                            <!----></div>
-                                    </div>
-                                    <div class="right"><p class="who-name">
-                                        <span class="who-msg">问答小精灵</span><span
-                                            class="msg-relation">陌生人</span></p>
-                                        <p class="last-msg">[图文消息]</p>
-                                        <div class="time">12-04</div>
-                                    </div>
-                                </div>
-                                <div class="msg-item">
-                                    <div class="left">
-                                        <div class="headimg"><img
-                                                src="https://profile.csdnimg.cn/9/A/B/0_CSDNbarket">
-                                            <!----></div>
-                                    </div>
-                                    <div class="right"><p class="who-name">
-                                        <span class="who-msg">CSDN现金红包</span><span
-                                            class="msg-relation">官方</span></p>
-                                        <p class="last-msg">您收到一个5元现金红包，立即参与点赞</p>
-                                        <div class="time">11-29</div>
-                                    </div>
-                                </div>
-                                <div class="msg-item">
-                                    <div class="left">
-                                        <div class="headimg"><img
-                                                src="https://profile.csdnimg.cn/1/8/F/0_yzkskaka">
-                                            <!----></div>
-                                    </div>
-                                    <div class="right"><p class="who-name">
-                                        <span class="who-msg">遇见OFFER</span><span
-                                            class="msg-relation">陌生人</span></p>
-                                        <p class="last-msg">[图文消息]</p>
-                                        <div class="time">11-10</div>
-                                    </div>
-                                </div>
-                                <div class="msg-item">
-                                    <div class="left">
-                                        <div class="headimg"><img
-                                                src="https://profile.csdnimg.cn/E/1/8/0_qq_40800872">
-                                            <!----></div>
-                                    </div>
-                                    <div class="right"><p class="who-name">
-                                        <span class="who-msg">大数据讲师团</span><span
-                                            class="msg-relation">陌生人</span></p>
-                                        <p class="last-msg">[图文消息]</p>
-                                        <div class="time">11-03</div>
-                                    </div>
-                                </div>
-                                <div class="msg-item">
-                                    <div class="left">
-                                        <div class="headimg"><img
-                                                src="https://profile.csdnimg.cn/9/5/F/0_weixin_39787242">
-                                            <!----></div>
-                                    </div>
-                                    <div class="right"><p class="who-name">
-                                        <span class="who-msg">Blink小姐姐</span><span
-                                            class="msg-relation">陌生人</span></p>
-                                        <p class="last-msg"><img class="msg-emoji"
-                                                                 src="https://csdnimg.cn/release/im/img/emoji_0.0ea8bc30.png">
-                                        </p>
-                                        <div class="time">09-11</div>
+                                        <p class="last-msg">{{item.content}}</p>
+                                        <div class="time">{{item.createTime}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -252,95 +99,30 @@
 </template>
 
 <script>
-    import {sortsListInfo, selectlistBySortId} from "../../api/sorts";
-    import {articlesListApi} from './../../api/articles'
+
+    import {selectMessageList} from './../../api/message'
 
     export default {
         data() {
             return {
-                sortsData: [],
-                articlesData: [],
-                query: {
-                    page: 1,
-                    limit: 10
-                },
-                pageTotal: 0,
-                loading: true,
-                id: ''
+               messageData:[],
+               token: this.$store.getters.getToken
             }
         },
         methods: {
-            async sortsList() {
+            //获取登陆者用户的所有私信
+            async messageList(token) {
                 try {
-                    const res = await sortsListInfo();
+                    const res = await selectMessageList(token);
                     if (res == undefined) return
-                    this.sortsData = res.data;
+                    this.messageData = res.data;
                 } catch (e) {
                     this.$message.error(e)
                 }
-            },
-            async articlesList(query) {
-                try {
-                    this.loading = true;
-                    const res = await articlesListApi(query);
-                    if (res == undefined) return
-                    this.articlesData = res.data.list;
-                    this.pageTotal = res.data.totalCount || 0;
-                    this.loading = false;
-                } catch (e) {
-                    this.$message.error(e)
-                }
-            },
-            async selectlistBySortId(id, query) {
-                try {
-                    this.loading = true;
-                    const res = await selectlistBySortId(id, query);
-                    if (res == undefined) return
-                    //分类下没文章
-                    if (res.data == null) {
-                        this.loading = false;
-                        return this.$message.warning("该分类下无文章")
-                    }
-                    this.articlesData = res.data.list;
-                    this.pageTotal = res.data.totalCount || 0;
-                    this.loading = false;
-                } catch (e) {
-                    this.$message.error(e)
-                }
-            },
-            articleDetail(id) {
-                this.$router.push({
-                    path: "/content/" + id
-                })
-            },
-            // 分页导航
-            handlePageChange(val) {
-                this.$set(this.query, 'page', val);
-                this.articlesList(this.query)
-            },
-            typeClass(i) {
-                if (i / 2 % 2 == 0) {
-                    return ""
-                }
-                if (i / 2 % 2 == 1) {
-                    return "success"
-                }
-                if ((i - 1) / 2 % 2 == 0) {
-                    return "warning"
-                }
-                if ((i - 1) / 2 % 2 == 1) {
-                    return "danger"
-                }
-            },
-            change(id) {
-                this.id = id;
-                this.$set(this.query, "page", 1);
-                this.selectlistBySortId(id, this.query)
             }
         },
         created() {
-            this.sortsList();
-            this.articlesList(this.query);
+            this.messageList(this.token);
         }
     }
 </script>

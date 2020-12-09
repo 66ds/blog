@@ -247,7 +247,7 @@
             },
             //私信别人
             sendLetter(){
-                this.$router.push("/chat")
+                  this.$router.push({path:'/chat'})
             }
         },
         components: {
