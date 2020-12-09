@@ -33,14 +33,11 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     res => {
         if (res.status === 200) {
-            if(res.data.code === 10008){
-                 Message.error(res.data.msg)
-            }
-            else if(res.data.code === 0){
+            let number = res.data.code;
+            if(number === 0){
                 return res.data;
-            }
-            else {
-                 Message.error(res.data.msg)
+            }else{
+                Message.error(res.data.msg)
             }
         } else {
             return Promise.reject("网络错误");

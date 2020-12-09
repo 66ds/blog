@@ -1,12 +1,13 @@
 <template>
     <div id="app">
-        <el-container class="is-vertical">
-            <index-header/>
+        <!--3.（1）引用-->
+            <el-container class="is-vertical">
+                <index-header/>
                 <index-main>
                     <router-view></router-view>
                 </index-main>
                 <index-footer></index-footer>
-        </el-container>
+            </el-container>
     </div>
 </template>
 

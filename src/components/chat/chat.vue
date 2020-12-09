@@ -394,6 +394,10 @@
         cursor: pointer;
     }
 
+    .chat .leftMenu .chat-list .msg-item:hover{
+        background: #2e2e2e;
+    }
+
     .chat .leftMenu .chat-list .active-msg-item {
         background: #2e2e2e;
     }
