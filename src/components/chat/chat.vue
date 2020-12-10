@@ -8,12 +8,12 @@
                         <div class="__panel"
                              style="position: relative; box-sizing: border-box; height: 100%; overflow: hidden;">
                             <div class="__view"
-                                 style="position: relative; box-sizing: border-box; min-width: 100%; min-height: 100%; width: -webkit-fit-content;">
+                                 style="position: relative; box-sizing: border-box; min-width: 100%; min-height: 100%;">
                                 <div style="display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; border: none; padding: 0px; margin: 0px; opacity: 0; z-index: -1000; pointer-events: none;">
                                     <object type="text/html" tabindex="-1" data="about:blank"
                                             style="display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; border: none; padding: 0px; margin: 0px; opacity: 0; z-index: -1000; pointer-events: none;"></object>
                                 </div>
-                                <div  :class="{'active-msg-item':isActive == item.userId,'msg-item':true}" v-for="(item,key) in messageData" :key="key" @click="getReplyInfo(item.userId)">
+                                <div  :class="{'active-msg-item':isActive == item.userId,'msg-item':true}" v-for="(item,key) in messageData" :key="key" @click="getReplyInfo(item.userId,key)">
                                     <div class="left">
                                         <div class="headimg"><img
                                                 :src="item.userImg">
@@ -21,7 +21,7 @@
                                     </div>
                                     <div class="right"><p class="who-name">
                                         <span class="who-msg">{{item.userName}}</span><span
-                                            class="msg-relation">{{item.isAttention == true?'已关注':'陌生人'}}</span>
+                                            class="msg-relation">{{item.attention == true?'已关注':'陌生人'}}</span>
                                     </p>
                                         <p class="last-msg">{{item.content}}</p>
                                         <div class="time">{{item.createTime}}</div>
@@ -38,8 +38,7 @@
             <div class="rightContent">
                 <div class="chat-container">
                     <header>
-                        <div data-v-34c6f139="" class="chatHeader"><span
-                                data-v-34c6f139="">黄林晴</span></div>
+                        <div  class="chatHeader"><span v-text="userName"></span></div>
                     </header>
                     <div class="msg-content-box">
                         <div class="msg-content">
@@ -48,31 +47,26 @@
                                 <div class="__panel"
                                      style="position: relative; box-sizing: border-box; height: 100%; overflow: hidden;">
                                     <div class="__view"
-                                         style="position: relative; box-sizing: border-box; min-width: 100%; min-height: 100%; width: -webkit-fit-content;">
+                                         style="position: relative; box-sizing: border-box; min-width: 100%; min-height: 100%;">
                                         <div class="chatMsg"><!---->
-                                            <div class="msg-item">
+                                            <div class="msg-item" v-for="(item,key) in messagesData" :key="key" :class="{'msg-item-right':isActive != item.sendId,'msg-item':true}">
                                                 <div class="system-prompt">
-                                                    <div class="pure-text">12-07 13:13</div>
+                                                    <div class="pure-text">{{item.createTime}}</div>
                                                 </div><!----><!----><!---->
-                                                <div class="text-box"><img
-
-                                                        src="https://profile.csdnimg.cn/8/D/6/0_huangliniqng" alt=""
+                                                <div class="text-box"><img :src="isActive != item.sendId?item.receivedImg:item.sendImg" alt=""
                                                         class="clearTpaErr">
-                                                    <div class="msg">各位朋友大家好：
-                                                        我是CSDN作者黄林晴，感谢您的支持与关注
-                                                        可关注我公众号：Android技术圈（不定期推送）
-                                                        或可添加我微信：hzx1306214077 （备注CSDN），邀您进入技术交流群，让我们一起学习，一起进步~
+                                                    <div class="msg">{{item.messageContent}}
                                                     </div><!----></div><!----><!----></div>
-                                            <div class="msg-item msg-item-right">
-                                                <div class="system-prompt">
-                                                    <div class="pure-text">12-08 11:19</div>
-                                                </div><!----><!----><!---->
-                                                <div class="text-box"><img
+<!--                                            <div class="msg-item msg-item-right">-->
+<!--                                                <div class="system-prompt">-->
+<!--                                                    <div class="pure-text">12-08 11:19</div>-->
+<!--                                                </div>&lt;!&ndash;&ndash;&gt;&lt;!&ndash;&ndash;&gt;&lt;!&ndash;&ndash;&gt;-->
+<!--                                                <div class="text-box"><img-->
 
-                                                        src="//profile.csdnimg.cn/2/5/5/2_weixin_42523071" alt=""
-                                                        class="clearTpaErr">
-                                                    <div class="msg">111</div><!----></div>
-                                                <!----><!----></div>
+<!--                                                        src="//profile.csdnimg.cn/2/5/5/2_weixin_42523071" alt=""-->
+<!--                                                        class="clearTpaErr">-->
+<!--                                                    <div class="msg">111</div>&lt;!&ndash;&ndash;&gt;</div>-->
+<!--                                                &lt;!&ndash;&ndash;&gt;&lt;!&ndash;&ndash;&gt;</div>-->
                                         </div>
                                         <div style="display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; border: none; padding: 0px; margin: 0px; opacity: 0; z-index: -1000; pointer-events: none;">
                                             <object type="text/html" tabindex="-1" data="about:blank"
@@ -108,8 +102,9 @@
             return {
                messageData:[],
                display:'none',
-               isActive:'',
+               isActive:0,
                messagesData:[],
+               userName:''
             }
         },
         methods: {
@@ -119,20 +114,19 @@
                     const res = await selectMessageListApi();
                     if (res == undefined) return this.display = 'block'
                     //所有私信中哪条是给私信者的放在最前面
-                    let bool = res.data.includes(item => {
-                        return item.userId == this.$route.query.id
+                    let top = res.data.find(item =>{
+                        return item.userId == this.$route.query.id;
                     })
-                    if(bool){
-                        let top = res.data.find(item =>{
-                            return item.userId == this.$route.query.id;
-                        })
-                        let index = res.data.findIndex(item =>{
-                            return item.userId == this.$route.query.id;
-                        })
+                    let index = res.data.findIndex(item =>{
+                        return item.userId == this.$route.query.id;
+                    })
+                    if(index != -1){
                         res.data.splice(index,1);
                         res.data.unshift(top)
                     }
                     this.isActive = res.data[0].userId
+                    this.userName = res.data[0].userName
+                    this.messagesList(this.isActive)
                     this.messageData = res.data;
                 } catch (e) {
                     this.display = 'block'
@@ -145,14 +139,14 @@
                     const res = await selectMessagesListApi(sendId);
                     if (res == undefined) return
                     this.messagesData = res.data
-                    console.log(this.messagesData)
                 }catch (e){
                    this.$message.error(e)
                 }
             },
             //获取私信内容
-            getReplyInfo(id){
+            getReplyInfo(id,index){
                 this.isActive = id;
+                this.userName = this.messageData[index].userName
                 this.messagesList(id)
             }
         },
