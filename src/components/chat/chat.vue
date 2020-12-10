@@ -13,7 +13,7 @@
                                     <object type="text/html" tabindex="-1" data="about:blank"
                                             style="display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; border: none; padding: 0px; margin: 0px; opacity: 0; z-index: -1000; pointer-events: none;"></object>
                                 </div>
-                                <div class="msg-item" v-for="(item,key) in messageData" :key="key">
+                                <div  :class="{'active-msg-item':isActive == item.userId,'msg-item':true}" v-for="(item,key) in messageData" :key="key" @click="getReplyInfo(item.userId)">
                                     <div class="left">
                                         <div class="headimg"><img
                                                 :src="item.userImg">
@@ -31,6 +31,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="blankview" :style="{display:display}">正在努力加载中...</div>
             </div>
         </div>
         <div class="right-content">
@@ -100,29 +101,63 @@
 
 <script>
 
-    import {selectMessageList} from './../../api/message'
+    import {selectMessageListApi,selectMessagesListApi} from './../../api/message'
 
     export default {
         data() {
             return {
                messageData:[],
-               token: this.$store.getters.getToken
+               display:'none',
+               isActive:'',
+               messagesData:[],
             }
         },
         methods: {
-            //获取登陆者用户的所有私信
-            async messageList(token) {
+            //获取登陆者用户的所有私信用户
+            async messageList() {
                 try {
-                    const res = await selectMessageList(token);
-                    if (res == undefined) return
+                    const res = await selectMessageListApi();
+                    if (res == undefined) return this.display = 'block'
+                    //所有私信中哪条是给私信者的放在最前面
+                    let bool = res.data.includes(item => {
+                        return item.userId == this.$route.query.id
+                    })
+                    if(bool){
+                        let top = res.data.find(item =>{
+                            return item.userId == this.$route.query.id;
+                        })
+                        let index = res.data.findIndex(item =>{
+                            return item.userId == this.$route.query.id;
+                        })
+                        res.data.splice(index,1);
+                        res.data.unshift(top)
+                    }
+                    this.isActive = res.data[0].userId
                     this.messageData = res.data;
                 } catch (e) {
+                    this.display = 'block'
                     this.$message.error(e)
                 }
+            },
+            //获取私信内容
+            async messagesList(sendId){
+                try{
+                    const res = await selectMessagesListApi(sendId);
+                    if (res == undefined) return
+                    this.messagesData = res.data
+                    console.log(this.messagesData)
+                }catch (e){
+                   this.$message.error(e)
+                }
+            },
+            //获取私信内容
+            getReplyInfo(id){
+                this.isActive = id;
+                this.messagesList(id)
             }
         },
         created() {
-            this.messageList(this.token);
+            this.messageList();
         }
     }
 </script>
@@ -174,6 +209,11 @@
         display: -ms-flexbox;
         display: flex;
         cursor: pointer;
+    }
+
+    .chat .leftMenu .blankview {
+        color: #bec9d2;
+        text-align: center;
     }
 
     .chat .leftMenu .chat-list .msg-item:hover{

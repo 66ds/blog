@@ -62,7 +62,7 @@
                     </dl>
                 </div>
                 <div class="item">
-                    <el-button type="info">私信</el-button>
+                    <el-button type="info" @click="sendLetter">私信</el-button>
                     <el-button type="danger">关注</el-button>
                 </div>
             </el-card>
@@ -89,6 +89,8 @@
 <script>
     import {articlesListApi,selectHotListApi} from './../../api/articles'
     import {userCardInfoById} from './../../api/users'
+    import {saveSecretMessageApi} from './../../api/message'
+
     export default {
         data() {
             return {
@@ -170,6 +172,22 @@
                 this.$router.push({
                     path: "/content/"+id
                 })
+            },
+            //添加私信(普通用户)
+            async saveSecretMessage(){
+                try{
+                    const res = await saveSecretMessageApi({
+                        sendId:this.query.userId
+                    })
+                    if (res == undefined) return
+                    this.$router.push({path:'/chat',query:{id:this.query.userId}})
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            //私信别人
+            sendLetter(){
+                this.saveSecretMessage()
             }
         },
         created() {

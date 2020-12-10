@@ -16,15 +16,11 @@ export const userLoginApi=(userTelephoneNumber,userPassword)=>{
 
 /**
  * 获取用户的个人信息(登录)
- * @param token
  */
-export const userInfoByIdApi=(token)=>{
+export const userInfoByIdApi=()=>{
     return request({
         url:"/api/v1/pri/user/info",
-        method:'post',
-        headers:{
-            token
-        }
+        method:'post'
     })
 }
 
@@ -44,13 +40,10 @@ export const userCardInfoById=(userId)=>{
  * 修改用户的个人信息(已登录)
  * @param user
  */
-export const updateUserInfoByIdApi = (user,token)=>{
+export const updateUserInfoByIdApi = (user)=>{
     return request({
         url:"/api/v1/pri/users/update",
         method:"post",
-        data:user,
-        headers:{
-            token
-        }
+        data:user
     })
 }

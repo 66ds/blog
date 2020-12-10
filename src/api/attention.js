@@ -5,15 +5,12 @@ import request from '../utils/request';
  * @param attentionId 关注的用户id
  * @returns {AxiosPromise}
  */
-export const saveAttentionInfoApi = (attentionId,token) => {
+export const saveAttentionInfoApi = (attentionId) => {
     return request({
         url: '/api/v1/pri/userattention/save',
         method: 'post',
         data:{
             attentionId
-        },
-        headers:{
-            token
         }
     });
 };
@@ -21,18 +18,14 @@ export const saveAttentionInfoApi = (attentionId,token) => {
 /**
  * 查看用户是不是关注了某人
  * @param attentionId
- * @param token
  * @returns {AxiosPromise}
  */
-export const selectAttentionInfoApi = (attentionId,token) => {
+export const selectAttentionInfoApi = (attentionId) => {
     return request({
         url: '/api/v1/pri/userattention/info',
         method: 'post',
         data:{
             attentionId
-        },
-        headers:{
-            token
         }
     });
 };

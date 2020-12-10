@@ -127,6 +127,7 @@
     import {articlesListApi,articlesTimeListApi,selectHotListApi} from './../../api/articles'
     import {userCardInfoById} from './../../api/users'
     import {saveAttentionInfoApi,selectAttentionInfoApi} from '../../api/attention'
+    import {saveSecretMessageApi} from './../../api/message'
     export default {
         data() {
             return {
@@ -142,8 +143,7 @@
                 pageTotal: 0,
                 labelId: '',
                 loading: true,
-                isFollow:true,
-                token:this.$store.getters.getToken
+                isFollow:true
             }
         },
         methods: {
@@ -200,9 +200,9 @@
                 }
             },
             //添加用户的关注信息
-            async saveAttentionInfo(attentionId,token){
+            async saveAttentionInfo(attentionId){
                 try{
-                    const res = await saveAttentionInfoApi(attentionId,token)
+                    const res = await saveAttentionInfoApi(attentionId)
                     if(res == undefined) return;
                     this.isFollow = !this.isFollow;
                     this.$message.success(res.msg);
@@ -211,13 +211,25 @@
                 }
             },
             //判断登陆者是不是关注了管理员
-            async selectAttentionInfo(attentionId,token){
+            async selectAttentionInfo(attentionId){
                 try{
-                    const res = await selectAttentionInfoApi(attentionId,token)
+                    const res = await selectAttentionInfoApi(attentionId)
                     if(res == undefined) return;
                     if(res.data != null){
                         this.isFollow = !this.isFollow;
                     }
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            //添加私信(这是管理员)
+            async saveSecretMessage(){
+                try{
+                    const res = await saveSecretMessageApi({
+                        sendId:3
+                    })
+                    if (res == undefined) return
+                    this.$router.push({path:'/chat',query:{id:3}})
                 }catch (e) {
                     this.$message.error(e)
                 }
@@ -243,11 +255,11 @@
             },
             //关注别人
             follow(){
-                this.saveAttentionInfo(3,this.token)
+                this.saveAttentionInfo(3)
             },
             //私信别人
             sendLetter(){
-                  this.$router.push({path:'/chat'})
+                  this.saveSecretMessage()
             }
         },
         components: {
@@ -259,8 +271,8 @@
             this.selectHotList();
             this.userCardInfo(3)//此处的3是管理员的id默认
             //如果登录了
-            if(this.token != ''){
-                this.selectAttentionInfo(3,this.token)
+            if(this.$store.getters.getToken != ''){
+                this.selectAttentionInfo(3)
             }
         }
     }

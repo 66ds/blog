@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { Message } from 'element-ui';
+import {Message} from 'element-ui';
+import store from './../store/index';
 
-// axios.defaults.headers.common['Authorization'] = localStorage.getItem("token");//设置请求头token
-
+axios.defaults.headers.common['token'] = store.getters.getToken//设置请求头token
+console.log(store.getters.getToken)
 const service = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
     // easy-mock服务挂了，暂时不使用了

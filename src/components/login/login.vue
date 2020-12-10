@@ -62,9 +62,6 @@
                 this.$refs.login.validate(valid => {
                     if (valid) {
                         userLoginApi(this.param.username, this.param.password).then(res => {
-                            if (res.code != 0) {
-                                this.$message.error(res.msg);
-                            } else {
                                 this.$message({
                                     message: '登陆成功',
                                     type: 'success',
@@ -72,11 +69,13 @@
                                     onClose:()=>{
                                         //设置后端的token令牌
                                         this.$store.dispatch("setToken",res.data)
+                                        import("../../utils/request.js")
                                         //跳转到之前的页面
                                         this.$router.go(-1);
+
+                                        // location.reload()
                                     }
                                 })
-                            }
                         }).catch((e)=>{
                             this.$message.error(e);
                         });

@@ -94,9 +94,10 @@
                 this.display = "block"//这里解决了页面导航栏第一次闪烁问题
                 this.isShow = !this.isShow
             },
+            //获取用户个人信息
             async userInfoById(){
                 try{
-                    const res = await userInfoByIdApi(this.token);
+                    const res = await userInfoByIdApi();
                     if(res == undefined) return;
                     //保存用户的个人信息
                     this.$store.dispatch("setUser",res.data)

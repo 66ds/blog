@@ -42,7 +42,7 @@
                                 :show-file-list="false"
                                 :on-success="handleAvatarSuccess"
                                 :before-upload="beforeAvatarUpload"
-                                :headers="{token:token}">
+                                :headers="{token:$store.getters.getToken}">
                             <img v-if="ruleForm.userProfilePhoto" :src="ruleForm.userProfilePhoto" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
@@ -119,7 +119,6 @@
                     userEmail:null,
                     userProfilePhoto:null
                 },
-                token:this.$store.getters.getToken,
                 rules: {
                     userNickname: [
                         { required: true, message: '请输入用户昵称', trigger: 'blur' },
@@ -141,9 +140,9 @@
             )
         },
         methods: {
-            async updateUserInfoById(user,token){
+            async updateUserInfoById(user){
                 try{
-                    const res = await updateUserInfoByIdApi(user,token)
+                    const res = await updateUserInfoByIdApi(user)
                     if(res == undefined) return
                     this.$message.success('修改成功')
                     //修改用户的个人信息
@@ -155,7 +154,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.updateUserInfoById(this.ruleForm,this.token)
+                        this.updateUserInfoById(this.ruleForm)
                     } else {
                         return false;
                     }
