@@ -77,13 +77,11 @@
                             </div>
                         </div><!----></div>
                     <div class="send-msg-box">
-                        <div data-v-447d58f6="" class="editContent">
-                            <div data-v-447d58f6="" class="edit-textarea">
-                                <div data-v-83235450="" data-v-447d58f6="" class="Editor"><textarea
-                                        data-v-83235450="" id="messageText" autofocus="autofocus"
-                                        maxlength="500"></textarea></div>
+                        <div class="editContent">
+                            <div  class="edit-textarea">
+                                <div  class="Editor"><textarea id="messageText" autofocus="autofocus" maxlength="500" @keyup.enter='sendMessage' v-model="letterValue"></textarea></div>
                             </div>
-                            <footer data-v-447d58f6=""><p data-v-447d58f6=""><span data-v-447d58f6="">0</span>/500
+                            <footer><p><span>0</span>/500
                             </p>按下Enter发送内容
                             </footer>
                         </div>
@@ -104,7 +102,10 @@
                display:'none',
                isActive:0,
                messagesData:[],
-               userName:''
+               userName:'',
+               websocket: null, // WebSocket对象
+               aisle: "", // 对方频道号
+               letterValue: "" // 消息内容
             }
         },
         methods: {
@@ -124,6 +125,7 @@
                         res.data.splice(index,1);
                         res.data.unshift(top)
                     }
+                    //默认展示第一个用户
                     this.isActive = res.data[0].userId
                     this.userName = res.data[0].userName
                     this.messagesList(this.isActive)
@@ -139,6 +141,8 @@
                     const res = await selectMessagesListApi(sendId);
                     if (res == undefined) return
                     this.messagesData = res.data
+                    //连接websocket
+                    this.conectWebSocket();
                 }catch (e){
                    this.$message.error(e)
                 }
@@ -148,7 +152,54 @@
                 this.isActive = id;
                 this.userName = this.messageData[index].userName
                 this.messagesList(id)
+            },
+            //连接websocket
+            conectWebSocket(){
+                if ("WebSocket" in window) {
+                    let parentSecretId = this.messagesData[this.messagesData.length-1].secretId == undefined?0:this.messagesData[this.messagesData.length-1].secretId;
+                    this.websocket = new WebSocket("ws://127.0.0.1:12000/websocket/"+this.isActive+"/"+this.$store.getters.getUser.userId+"/"+ parentSecretId);
+                } else {
+                    this.$message.error("不支持建立socket连接");
+                }
+                //连接发生错误的回调方法
+                this.websocket.onerror = () =>{
+
+                };
+                //连接成功建立的回调方法
+                this.websocket.onopen = () => {
+
+                };
+                //接收到消息的回调方法
+                this.websocket.onmessage = (event)=> {
+                    let object = eval("(" + event.data + ")");
+                    if (object.type == 0) {
+                        // 提示连接成功
+                        this.aisle = object.aisle
+                    }
+                    if (object.type == 1) {
+                        //显示消息
+                        console.log(object.msg)
+                        this.messagesData.push(object.msg);
+                    }
+                };
+                //连接关闭的回调方法
+                this.websocket.onclose = () =>{};
+                //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+                window.onbeforeunload = () =>{
+                    this.websocket.close();
+                };
+            },
+            // 发送消息
+            sendMessage() {
+                let socketMsg = { msg: this.keepTextStyle(this.letterValue), aisle: this.aisle };
+                this.websocket.send(JSON.stringify(socketMsg));
+                this.letterValue = ''
+            },
+            //处理换行符
+            keepTextStyle(val){
+                return  (val + '').replace(/\n/g,"")
             }
+
         },
         created() {
             this.messageList();
@@ -212,6 +263,19 @@
 
     .chat .leftMenu .chat-list .msg-item:hover{
         background: #2e2e2e;
+    }
+
+    .chat .chatMsg .msg-item .msg:after {
+        content: " ";
+        position: absolute;
+        top: 11px;
+        right: 100%;
+        border-right: 5px solid #eaeeef;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-left: 5px solid transparent;
+        width: 0;
+        height: 0;
     }
 
     .chat .leftMenu .chat-list .active-msg-item {
