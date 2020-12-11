@@ -51,13 +51,13 @@
                                         <div class="chatMsg"><!---->
                                             <div class="msg-item" v-for="(item,key) in messagesData" :key="key" :class="{'msg-item-right':isActive != item.sendId,'msg-item':true}">
                                                 <div class="system-prompt">
-                                                    <div class="pure-text">{{item.createTime}}</div>
+                                                    <div class="pure-text">{{item.createTime | changeTime('yyyy-MM-dd hh:mm:ss')}}</div>
                                                 </div><!----><!----><!---->
                                                 <div class="text-box"><img :src="isActive != item.sendId?item.receivedImg:item.sendImg" alt=""
                                                         class="clearTpaErr">
                                                     <div class="msg">{{item.messageContent}}
                                                     </div><!----></div><!----><!----></div>
-<!--                                            <div class="msg-item msg-item-right">-->
+                                            <!--                                            <div class="msg-item msg-item-right">-->
 <!--                                                <div class="system-prompt">-->
 <!--                                                    <div class="pure-text">12-08 11:19</div>-->
 <!--                                                </div>&lt;!&ndash;&ndash;&gt;&lt;!&ndash;&ndash;&gt;&lt;!&ndash;&ndash;&gt;-->
@@ -156,8 +156,7 @@
             //连接websocket
             conectWebSocket(){
                 if ("WebSocket" in window) {
-                    let parentSecretId = this.messagesData[this.messagesData.length-1].secretId == undefined?0:this.messagesData[this.messagesData.length-1].secretId;
-                    this.websocket = new WebSocket("ws://127.0.0.1:12000/websocket/"+this.isActive+"/"+this.$store.getters.getUser.userId+"/"+ parentSecretId);
+                    this.websocket = new WebSocket("ws://127.0.0.1:12000/websocket/"+this.isActive+"/"+this.$store.getters.getUser.userId+"/");
                 } else {
                     this.$message.error("不支持建立socket连接");
                 }
@@ -171,15 +170,14 @@
                 };
                 //接收到消息的回调方法
                 this.websocket.onmessage = (event)=> {
-                    let object = eval("(" + event.data + ")");
+                    let object = JSON.parse(event.data);
                     if (object.type == 0) {
                         // 提示连接成功
                         this.aisle = object.aisle
                     }
                     if (object.type == 1) {
                         //显示消息
-                        console.log(object.msg)
-                        this.messagesData.push(object.msg);
+                       this.messagesList(this.isActive)
                     }
                 };
                 //连接关闭的回调方法
@@ -193,6 +191,7 @@
             sendMessage() {
                 let socketMsg = { msg: this.keepTextStyle(this.letterValue), aisle: this.aisle };
                 this.websocket.send(JSON.stringify(socketMsg));
+                //清空发送内容
                 this.letterValue = ''
             },
             //处理换行符
@@ -203,6 +202,31 @@
         },
         created() {
             this.messageList();
+        },
+        filters: {
+            changeTime(dateTime, fmt) {
+                var dateTime = new Date(dateTime);
+                var o = {
+                    "M+": dateTime.getMonth() + 1,               //月份
+                    "d+": dateTime.getDate(),                    //日
+                    "h+": dateTime.getHours(),                   //小时
+                    "m+": dateTime.getMinutes(),                 //分
+                    "s+": dateTime.getSeconds(),                 //秒
+                    "q+": Math.floor((dateTime.getMonth() + 3) / 3), //季度
+                    "S": dateTime.getMilliseconds()             //毫秒
+                };
+
+                if (/(y+)/.test(fmt)) {
+                    fmt = fmt.replace(RegExp.$1, (dateTime.getFullYear() + "").substr(4 - RegExp.$1.length));
+                }
+                for (var k in o) {
+                    if (new RegExp(`(${k})`).test(fmt)) {
+                        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                    }
+                }
+                return fmt;
+
+            }
         }
     }
 </script>
@@ -369,7 +393,6 @@
         -ms-flex: 1;
         flex: 1;
         min-width: 480px;
-        background: #fff;
     }
 
     .chat .rightContent {
