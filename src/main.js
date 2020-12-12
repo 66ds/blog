@@ -13,10 +13,13 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+import { HappyScroll } from 'vue-happy-scroll'
+import 'vue-happy-scroll/docs/happy-scroll.css'
+Vue.component('happy-scroll', HappyScroll)
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.use(VueParticles);
-Vue.use(animated)
+Vue.use(animated);
 Vue.use(VueQuillEditor);
 new Vue({
   render: h => h(App),

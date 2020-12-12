@@ -5,8 +5,7 @@
                 <div class="chat-list">
                     <div class="chatListMenu __vuescroll"
                          style="height: 100%; width: 100%; padding: 0px; position: relative; overflow: hidden;">
-                        <div class="__panel"
-                             style="position: relative; box-sizing: border-box; height: 100%; overflow: hidden;">
+                        <div style="position: relative; box-sizing: border-box; height: 100%; overflow: hidden;">
                             <div class="__view"
                                  style="position: relative; box-sizing: border-box; min-width: 100%; min-height: 100%;">
                                 <div style="display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; border: none; padding: 0px; margin: 0px; opacity: 0; z-index: -1000; pointer-events: none;">
@@ -44,38 +43,27 @@
                         <div class="msg-content">
                             <div class="historyMenu __vuescroll"
                                  style="height: 100%; width: 100%; padding: 0px; position: relative; overflow: hidden;">
-                                <div class="__panel"
-                                     style="position: relative; box-sizing: border-box; height: 100%; overflow: hidden;">
-                                    <div class="__view"
-                                         style="position: relative; box-sizing: border-box; min-width: 100%; min-height: 100%;">
-                                        <div class="chatMsg"><!---->
-                                            <div class="msg-item" v-for="(item,key) in messagesData" :key="key" :class="{'msg-item-right':isActive != item.sendId,'msg-item':true}">
-                                                <div class="system-prompt">
-                                                    <div class="pure-text">{{item.createTime | changeTime('yyyy-MM-dd hh:mm:ss')}}</div>
-                                                </div><!----><!----><!---->
-                                                <div class="text-box"><img :src="isActive != item.sendId?item.receivedImg:item.sendImg" alt=""
-                                                        class="clearTpaErr">
-                                                    <div class="msg">{{item.messageContent}}
-                                                    </div><!----></div><!----><!----></div>
-                                            <!--                                            <div class="msg-item msg-item-right">-->
-<!--                                                <div class="system-prompt">-->
-<!--                                                    <div class="pure-text">12-08 11:19</div>-->
-<!--                                                </div>&lt;!&ndash;&ndash;&gt;&lt;!&ndash;&ndash;&gt;&lt;!&ndash;&ndash;&gt;-->
-<!--                                                <div class="text-box"><img-->
-
-<!--                                                        src="//profile.csdnimg.cn/2/5/5/2_weixin_42523071" alt=""-->
-<!--                                                        class="clearTpaErr">-->
-<!--                                                    <div class="msg">111</div>&lt;!&ndash;&ndash;&gt;</div>-->
-<!--                                                &lt;!&ndash;&ndash;&gt;&lt;!&ndash;&ndash;&gt;</div>-->
+                                <div style="position: relative; box-sizing: border-box; height: 100%;overflow: auto" class="scrollContent middle">
+                                        <div class="__view" style="position: relative; box-sizing: border-box; min-width: 100%; min-height: 100%;">
+                                            <div class="chatMsg"><!---->
+                                                <div class="msg-item" v-for="(item,key) in messagesData" :key="key" :class="{'msg-item-right':isActive != item.sendId,'msg-item':true}">
+                                                    <div class="system-prompt">
+                                                        <div class="pure-text">{{item.createTime | changeTime('yyyy-MM-dd hh:mm:ss')}}</div>
+                                                    </div><!----><!----><!---->
+                                                    <div class="text-box"><img :src="isActive != item.sendId?item.receivedImg:item.sendImg" alt=""
+                                                                               class="clearTpaErr">
+                                                        <div class="msg">{{item.messageContent}}
+                                                        </div><!----></div><!----><!----></div>
+                                            </div>
+                                            <div style="display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; border: none; padding: 0px; margin: 0px; opacity: 0; z-index: -1000; pointer-events: none;">
+                                                <object type="text/html" tabindex="-1" data="about:blank"
+                                                        style="display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; border: none; padding: 0px; margin: 0px; opacity: 0; z-index: -1000; pointer-events: none;"></object>
+                                            </div>
                                         </div>
-                                        <div style="display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; border: none; padding: 0px; margin: 0px; opacity: 0; z-index: -1000; pointer-events: none;">
-                                            <object type="text/html" tabindex="-1" data="about:blank"
-                                                    style="display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; border: none; padding: 0px; margin: 0px; opacity: 0; z-index: -1000; pointer-events: none;"></object>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
-                        </div><!----></div>
+                        </div><!---->
+                    </div>
                     <div class="send-msg-box">
                         <div class="editContent">
                             <div  class="edit-textarea">
@@ -141,8 +129,12 @@
                     const res = await selectMessagesListApi(sendId);
                     if (res == undefined) return
                     this.messagesData = res.data
-                    //连接websocket
+                    //连接websocket进行通信
                     this.conectWebSocket();
+                    //滚动条滑到最底下
+                    this.$nextTick(()=>{
+                        document.querySelector('.middle').scrollTop = this.$el.querySelector('.middle').scrollHeight;
+                    })
                 }catch (e){
                    this.$message.error(e)
                 }
@@ -176,8 +168,10 @@
                         this.aisle = object.aisle
                     }
                     if (object.type == 1) {
-                        //显示消息
-                       this.messagesList(this.isActive)
+                        //重新显示私信内容
+                       this.messagesList(this.isActive);
+                        //重新获取登陆者用户的所有私信用户(这里为了获取最新的消息)
+                       this.messageList();
                     }
                 };
                 //连接关闭的回调方法
@@ -424,7 +418,7 @@
     }
 
     .chat .rightContent .chat-container .msg-content-box {
-        height: calc(100% - 244px);
+        height: calc(100vh - 425px);
         position: relative;
     }
 
@@ -434,10 +428,13 @@
         overflow: auto;
     }
 
+    .scrollContent::-webkit-scrollbar {
+        width: 0 !important;
+    }
+
     .chat .chatMsg {
         width: 100%;
         padding-top:10px;
-        padding-bottom: 10px;
         padding-left: 24px;
         box-sizing: border-box;
     }
