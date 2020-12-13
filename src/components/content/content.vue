@@ -55,28 +55,10 @@
         <el-card class="article-box-card animated fadeIn">
             <div class="tips">
                 <p><i class="el-icon-info" style="color: red;font-size: 14px;"></i> 评论说明: </p>
-                <p data-v-0eafe26a="">务必填写有效的邮箱地址，否则不会收到回复信息的~</p>
+                <p data-v-0eafe26a="">务必填写有效的内容o，否则不会收到回复信息的~</p>
             </div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="70px" class="demo-ruleForm">
                 <el-form-item label="内容" prop="desc">
-                    <!--&lt;!&ndash; 图片上传组件辅助&ndash;&gt;-->
-                    <!--<el-upload-->
-                            <!--id="upimg"-->
-                            <!--v-show="false"-->
-                            <!--class="upload-demo"-->
-                            <!--:action="imgUploadUrl"-->
-                            <!--:on-success="handleSuccess"-->
-                            <!--:headers="{token:token}"-->
-                            <!--multiple-->
-                    <!--&gt;-->
-                        <!--<el-button size="small" type="primary">点击上传</el-button>-->
-                    <!--</el-upload>-->
-                    <!--<quill-editor-->
-                            <!--v-model="ruleForm.desc"-->
-                            <!--:options="editorOption"-->
-                            <!--ref="QuillEditor"-->
-                    <!--&gt;-->
-                    <!--</quill-editor>-->
                     <el-input type="textarea" v-model="ruleForm.desc" maxlength="100"  show-word-limit :autosize="{ minRows: 4, maxRows: 5}"></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -146,49 +128,9 @@
     import {selectArticleListLikeApi, likeArticleApi} from './../../api/like-article'
     import {selectCommentListLikeApi,likeCommentApi} from './../../api/like-comment'
     import {addCommentApi,selectCommentListApi} from '../../api/comments'
-    const toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-        ['blockquote', 'code-block'],
-
-        [{header: 1}, {header: 2}], // custom button values
-        [{list: 'ordered'}, {list: 'bullet'}],
-        [{script: 'sub'}, {script: 'super'}], // superscript/subscript
-        [{indent: '-1'}, {indent: '+1'}], // outdent/indent
-        [{direction: 'rtl'}], // text direction
-
-        [{size: ['small', false, 'large', 'huge']}], // custom dropdown
-        [{header: [1, 2, 3, 4, 5, 6, false]}],
-
-        [{color: []}, {background: []}], // dropdown with defaults from theme
-        [{font: []}],
-        [{align: []}],
-        ['link', 'image', 'video'],
-        ['clean'] // remove formatting button
-    ]
     export default {
         data() {
             return {
-                // 上传图片接口地址
-                imgUploadUrl: 'http://127.0.0.1:12000/api/v1/pri/oos/upload',
-                // 富文本编辑器工具栏
-                editorOption: {
-                    modules: {
-                        toolbar: {
-                            container: toolbarOptions, // 工具栏
-                            handlers: {
-                                image: function (value) {
-                                    if (value) {
-                                        // 调用element的图片上传组件
-                                        // （这里是用的原生js的选择dom方法）
-                                        document.querySelector('#upimg button').click()
-                                    } else {
-                                        this.quill.format('image', false)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
                 ruleForm: {
                     desc: ''
                 },
@@ -213,7 +155,6 @@
                 location: document.location,
                 likeClass: "el-icon-star-off",
                 likeCommentClass:"el-icon-star-off",
-                token: this.$store.getters.getToken,
                 articleId:this.$route.params.id,
             }
         },
@@ -222,7 +163,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         //添加评论
-                        this.addComment(this.ruleForm.desc,this.articleId,0,this.token)
+                        this.addComment(this.ruleForm.desc,this.articleId,0)
                     } else {
                         return false;
                     }
@@ -232,9 +173,9 @@
                 this.$refs[formName].resetFields();
             },
             //公共模块 添加评论并重新刷新评论
-            async addComment(content,articleId,parentCommentId,token){
+            async addComment(content,articleId,parentCommentId){
                 try{
-                    const res = await addCommentApi(content,articleId,parentCommentId,token) ;
+                    const res = await addCommentApi(content,articleId,parentCommentId) ;
                     if(res == undefined) return
                     this.$message.success("评论成功")
                     //删除上面textarea内容
@@ -249,9 +190,9 @@
                 }
             },
             //点赞文章
-            async likeArticle(articleId, token) {
+            async likeArticle(articleId) {
                 try {
-                    const res = await likeArticleApi(articleId, token)
+                    const res = await likeArticleApi(articleId)
                     if(res == undefined) return
                     if (res.data == null) {
                         this.likeClass = "el-icon-star-off"
@@ -265,9 +206,9 @@
                 }
             },
             //点赞评论
-            async likeComment(commentId,token,comment){
+            async likeComment(commentId,comment){
                 try {
-                    const res = await likeCommentApi(commentId, token)
+                    const res = await likeCommentApi(commentId)
                     if(res == undefined) return
                     if (res.data == null) {
                         this.$set(comment,"commentLikeCount",comment.commentLikeCount-1)
@@ -277,7 +218,7 @@
                         this.$message.success("点赞成功");
                     }
                     //已登录,则判断该用户有么有有没有点赞评论
-                    this.selectCommentListLike(this.articleId,this.token)
+                    this.selectCommentListLike(this.articleId)
 
                 } catch (e) {
                     this.$message.error(e)
@@ -286,12 +227,12 @@
             //点赞文章
             like() {
                 //未登录
-                this.likeArticle(this.$route.params.id, this.token)
+                this.likeArticle(this.$route.params.id)
             },
             //点赞评论
             dig(commentId,comment){
                 //未登录
-                this.likeComment(commentId,this.token,comment)
+                this.likeComment(commentId,comment)
             },
             async articlesInfo(id) {
                 try {
@@ -299,7 +240,7 @@
                     if(res == undefined) return
                     this.articleInfo = res.data;
                     //已登录,则判断该用户有么有点赞文章
-                    if (this.token != '') {
+                    if (this.$store.getters.getToken != '') {
                         this.selectArticleListLike(this.articleId)
                     }
                 } catch (e) {
@@ -308,7 +249,7 @@
             },
             async selectArticleListLike(id) {
                 try {
-                    const res = await selectArticleListLikeApi(id, this.token)
+                    const res = await selectArticleListLikeApi(id)
                     if(res == undefined) return
                     //已点赞
                     if (res.data != null) {
@@ -318,9 +259,9 @@
                     this.$message.error(e)
                 }
             },
-            async selectCommentListLike(articleId,token){
+            async selectCommentListLike(articleId){
               try{
-                  const res = await selectCommentListLikeApi(articleId,token)
+                  const res = await selectCommentListLikeApi(articleId)
                   if(res == undefined) return
                   this.commentsList = res.data
               }catch (e) {
@@ -344,8 +285,8 @@
                     //分页数
                     this.pageTotal = res.data.totalCount || 0;
                     //是否登录 获取评论的所有赞
-                    if (this.token != '') {
-                        this.selectCommentListLike(this.articleId,this.token)
+                    if (this.$store.getters.getToken != '') {
+                        this.selectCommentListLike(this.articleId)
                     }
                 }catch (e) {
                     this.$message.error(e)
@@ -360,22 +301,6 @@
                 }
                 return arr
             },
-            //element的upload组件上传图片成功后调用的函数
-            handleSuccess(res) {
-                // 获取富文本组件实例
-                let quill = this.$refs.QuillEditor.quill
-                if (res.code != 0) {
-                    return this.$message.error('请先登录')
-                }
-                this.$message.success('上传成功')
-                // 获取光标所在位置
-                let length = quill.getSelection().index
-                // 插入图片，res为服务器返回的图片链接地址
-                quill.insertEmbed(length, 'image', res.data)
-                // 调整光标到最后
-                quill.setSelection(length + 1)
-
-            },
             // 分页导航
             handlePageChange(val) {
                 this.$set(this.query, 'page', val);
@@ -387,7 +312,7 @@
                     return this.$message.warning("请填写内容")
                 }else{
                     //添加评论
-                    this.addComment(this.commentDesc,this.articleId,parentId,this.token)
+                    this.addComment(this.commentDesc,this.articleId,parentId)
                 }
             }
         },

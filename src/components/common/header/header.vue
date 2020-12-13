@@ -30,7 +30,7 @@
                              欢迎你:{{$store.getters.getUser.userNickname}}<i class="el-icon-arrow-down el-icon--right"></i>
                      </span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item icon="el-icon-edit">我的博客</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-edit" command="myBlog">我的博客</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-s-grid">我的分类</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-paperclip">我的标签</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-user" command="userInfo">个人中心</el-dropdown-item>
@@ -134,6 +134,9 @@
                 }
                 if(command == "userInfo"){
                     this.$router.push("/person-info")
+                }
+                if(command == "myBlog"){
+                    this.$router.push("/person-blog/"+this.$store.getters.getUser.userId)
                 }
             }
         },

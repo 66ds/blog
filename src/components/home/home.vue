@@ -141,7 +141,6 @@
                     limit: 10
                 },
                 pageTotal: 0,
-                labelId: '',
                 loading: true,
                 isFollow:true
             }
@@ -202,10 +201,14 @@
             //添加用户的关注信息
             async saveAttentionInfo(attentionId){
                 try{
-                    const res = await saveAttentionInfoApi(attentionId)
-                    if(res == undefined) return;
-                    this.isFollow = !this.isFollow;
-                    this.$message.success(res.msg);
+                    if(this.$store.getters.getUser!=null&&attentionId == this.$store.getters.getUser.userId){
+                        return this.$message.success("不能关注自己o~")
+                    }else{
+                        const res = await saveAttentionInfoApi(attentionId)
+                        if(res == undefined) return;
+                        this.isFollow = !this.isFollow;
+                        this.$message.success(res.msg);
+                    }
                 }catch (e) {
                     this.$message.error(e)
                 }

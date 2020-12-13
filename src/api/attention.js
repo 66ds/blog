@@ -7,11 +7,8 @@ import request from '../utils/request';
  */
 export const saveAttentionInfoApi = (attentionId) => {
     return request({
-        url: '/api/v1/pri/userattention/save',
+        url: '/api/v1/pri/userattention/save/'+attentionId,
         method: 'post',
-        data:{
-            attentionId
-        }
     });
 };
 

@@ -191,11 +191,6 @@
             }
         },
         created() {
-            const h = this.$createElement;
-            this.$notify({
-                title: 'Mr Qian的信息',
-                message: h('i', {style: 'color: teal'}, '小白开发网站,请多多指教'),
-            });
             this.articlesList()
             this.selectHotList(this.query.userId);
             this.userCardInfo(this.query.userId)
