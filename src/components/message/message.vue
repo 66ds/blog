@@ -18,39 +18,51 @@
                     <el-button @click="resetForm('ruleForm')">重置</el-button>
                 </el-form-item>
             </el-form>
-            <div class="commnet-total"><span>共0条留言</span></div>
-            <div class="comment">
-                <ul style="list-style: none">
+            <div class="commnet-total"><span>共{{totalCount}}条评论</span><span v-if="totalCount==0">,快来成为第一个评论的吧~</span></div>
+            <div class="comment" v-loading="loading"
+                 element-loading-text="拼命加载中"
+                 element-loading-spinner="el-icon-loading"
+            >
+                <ul style="list-style: none" v-for="(item,i) in stayList" :key="i">
                     <li class="who">
-                        <span class="page">1.</span>
-                        <span class="user">44</span>
-                        <span class="sys">win10</span>
-                        <span class="exe">chrome</span>
-                        <span class="time">2017-7-11</span>
+                        <!--                        <span class="page">{{i+1}}.</span>-->
+                        <span class="user" @click="$router.push('/person-blog/'+item.stayUserId)">{{item.userName}}</span>
+                        <span class="sys">{{item.staySys}}</span>
+                        <span class="exe">{{item.stayChrome}}</span>
+                        <span class="time">{{item.messageStayTime}}</span>
                     </li>
                     <li class="write">
-                        外阿胶为和爱我和哦亲而后安慰i2121313大会上扩军多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多爱斯达克就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看家
+                        {{item.messageContent}}
                     </li>
+                    <div style="border-bottom: 1px solid #ececec;" v-if="item.stayMessageEntity != null">
+                        <li class="who" style="padding-left: 40px;">
+                            <!--                        <span class="page">{{i+1}}.</span>-->
+                            <span class="user" @click="$router.push('/person-blog/'+item.stayMessageEntity.stayUserId)">{{item.stayMessageEntity.userName}}</span>
+                            <span class="sys">{{item.stayMessageEntity.staySys}}</span>
+                            <span class="exe">{{item.stayMessageEntity.stayChrome}}</span>
+                            <span class="time">{{item.stayMessageEntity.messageStayTime}}</span>
+                        </li>
+                        <li class="write" style="padding-left: 30px;">
+                            {{item.stayMessageEntity.messageContent}}
+                        </li>
+                    </div>
                 </ul>
-                <ul style="list-style: none">
-                    <li class="who">
-                        <span class="page">2.</span>
-                        <span class="user">44</span>
-                        <span class="sys">win10</span>
-                        <span class="exe">chrome</span>
-                        <span class="time">2017-7-11</span>
-                    </li>
-                    <li class="write">
-                        外阿胶为和爱我和哦亲而后安慰i2121313大会上扩军多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多爱斯达克就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看就看家
-                    </li>
-                </ul>
+                <div class="pagination" style="text-align: center">
+                    <el-pagination
+                            layout="prev, pager, next"
+                            :current-page="query.page"
+                            :page-size="query.limit"
+                            :total="pageTotal"
+                            @current-change="handlePageChange"
+                    ></el-pagination>
+                </div>
             </div>
         </el-card>
     </div>
 </template>
 
 <script>
-    import {addCommentApi} from "../../api/comments";
+    import {addStayMessageApi,selectStayMessageListApi} from '../../api/stay-message'
 
     export default {
         data() {
@@ -70,15 +82,17 @@
                 commentDesc:'',
                 pageTotal: 0,
                 totalCount:0,
+                loading:false,
+                stayList:[]
             }
         },
         methods: {
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        //添加留言
+                        this.addStayMessage(this.ruleForm.desc)
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
@@ -87,25 +101,46 @@
                 this.$refs[formName].resetFields();
             },
             //公共模块 添加留言并重新刷新留言
-            async addComment(content){
+            async addStayMessage(content){
                 try{
-                    const res = await addCommentApi(content) ;
-                    if(res == undefined) return
-                    this.$message.success("评论成功")
+                    const res = await addStayMessageApi(content,0);
+                    if(res == undefined) return;
+                    this.$message.success(res.msg);
                     //删除上面textarea内容
                     this.ruleForm.desc = ""
                     //重新文章下的所有评论
                     this.$set(this.query, 'page', 1);
-                    this.selectCommentList(this.articleId,this.query);
-                    //消除当前下面textarea的内容
-                    this.isActive = ''
+                    this.selectStayMessageList(this.query);
                 }catch (e) {
                     this.$message.error(e)
                 }
             },
+            //获取所有留言列表
+            async selectStayMessageList(query){
+                try{
+                    this.loading = true
+                    const res = await selectStayMessageListApi(query)
+                    if(res == undefined) return
+                    //遍历数据展示在留言列表上
+                    this.stayList = res.data.list
+                    this.loading = false
+                    this.totalCount = res.data.totalCount || 0
+                    //分页数
+                    this.pageTotal = res.data.totalCount || 0;
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            // 分页导航
+            handlePageChange(val) {
+                this.$set(this.query, 'page', val);
+                this.selectStayMessageList(this.query)
+            }
         },
         components: {},
         created() {
+            //获取文章下的所有评论
+            this.selectStayMessageList(this.query)
         }
     }
 </script>
@@ -149,27 +184,37 @@
     .message .comment .who .user {
         color: #1abc9c;
         margin-right: 10px;
+        cursor: pointer;
     }
 
-    .message .comment .who .sys, .exe {
+
+    .message .comment .who .sys, .exe,.time{
         text-align: center;
         font-size: 12px;
-        background-color: #ededed;
+        /*background-color: #ededed;*/
         padding: 0 10px;
         margin-right: 10px;
     }
 
-    .message .comment .who .time {
-        flex: 1;
-        text-align: right;
-        color: #999;
-        font-size: 12px;
-    }
 
     .message .comment .write {
         padding: 10px 0;
         line-height: 18px;
         letter-spacing: 1px;
+    }
+
+    .message .el-form-item__content {
+        line-height: 0px !important;
+    }
+
+    .message .commnet-total {
+        color: #303133;
+        line-height: 36px;
+        margin-left: 70px;
+    }
+
+    .message .ul,.el-pager{
+        padding-left:0px !important;
     }
 
     .message .el-form .form-top {

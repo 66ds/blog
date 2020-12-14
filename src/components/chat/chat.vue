@@ -199,19 +199,19 @@
         },
         filters: {
             changeTime(dateTime, fmt) {
-                var dateTime = new Date(dateTime);
-                var o = {
-                    "M+": dateTime.getMonth() + 1,               //月份
-                    "d+": dateTime.getDate(),                    //日
-                    "h+": dateTime.getHours(),                   //小时
-                    "m+": dateTime.getMinutes(),                 //分
-                    "s+": dateTime.getSeconds(),                 //秒
-                    "q+": Math.floor((dateTime.getMonth() + 3) / 3), //季度
-                    "S": dateTime.getMilliseconds()             //毫秒
+                let time = new Date(dateTime);
+                let o = {
+                    "M+": time.getMonth() + 1,               //月份
+                    "d+": time.getDate(),                    //日
+                    "h+": time.getHours(),                   //小时
+                    "m+": time.getMinutes(),                 //分
+                    "s+": time.getSeconds(),                 //秒
+                    "q+": Math.floor((time.getMonth() + 3) / 3), //季度
+                    "S": time.getMilliseconds()             //毫秒
                 };
 
                 if (/(y+)/.test(fmt)) {
-                    fmt = fmt.replace(RegExp.$1, (dateTime.getFullYear() + "").substr(4 - RegExp.$1.length));
+                    fmt = fmt.replace(RegExp.$1, (time.getFullYear() + "").substr(4 - RegExp.$1.length));
                 }
                 for (var k in o) {
                     if (new RegExp(`(${k})`).test(fmt)) {

@@ -30,14 +30,3 @@ export const selectCommentListApi = (articleId,query) =>{
         data:query
     })
 }
-
-
-/**
- * 根据父commentId获取用户信息
- */
-export const selectUserInfoApi = (parentCommentId) =>{
-    return request({
-        url: '/api/v1/pub/comments/users/'+parentCommentId,
-        method:'get'
-    })
-}
