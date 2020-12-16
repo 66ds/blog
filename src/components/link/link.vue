@@ -2,35 +2,10 @@
     <div class="link">
         <h2>友情链接</h2>
         <div class="content animated fadeIn">
-            <el-card class="box-card">
-                <el-link :underline="false">无下划线</el-link>
-                <p>我是你妈你妈妈我是你妈你妈妈妈妈马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独妈妈马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独</p>
+            <el-card class="box-card" v-for="(item,key) in linkData" :key="key">
+                <el-link :underline="false">{{item.linkName}}</el-link>
+                <p>{{item.linkDesc}}</p>
             </el-card>
-            <el-card class="box-card">
-                <el-link :underline="false">无下划线</el-link>
-                <p>我是你妈你妈妈妈我是你妈你妈妈妈妈马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独妈马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独</p>
-            </el-card>
-            <el-card class="box-card">
-                <el-link :underline="false">无下划线</el-link>
-                <p>我是你妈你妈我是你妈你妈妈妈妈马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独妈妈妈马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独</p>
-            </el-card>
-            <el-card class="box-card">
-                <el-link :underline="false">无下划线</el-link>
-                <p>我是你妈你妈妈妈妈我是你妈你妈妈妈妈马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独</p>
-            </el-card>
-            <el-card class="box-card">
-                <el-link :underline="false">无下划线</el-link>
-                <p>我是你妈你妈妈妈妈我是你妈你妈妈妈妈马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独</p>
-            </el-card>
-            <el-card class="box-card">
-                <el-link :underline="false">无下划线</el-link>
-                <p>我是你妈你妈妈妈我是你妈你妈妈妈妈马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独妈马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独</p>
-            </el-card>
-            <el-card class="box-card">
-                <el-link :underline="false">无下划线</el-link>
-                <p>我是你妈你妈妈妈我是你妈你妈妈妈妈马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独马上你们那是那是美女忙啥呢撒旦是没到那上面的那单独</p>
-            </el-card>
-
         </div>
         <div  class="apply-link animated fadeIn">
             <h4>友链申请</h4>
@@ -42,22 +17,22 @@
                 <p>本站会不定期互相走访友链，发现单方取消友链便拉入黑名单。</p>
                 <p>特别提醒: 若无意外，在申请友链后24小时内完成审核并录入站点，如超时还未审核完成，请留言或者私信给我。审核结果均以邮件形式通知，请输入常用有效邮箱。</p>
             </div>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="站点名称" prop="name">
-                    <el-input v-model="ruleForm.name"></el-input>
+            <el-form :model="linkForm" :rules="rules" ref="linkForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="站点名称" prop="linkName">
+                    <el-input v-model="linkForm.linkName"></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱地址" prop="name">
-                    <el-input v-model="ruleForm.name"></el-input>
+                <el-form-item label="邮箱地址" prop="linkEmail">
+                    <el-input v-model="linkForm.linkEmail"></el-input>
                 </el-form-item>
-                <el-form-item label="站点地址" prop="name">
-                    <el-input v-model="ruleForm.name"></el-input>
+                <el-form-item label="站点地址" prop="linkUrl">
+                    <el-input v-model="linkForm.linkUrl"></el-input>
                 </el-form-item>
-                <el-form-item label="站点描述" prop="desc">
-                    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+                <el-form-item label="站点描述" prop="linkDesc">
+                    <el-input type="textarea" v-model="linkForm.linkDesc"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-                    <el-button @click="resetForm('ruleForm')">重置</el-button>
+                    <el-button type="primary" @click="submitForm('linkForm')">立即创建</el-button>
+                    <el-button @click="resetForm('linkForm')">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -65,42 +40,55 @@
 </template>
 
 <script>
+    import {addFriendLinkApi,selectFriendLinkListApi} from './../../api/link'
+    let checkEmail = (rule, value, callback) => {
+        const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+        if (!value) {
+            return callback(new Error('请输入邮箱地址'))
+        }
+        setTimeout(() => {
+            if (mailReg.test(value)) {
+                callback()
+            } else {
+                callback(new Error('请输入正确的邮箱格式'))
+            }
+        }, 100)
+    };
+   let checkUrl = (rule, value, callback) => {
+        const reg = new RegExp(
+            /^http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/
+        )
+        if (value === '') {
+            callback(new Error('请输入站点地址'))
+        } else if (!reg.test(value)) {
+            callback(new Error('请输入正确的站点地址'))
+        } else {
+            callback()
+        }
+    }
     export default {
         data() {
             return {
-                ruleForm: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
+                linkData:[],
+                linkForm: {
+                    linkName: '',
+                    linkUrl: '',
+                    linkEmail: '',
+                    linkDesc: '',
                 },
                 rules: {
-                    name: [
-                        { required: true, message: '请输入活动名称', trigger: 'blur' },
-                        { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                    linkName: [
+                        { required: true, message: '请输入站点名称', trigger: 'blur' },
                     ],
-                    region: [
-                        { required: true, message: '请选择活动区域', trigger: 'change' }
+                    linkUrl: [
+                        { required: true,validator: checkUrl, trigger: 'change' }
                     ],
-                    date1: [
-                        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+                    linkEmail: [
+                        { required:true, validator: checkEmail,trigger: 'change' }
                     ],
-                    date2: [
-                        { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+                    linkDesc: [
+                        { required: true,message: '请输入站点描述', trigger: 'blur' }
                     ],
-                    type: [
-                        { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-                    ],
-                    resource: [
-                        { required: true, message: '请选择活动资源', trigger: 'change' }
-                    ],
-                    desc: [
-                        { required: true, message: '请填写活动形式', trigger: 'blur' }
-                    ]
                 }
             };
         },
@@ -108,16 +96,40 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        this.addFriendLink();
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
+            },
+            //添加友链信息
+            async addFriendLink(){
+                try{
+                    const res = await addFriendLinkApi(this.linkForm);
+                    if(res == undefined) return;
+                    this.$message.success(res.msg)
+                    //重置表单
+                    this.resetForm("linkForm")
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            //查询所有友情链接
+            async selectFriendLink(){
+                try{
+                    const res = await selectFriendLinkListApi();
+                    if(res == undefined) return;
+                    this.linkData = res.data
+                }catch (e) {
+                    this.$message.error(e)
+                }
             }
+        },
+        created() {
+            this.selectFriendLink();
         }
     }
 </script>
