@@ -201,7 +201,7 @@
             //添加用户的关注信息
             async saveAttentionInfo(attentionId){
                 try{
-                    if(this.$store.getters.getUser!=null&&attentionId == this.$store.getters.getUser.userId){
+                    if(this.$store.getters.getUser != null && attentionId == this.$store.getters.getUser.userId){
                         return this.$message.success("不能关注自己o~")
                     }else{
                         const res = await saveAttentionInfoApi(attentionId)

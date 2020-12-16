@@ -63,7 +63,8 @@
                 </div>
                 <div class="item">
                     <el-button type="info" @click="sendLetter">私信</el-button>
-                    <el-button type="danger">关注</el-button>
+                    <el-button type="danger" @click="follow" v-if="isFollow">关注</el-button>
+                    <el-button @click="follow" v-else>已关注</el-button>
                 </div>
             </el-card>
             <el-card class="right-box-card">
@@ -90,6 +91,7 @@
     import {articlesListApi,selectHotListApi} from './../../api/articles'
     import {userCardInfoById} from './../../api/users'
     import {saveSecretMessageApi} from './../../api/message'
+    import {saveAttentionInfoApi,selectAttentionInfoApi} from '../../api/attention'
 
     export default {
         data() {
@@ -104,7 +106,8 @@
                     userId:this.$route.params.id
                 },
                 pageTotal: 0,
-                loading: true
+                loading: true,
+                isFollow:true
             }
         },
         methods: {
@@ -120,7 +123,7 @@
                     const res = await articlesListApi(this.query)
                     if(res == undefined) return
                     if(res.data.list.length == 0){
-                        this.$message.success("该用户暂时还没有发表文章o~")
+                        this.$message.warning("该用户暂时还没有发表文章o~")
                     }
                     this.tableData = res.data.list;
                     this.pageTotal = res.data.totalCount || 0;
@@ -154,6 +157,45 @@
                     this.$message.error(e)
                 }
             },
+            //添加用户的关注信息
+            async saveAttentionInfo(attentionId){
+                try{
+                    if(this.$store.getters.getUser != null && attentionId == this.$store.getters.getUser.userId){
+                        return this.$message.success("不能关注自己o~")
+                    }else{
+                        const res = await saveAttentionInfoApi(attentionId)
+                        if(res == undefined) return;
+                        this.isFollow = !this.isFollow;
+                        this.$message.success(res.msg);
+                    }
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            //判断登陆者是不是关注了其它用户
+            async selectAttentionInfo(attentionId){
+                try{
+                    const res = await selectAttentionInfoApi(attentionId)
+                    if(res == undefined) return;
+                    if(res.data != null){
+                        this.isFollow = !this.isFollow;
+                    }
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
+            //添加私信(普通用户)
+            async saveSecretMessage(){
+                try{
+                    const res = await saveSecretMessageApi({
+                        sendId:this.query.userId
+                    })
+                    if (res == undefined) return
+                    this.$router.push({path:'/chat',query:{id:this.query.userId}})
+                }catch (e) {
+                    this.$message.error(e)
+                }
+            },
             typeClass(i) {
                 if (i / 2 % 2 == 0) {
                     return ""
@@ -173,27 +215,23 @@
                     path: "/content/"+id
                 })
             },
-            //添加私信(普通用户)
-            async saveSecretMessage(){
-                try{
-                    const res = await saveSecretMessageApi({
-                        sendId:this.query.userId
-                    })
-                    if (res == undefined) return
-                    this.$router.push({path:'/chat',query:{id:this.query.userId}})
-                }catch (e) {
-                    this.$message.error(e)
-                }
-            },
             //私信别人
             sendLetter(){
                 this.saveSecretMessage()
-            }
+            },
+            //关注别人
+            follow(){
+                this.saveAttentionInfo(this.query.userId)
+            },
         },
         created() {
             this.articlesList()
             this.selectHotList(this.query.userId);
-            this.userCardInfo(this.query.userId)
+            this.userCardInfo(this.query.userId);
+            //如果登录了
+            if(this.$store.getters.getToken != ''){
+                this.selectAttentionInfo(this.query.userId)
+            }
         }
     }
 </script>

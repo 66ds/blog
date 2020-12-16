@@ -64,9 +64,24 @@ export default new VRouter({
             component: ()=>import("../components/person/person-blog.vue")
         },
         {
+            path:'/person-catagory/:id',
+            name:'personCatagory',
+            component: ()=>import("../components/person/person-catagory.vue")
+        },
+        {
+            path:'/person-labels/:id',
+            name:'personLabels',
+            component: ()=>import("../components/person/person-labels.vue")
+        },
+        {
             path:'/person-info',
             name:'personInfo',
             component: ()=>import("../components/person/person-info.vue")
+        },
+        {
+            path:'/person-attention',
+            name:'personAttention',
+            component: ()=>import("../components/person/person-attention.vue")
         },
         {
             path:'/chat',

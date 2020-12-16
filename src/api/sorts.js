@@ -1,13 +1,16 @@
 import request from '../utils/request';
 
 /**
- * 所有分类查询
+ * 所有分类查询(没有id传过来就是所有分类)
  * @param token
  */
-export const sortsListInfo = () => {
+export const sortsListInfo = (userId) => {
     return request({
         url: '/api/v1/pub/sorts/list',
-        method: 'post'
+        method: 'post',
+        params:{
+            userId
+        }
     });
 };
 
