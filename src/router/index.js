@@ -79,9 +79,9 @@ export default new VRouter({
             component: ()=>import("../components/person/person-info.vue")
         },
         {
-            path:'/person-attention',
-            name:'personAttention',
-            component: ()=>import("../components/person/person-attention.vue")
+            path:'/person-message',
+            name:'personMessage',
+            component: ()=>import("../components/person/person-message.vue")
         },
         {
             path:'/chat',

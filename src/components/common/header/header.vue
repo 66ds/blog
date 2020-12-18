@@ -34,8 +34,8 @@
                             <el-dropdown-item icon="el-icon-s-grid" command="myCatagory">我的分类</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-paperclip" command="myLabel">我的标签</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-user" command="userInfo">个人中心</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-view" command="myAttention">我的关注</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-camera">我的相册</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-view" command="myMessage">我的消息</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-camera">我的关注</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-edit-outline" command="admin-manager">后台管理</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-switch-button" command="logOut">安全退出</el-dropdown-item>
                         </el-dropdown-menu>
@@ -66,7 +66,7 @@
 
 <script>
 
-    import {userInfoByIdApi} from "../../../api/users";
+    import {userInfoByIdApi} from "api/users";
 
     export default {
         data() {
@@ -144,8 +144,8 @@
                 if(command == "myLabel"){
                     this.$router.push("/person-labels/"+this.$store.getters.getUser.userId)
                 }
-                if(command == "myAttention"){
-                    this.$router.push("/person-attention")
+                if(command == "myMessage"){
+                    this.$router.push("/person-message")
                 }
             }
         },

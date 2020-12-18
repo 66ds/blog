@@ -88,10 +88,10 @@
 </template>
 
 <script>
-    import {articlesListApi,selectHotListApi} from './../../api/articles'
-    import {userCardInfoById} from './../../api/users'
-    import {saveSecretMessageApi} from './../../api/message'
-    import {saveAttentionInfoApi,selectAttentionInfoApi} from '../../api/attention'
+    import {articlesListApi,selectHotListApi} from 'api/articles'
+    import {userCardInfoById} from 'api/users'
+    import {saveSecretMessageApi} from 'api/message'
+    import {saveAttentionInfoApi,selectAttentionInfoApi} from 'api/attention'
 
     export default {
         data() {

@@ -123,11 +123,11 @@
 </template>
 
 <script>
-    import TagCloud from '../common/tagcloud'
-    import {articlesListApi,articlesTimeListApi,selectHotListApi} from './../../api/articles'
-    import {userCardInfoById} from './../../api/users'
-    import {saveAttentionInfoApi,selectAttentionInfoApi} from '../../api/attention'
-    import {saveSecretMessageApi} from './../../api/message'
+    import TagCloud from 'common/tagcloud'
+    import {articlesListApi,articlesTimeListApi,selectHotListApi} from 'api/articles'
+    import {userCardInfoById} from 'api/users'
+    import {saveAttentionInfoApi,selectAttentionInfoApi} from 'api/attention'
+    import {saveSecretMessageApi} from 'api/message'
     export default {
         data() {
             return {
