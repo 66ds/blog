@@ -3,7 +3,6 @@
         <div class="content el-row animated fadeIn">
             <div class="left_box">
                 <ul class="aside" style="list-style: none">
-                    <li class="list"><a href="https://i.csdn.net/#/msg/index" class="zl"><span>文章</span></a></li>
                     <li class="list"><a href="https://i.csdn.net/#/msg/index" class="zl"><span>评论</span></a></li>
                     <li class="list router-link-active"><a  href="https://i.csdn.net/#/msg/attention" class="zl"><span>关注</span></a> <!----> <!----></li>
                     <li class="list"><a href="https://i.csdn.net/#/msg/like" class="zl"><span>点赞</span></a></li>
@@ -121,9 +120,6 @@
         text-align: center;
     }
 
-    .person-message .left_box .aside li:hover {
-        background: #f6f7f8;
-    }
 
     .person-message .left_box .aside li .zl {
         font-size: 14px;
@@ -134,6 +130,10 @@
         width: 100%;
         font-family: PingFangSC-Regular, PingFang SC !important;
         font-weight: 400;
+    }
+
+    .person-message .left_box .aside li .zl:hover {
+        color: #409EFF;
     }
 
     .person-message .view-container {

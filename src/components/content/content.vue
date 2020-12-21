@@ -12,16 +12,6 @@
             <div class="content markdown-body" v-html="articleInfo.articleContent">
 
             </div>
-            <!--<div class="prev-next">-->
-                <!--<div class="prev">-->
-                    <!--<span>上一篇:</span>-->
-                    <!--<a href="www.baidu.com">Java设计模式</a>-->
-                <!--</div>-->
-                <!--<div class="next">-->
-                    <!--<span>下一篇:</span>-->
-                    <!--<a href="www.baidu.com">Java设计模式</a>-->
-                <!--</div>-->
-            <!--</div>-->
             <div class="reward-container">
                 <button type="button" class="el-button el-button--primary" @click="isShow=!isShow">
                     <span>打赏</span>
@@ -73,7 +63,6 @@
                  >
                 <ul style="list-style: none" v-for="(item,i) in commentsInfo" :key="i">
                     <li class="who">
-<!--                        <span class="page">{{i+1}}.</span>-->
                         <span class="user" @click="$router.push('/person-blog/'+item.usersEntity.userId)">{{item.usersEntity.userNickname}}</span>
                         <span class="sys">{{item.commentSys}}</span>
                         <span class="exe">{{item.commentChrome}}</span>
@@ -91,8 +80,7 @@
                     </li>
                         <div  v-for="(comments,j) in commentsInfo[i].children" :key="j" style="border-bottom: 1px solid #ececec;">
                             <li class="who" style="padding-left: 40px;">
-<!--                                <span class="page">{{i+1}}.{{j+1}}</span>-->
-                                <span class="user" @click="$router.push('/person-blog/'+comments.usersEntity.userId)">{{comments.usersEntity.userNickname}}&nbsp;回复:{{comments.parentUsersEntity.userNickname}}</span>
+                                <span class="user" @click="$router.push('/person-blog/'+comments.usersEntity.userId)">{{comments.usersEntity.userNickname}}&nbsp;回复:{{j==0?'':comments.parentUsersEntity.userNickname}}</span>
                                 <span class="sys">{{comments.commentSys}}</span>
                                 <span class="exe">{{comments.commentChrome}}</span>
                                 <span class="time">{{comments.commentDate}}</span>
