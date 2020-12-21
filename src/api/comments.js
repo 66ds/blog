@@ -30,3 +30,13 @@ export const selectCommentListApi = (articleId,query) =>{
         data:query
     })
 }
+
+/**
+ * 获取未读评论信息
+ */
+export const getNoReadCommentInfoApi = () => {
+    return request({
+        url: '/api/v1/pri/comments/no/read',
+        method:'post',
+    })
+}

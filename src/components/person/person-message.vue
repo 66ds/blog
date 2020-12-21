@@ -23,24 +23,14 @@
                         <div class="msg-info clearfix msg-info-wrap"><a>清空所有消息</a></div>
                         <div class="msg-list">
                             <ul>
-                                <li class="msg-read"><span class="msg-type">APP</span>
-                                    <span class="msg-title"><a target="_blank" href="https://me.csdn.net/weixin_38751861">代码加烟，法力无边</a><a
-                                            target="_blank" href="https://me.csdn.net/weixin_38751031">发亮日渐稀疏</a><a
-                                            target="_blank" href="https://me.csdn.net/weixin_38750829">哒哒鸭</a>等4人点赞了你的Blink动态</span>
-                                    <a class="btn-rush csdnc-trash"></a>
+                                <li class="msg-read" v-for="(item,key) in noReadCommentInfo" :key="key">
+                                    <span class="msg-title">
+                                        <a target="_blank" href="https://me.csdn.net/weixin_38751861" v-for="(user,j) in item.users" :key="j">{{user.userName}}</a>
+                                        等{{item.users.length}}人回复了你的评论</span>
+                                    <a class="btn-rush csdnc-trash" href="#"> <i class="el-icon-delete"></i></a>
                                     <p class="msg-text clearfix"><span class="bb-span-wrap"><a
                                             href="https://www.csdn.net/apps/download?code=blink_1555313595"
-                                            target="_blank">关于SSM框架全局异常统一处理的方式</a></span><em>2019-11-23</em>
-                                    </p></li>
-                                <li class="msg-read"><span id="notice_0" class="msg-type">APP</span>
-                                    <span class="msg-title"><a target="_blank"
-                                                               href="https://me.csdn.net/weixin_38751861">代码加烟，法力无边</a><a
-                                            target="_blank" href="https://me.csdn.net/weixin_38751031">发亮日渐稀疏</a><a
-                                            target="_blank" href="https://me.csdn.net/weixin_38750829">哒哒鸭</a>等4人点赞了你的Blink动态</span>
-                                    <a class="btn-rush csdnc-trash"></a>
-                                    <p class="msg-text clearfix"><span class="bb-span-wrap"><a
-                                            href="https://www.csdn.net/apps/download?code=blink_1555313595"
-                                            target="_blank">关于SSM框架全局异常统一处理的方式</a></span> <em>2019-11-23</em>
+                                            target="_blank">{{item.articleTitle}}</a></span><em>{{item.createTime}}</em>
                                     </p></li>
                             </ul>
                         </div>
@@ -63,6 +53,7 @@
 </template>
 
 <script>
+    import {getNoReadCommentInfoApi} from '../../api/comments'
     export default {
         data() {
             return {
@@ -71,17 +62,29 @@
                     limit: 10
                 },
                 pageTotal: 0,
+                noReadCommentInfo:[]
             }
         },
         methods: {
             // 分页导航
             handlePageChange(val) {
                 this.$set(this.query, 'page', val)
+            },
+            //获取未读评论
+            async getNoReadCommentInfo(){
+                try {
+                    const res = await getNoReadCommentInfoApi();
+                    if(res == undefined) return
+                    this.noReadCommentInfo = res.data;
+                    console.log(this.noReadCommentInfo)
+                }catch (e) {
+                    this.$message.error(e);
+                }
             }
         },
         components: {},
         created() {
-
+            this.getNoReadCommentInfo();
         }
     }
 </script>
@@ -156,12 +159,6 @@
         margin-bottom: 8px;
     }
 
-    .person-message .msg-info {
-        width: 100%;
-        margin: 0;
-        font-size: 14px;
-        color: #3d3d3d;
-    }
 
     .person-message .msg-info a {
         display: inline-block;

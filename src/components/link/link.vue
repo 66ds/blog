@@ -56,7 +56,7 @@
     };
    let checkUrl = (rule, value, callback) => {
         const reg = new RegExp(
-            /^http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/
+            /^http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?/
         )
         if (value === '') {
             callback(new Error('请输入站点地址'))
