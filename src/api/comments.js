@@ -36,7 +36,19 @@ export const selectCommentListApi = (articleId,query) =>{
  */
 export const getNoReadCommentInfoApi = () => {
     return request({
-        url: '/api/v1/pri/comments/no/read',
+        url: '/api/v1/pri/comments/get/no/read',
         method:'post'
+    })
+}
+
+/**
+ * 清空信息(单个和多个)
+ * @param commentIds
+ */
+export const deleteNoReadCommentInfoApi = (commentIds) => {
+    return request({
+        url: '/api/v1/pri/comments/delete/no/read',
+        method:'post',
+        data: commentIds
     })
 }

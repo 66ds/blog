@@ -12,17 +12,17 @@ const service = axios.create({
 service.interceptors.request.use(
     config => {
         config.headers.token = store.getters.getToken //设置请求头token
-        if (config.method == 'post') {
-            config.data = {
-                ...config.data,
-                _t: Date.parse(new Date()) / 1000
-            }
-        } else if (config.method == 'get') {
-            config.params = {
-                _t: Date.parse(new Date()) / 1000,
-                ...config.params
-            }
-        }
+        // if (config.method == 'post') {
+        //     config.data = {
+        //         ...config.data,
+        //         _t: Date.parse(new Date()) / 1000
+        //     }
+        // } else if (config.method == 'get') {
+        //     config.params = {
+        //         _t: Date.parse(new Date()) / 1000,
+        //         ...config.params
+        //     }
+        // }
         return config
     },
     // eslint-disable-next-line no-unused-vars
