@@ -79,9 +79,27 @@ export default new VRouter({
             component: ()=>import("../components/person/person-info.vue")
         },
         {
-            path:'/person-message',
-            name:'personMessage',
-            component: ()=>import("../components/person/person-message.vue")
+            path:'/person-msg',
+            name:'personMsg',
+            component: ()=>import("../components/person/person-msg.vue"),
+            redirect: '/person-msg/index',
+            children: [
+                {
+                    path: 'index',
+                    name: 'index',
+                    component: ()=>import("../components/person/msg/index.vue"),
+                },
+                {
+                    path: 'attention',
+                    name: 'attention',
+                    component: ()=>import("../components/person/msg/attention.vue"),
+                },
+                {
+                    path: 'like',
+                    name: 'like',
+                    component: ()=>import("../components/person/msg/like.vue"),
+                }
+            ]
         },
         {
             path:'/chat',

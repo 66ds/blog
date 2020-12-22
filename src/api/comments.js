@@ -37,6 +37,6 @@ export const selectCommentListApi = (articleId,query) =>{
 export const getNoReadCommentInfoApi = () => {
     return request({
         url: '/api/v1/pri/comments/no/read',
-        method:'post',
+        method:'post'
     })
 }

@@ -145,7 +145,7 @@
                     this.$router.push("/person-labels/"+this.$store.getters.getUser.userId)
                 }
                 if(command == "myMessage"){
-                    this.$router.push("/person-message")
+                    this.$router.push("/person-msg")
                 }
             }
         },

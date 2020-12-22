@@ -3,88 +3,30 @@
         <div class="content el-row animated fadeIn">
             <div class="left_box">
                 <ul class="aside" style="list-style: none">
-                    <li class="list"><a href="https://i.csdn.net/#/msg/index" class="zl"><span>评论</span></a></li>
-                    <li class="list router-link-active"><a  href="https://i.csdn.net/#/msg/attention" class="zl"><span>关注</span></a> <!----> <!----></li>
-                    <li class="list"><a href="https://i.csdn.net/#/msg/like" class="zl"><span>点赞</span></a></li>
-                    <li class="list"><a href="https://im.csdn.net/chat" target="_blank" class="zl"><span>私信</span></a></li>
-                    <li class="list"><a href="https://i.csdn.net/#/msg/notice" class="zl"><span>系统通知</span></a></li>
+                    <li class="list"><router-link to="/person-msg/index"  active-class="active"><span>评论</span></router-link></li>
+                    <li class="list"><router-link to="/person-msg/attention"  active-class="active"><span>关注</span></router-link></li>
+                    <li class="list"><router-link to="/person-msg/like"  active-class="active"><span>点赞</span></router-link></li>
+                    <li class="list"><router-link to="/chat" target="_blank" active-class="active"><span>私信</span></router-link></li>
+                    <li class="list"><router-link to="/person-msg/notice" active-class="active"><span>系统通知</span></router-link></li>
                 </ul>
             </div>
             <div class="view-container">
-                <div class="msg-content view">
-                    <div class="msg-all">
-                        <!--<div class="msg-message">-->
-                        <!--&lt;!&ndash;<svg aria-hidden="true" class="icon csdnc-monkey">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<use xlink:href="#csdnc-monkey-pixel"></use>&ndash;&gt;-->
-                        <!--&lt;!&ndash;</svg>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<p>空空如也</p>&ndash;&gt;-->
-                        <!---->
-                        <!--</div>-->
-                        <div class="msg-info clearfix msg-info-wrap"><a>清空所有消息</a></div>
-                        <div class="msg-list">
-                            <ul>
-                                <li class="msg-read" v-for="(item,key) in noReadCommentInfo" :key="key">
-                                    <span class="msg-title">
-                                        <a target="_blank" href="https://me.csdn.net/weixin_38751861" v-for="(user,j) in item.users" :key="j">{{user.userName}}</a>
-                                        等{{item.users.length}}人回复了你的评论</span>
-                                    <a class="btn-rush csdnc-trash" href="#"> <i class="el-icon-delete"></i></a>
-                                    <p class="msg-text clearfix"><span class="bb-span-wrap"><a
-                                            href="https://www.csdn.net/apps/download?code=blink_1555313595"
-                                            target="_blank">{{item.articleTitle}}</a></span><em>{{item.createTime}}</em>
-                                    </p></li>
-                            </ul>
-                        </div>
-                        <div class="page-box">
-                            <div class="pagination">
-                                <el-pagination
-                                        layout="prev, pager, next"
-                                        :current-page="query.page"
-                                        :page-size="query.limit"
-                                        :total="pageTotal"
-                                        @current-change="handlePageChange"
-                                ></el-pagination>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <router-view></router-view>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import {getNoReadCommentInfoApi} from '../../api/comments'
     export default {
         data() {
             return {
-                query: {
-                    page: 1,
-                    limit: 10
-                },
-                pageTotal: 0,
-                noReadCommentInfo:[]
             }
         },
         methods: {
-            // 分页导航
-            handlePageChange(val) {
-                this.$set(this.query, 'page', val)
-            },
-            //获取未读评论
-            async getNoReadCommentInfo(){
-                try {
-                    const res = await getNoReadCommentInfoApi();
-                    if(res == undefined) return
-                    this.noReadCommentInfo = res.data;
-                    console.log(this.noReadCommentInfo)
-                }catch (e) {
-                    this.$message.error(e);
-                }
-            }
         },
         components: {},
         created() {
-            this.getNoReadCommentInfo();
         }
     }
 </script>
@@ -124,7 +66,7 @@
     }
 
 
-    .person-message .left_box .aside li .zl {
+    .person-message .left_box .aside li>a {
         font-size: 14px;
         color: #4d4d4d;
         display: inline-block;
@@ -135,9 +77,15 @@
         font-weight: 400;
     }
 
-    .person-message .left_box .aside li .zl:hover {
+    .person-message .left_box .aside li>.active{
+        color: #409EFF !important;
+    }
+
+    .person-message .left_box .aside li>a:hover {
         color: #409EFF;
     }
+
+
 
     .person-message .view-container {
         border: 1px solid #EBEEF5;
@@ -175,7 +123,12 @@
 
     .person-message .msg-list {
         padding: 0 0 0 15px;
-        min-height: 370px;
+        height: 480px;
+        overflow: auto;
+    }
+
+    .person-message .msg-list::-webkit-scrollbar{
+        display: none;
     }
 
     .person-message .msg-list ul {
@@ -268,11 +221,6 @@
         float: right;
     }
 
-    .person-message .page-box {
-        width: 100%;
-        margin: 32px 0 20px;
-        text-align: center;
-    }
 
     @media screen and (max-width: 768px) and (min-width: 0px) {
         .person-message {
