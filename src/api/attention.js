@@ -27,4 +27,25 @@ export const selectAttentionInfoApi = (attentionId) => {
     });
 };
 
+/**
+ * 获取谁关注我信息
+ */
+export const getWhoAttentionMeInfoApi = () => {
+    return request({
+        url: '/api/v1/pri/userattention/get/who/attention',
+        method:'post'
+    })
+}
+
+/**
+ * 清空信息(单个和多个)
+ * @param commentIds
+ */
+export const deleteWhoAttentionMeInfoApi = (attentionIds) => {
+    return request({
+        url: '/api/v1/pri/userattention/delete/who/attention',
+        method:'post',
+        data: attentionIds
+    })
+}
 

@@ -7,7 +7,7 @@
                                         <a target="_blank" :href="['/person-blog/'+user.userId]"
                                            v-for="(user,j) in item.users" :key="j">{{user.userName}}</a>
                                         等{{item.users.length}}人回复了你的评论</span>
-                    <a class="btn-rush csdnc-trash" href="javascript:void(0)" @click="deleteAll(item.commentIds)"> <i class="el-icon-delete"></i></a>
+                    <a class="btn-rush csdnc-trash" href="javascript:void(0)" @click="deleteAll(item.Ids)"> <i class="el-icon-delete"></i></a>
                     <p class="msg-text clearfix"><span class="bb-span-wrap"><a :href="['/content/'+item.articleId]" target="_blank">{{item.articleTitle}}</a></span><em>{{item.createTime}}</em></p>
                 </li>
             </ul>
@@ -37,14 +37,14 @@
                 }
             },
             //清空信息(单个和多个)
-            deleteAll(commentIds){
+            deleteAll(Ids){
                 // 二次确认删除
                 this.$confirm('确定要清空删除吗？', '提示', {
                     type: 'warning',
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(() => {
-                    return deleteNoReadCommentInfoApi(commentIds)
+                    return deleteNoReadCommentInfoApi(Ids)
                 }).then(res => {
                     if(res == undefined) return;
                     this.$message.success(res.msg);

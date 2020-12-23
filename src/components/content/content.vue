@@ -63,7 +63,7 @@
                  >
                 <ul style="list-style: none" v-for="(item,i) in commentsInfo" :key="i">
                     <li class="who">
-                        <span class="user" @click="$router.push('/person-blog/'+item.usersEntity.userId)">{{item.usersEntity.userNickname}}</span>
+                        <span class="user" @click="$router.push('/person-blog/'+item.usersEntity.userId)"> <el-avatar :size="30" :src="item.usersEntity.userProfilePhoto" style="float:left;margin-right: 10px;"></el-avatar>{{item.usersEntity.userNickname}}</span>
                         <span class="sys">{{item.commentSys}}</span>
                         <span class="exe">{{item.commentChrome}}</span>
                         <span class="time">{{item.commentDate}}</span>
@@ -80,7 +80,7 @@
                     </li>
                         <div  v-for="(comments,j) in commentsInfo[i].children" :key="j" style="border-bottom: 1px solid #ececec;">
                             <li class="who" style="padding-left: 40px;">
-                                <span class="user" @click="$router.push('/person-blog/'+comments.usersEntity.userId)">{{comments.usersEntity.userNickname}}&nbsp;回复:{{j==0?'':comments.parentUsersEntity.userNickname}}</span>
+                                <span class="user" @click="$router.push('/person-blog/'+comments.usersEntity.userId)"><el-avatar :size="30" :src="comments.usersEntity.userProfilePhoto" style="float:left;margin-right: 10px;"></el-avatar>{{comments.usersEntity.userNickname}}&nbsp;回复:{{comments.parentCommentId==commentsInfo[i].commentId&&commentsInfo[i].parentCommentId==0?'':comments.parentUsersEntity.userNickname}}</span>
                                 <span class="sys">{{comments.commentSys}}</span>
                                 <span class="exe">{{comments.commentChrome}}</span>
                                 <span class="time">{{comments.commentDate}}</span>
@@ -92,7 +92,7 @@
                             <li  :class="{'commentActive':isActive != comments.commentId}" class="animated rubberBand">
                                 <el-input type="textarea" v-model="commentDesc" maxlength="100"  show-word-limit :autosize="{ minRows: 2, maxRows: 5}"></el-input>
                             </li>
-                            <li class="write" style="padding-left: 30px;">
+                            <li class="write" style="padding-left: 40px;">
                                 {{comments.commentContent}}
                             </li>
                     </div>

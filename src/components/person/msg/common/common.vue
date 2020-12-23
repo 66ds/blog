@@ -27,7 +27,7 @@
         methods: {
 
             deleteAll () {
-                this.$emit('deleteAll', this.data.reduce((n,m) => n.concat(m.commentIds),[]))
+                this.$emit('deleteAll', this.data.reduce((n,m) => n.concat(m.ids),[]))
             }
         },
         components: {},
