@@ -21,3 +21,25 @@ export const likeArticleApi = (articleId) => {
         method: 'post'
     });
 };
+
+/**
+ * 获取谁点赞我的信息
+ */
+export const getWhoDigMeInfoApi = () => {
+    return request({
+        url: '/api/v1/pri/likearticleuser/get/who/dig',
+        method:'post'
+    })
+}
+
+/**
+ * 清空信息(单个和多个)
+ * @param commentIds
+ */
+export const deleteWhoDigMeInfoApi = (commentIds) => {
+    return request({
+        url: '/api/v1/pri/comments/delete/no/read',
+        method:'post',
+        data: commentIds
+    })
+}

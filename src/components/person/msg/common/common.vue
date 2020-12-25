@@ -15,7 +15,7 @@
     export default {
         data() {
             return {
-
+                flag:false
             }
         },
         props: {
@@ -27,7 +27,40 @@
         methods: {
 
             deleteAll () {
-                this.$emit('deleteAll', this.data.reduce((n,m) => n.concat(m.ids),[]))
+                let data = this.data.reduce((n,m) => {
+                    if(m.alias != undefined){
+                        this.flag = false
+                        return n.concat({alias:m.alias,data:m.ids})
+                    }else{
+                        this.flag = true
+                        return n.concat(m.ids)
+                    }
+                },[]);
+                if(!this.flag){
+                   data = this.assign(data)
+                }
+                console.log(data)
+                // this.$emit('deleteAll',data)
+            },
+            assign(data){
+                let resultArr = [];
+                let resultObj = {};
+                data.forEach((obj)=>{
+                    if(!resultObj[obj.alias]){
+                        resultObj[obj.alias] = [obj.data]
+                    }else{
+                        resultObj[obj.alias].push(obj.data)
+                    }
+                })
+
+                for(let key in resultObj){
+                    let newObj = {
+                        type:key,
+                        value:resultObj[key].join(',')
+                    }
+                    resultArr.push(newObj)
+                }
+                return resultArr
             }
         },
         components: {},
