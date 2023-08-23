@@ -58,5 +58,6 @@ export default [
   "em-neutral_face",
   "em-no_mouth",
   "em-innocent",
-  "em-alien"
+  "em-alien",
+  "111"
 ];
