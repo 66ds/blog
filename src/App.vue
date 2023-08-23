@@ -39,11 +39,11 @@
 </template>
 
 <script>
-import IndexHeader from "@/components/common/header/Header";
-import IndexMain from "@/components/common/main/Main";
-import IndexFooter from "@/components/common/footer/Footer";
-import PcHeader from "@/components/common/header/pc/Pc";
-import PhoneHeader from "@/components/common/header/phone/Phone";
+import IndexHeader from "@/components/header/Header";
+import IndexMain from "@/components/main/Main";
+import IndexFooter from "@/components/footer/Footer";
+import PcHeader from "@/components/header/pc/Pc";
+import PhoneHeader from "@/components/header/phone/Phone";
 import BackToTop from "../node_modules/element-ui/packages/backtop/index";
 export default {
   name: "App",
@@ -85,11 +85,13 @@ export default {
 </script>
 
 
-<style>
+<style lang="less">
 
 @import 'assets/styles/reset.css';
 
 @import 'assets/styles/border.css';
+
+
 
 #particles-js {
   width: 100%;
@@ -98,11 +100,6 @@ export default {
   z-index: -1;
 }
 
-.el-container.is-vertical {
-  -ms-flex-direction: column;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  flex-direction: column;
-}
+
 
 </style>

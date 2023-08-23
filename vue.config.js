@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 const path = require('path');
 
 function resolve(dir) {
@@ -9,13 +8,17 @@ module.exports = {
     chainWebpack: (config) => {
         config.resolve.alias
             .set('@', resolve('src'))
-            // 需要重启 IDE
-            .set('assets',resolve('src/assets'))
             .set('api',resolve('src/api'))
-            .set('components',resolve('src/components'))
-            .set('mixins',resolve('src/mixins'))
+            .set("store",resolve('src/store'))
             .set('utils',resolve('src/utils'))
-            .set('partten',resolve('src/partten'))
+            .set('views',resolve('src/views'))
+            .set('assets',resolve('src/assets'))
+            .set('mixins',resolve('src/mixins'))
+            .set("router",resolve('src/router'))
+            .set('plugins',resolve('src/plugins'))
+            .set('constants',resolve('src/constants'))
+            .set("directives",resolve('src/directives'))
+            .set('components',resolve('src/components'))
         // 这里只写了两个个，你可以自己再加，按这种格式.set('', resolve(''))
     },
     publicPath: "/" ,

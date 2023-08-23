@@ -4,11 +4,30 @@ html {
     background-color: #fff;
     color: #000;
     font-size: 12px;
-    overflow-y: overlay;
 }
 
 body {
-    width: 100%;
+    position: relative;
+}
+
+
+body::-webkit-scrollbar {
+    width: 0em;
+    /* 设置滚动条宽度 */
+    position: absolute;
+    /* 设置绝对定位 */
+    top: 0;
+    /* 将滚动条置于容器的顶部 */
+    right: 0;
+    /* 将滚动条置于容器的右侧 */
+    z-index: 999;
+    /* 设置层级，确保滚动条显示在内容之上 */
+    /* background-color: transparent; 设置滚动条背景透明*/
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    /* 滚动条滑块颜色 */
 }
 
 body,

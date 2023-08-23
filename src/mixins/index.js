@@ -2,11 +2,17 @@
 import { saveSecretMessageApi } from "api/message";
 import { saveAttentionInfoApi } from "api/attention";
 import { mapState } from "vuex";
-import Search from 'components/common/search/Search.vue';
+import Search from 'components/search/Search.vue';
 export default {
     data() {
         return {
-            info: {},
+            info: {
+                searchSaveVos: [],
+                pageTotal: 0,
+                loading: true,
+                sortNames: [],
+                archivesTimes: [],
+            },
             query: {},
             isFollow: false,
             newTableHotData: [],
@@ -68,9 +74,9 @@ export default {
         },
         searchChildListTwo(data) {
             this.isFollow = !data[0]
-            this.newTableHotData = Object.assign({}, data[1]);
-            this.userCardData = Object.assign({}, data[2]);
-            this.newTableNewData = Object.assign({}, data[3]);
+            this.newTableHotData = Object.assign([], data[1]);
+            this.userCardData = Object.assign([], data[2]);
+            this.newTableNewData = Object.assign([], data[3]);
         },
         articleDetail(id) {
             this.$router.push({

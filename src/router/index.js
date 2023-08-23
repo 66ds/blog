@@ -11,110 +11,110 @@ export default new VRouter({
         {
             path:'/',
             name:'main',
-            component: ()=>import("components/home/Home.vue")
+            component: ()=>import("views/home/Home.vue")
         },
         {
             path:'/labels',
             name:'labels',
-            component: ()=>import("components/labels/Labels.vue")
+            component: ()=>import("views/labels/Labels.vue")
         },
         {
             path:'/catagory',
             name:'catagory',
-            component: ()=>import("components/catagory/Catagory.vue")
+            component: ()=>import("views/catagory/Catagory.vue")
         },
         {
             path:'/archives',
             name:'archives',
-            component: ()=>import("components/archives/Archives.vue")
+            component: ()=>import("views/archives/Archives.vue")
         },
         {
             path:'/message',
             name:'message',
-            component: ()=>import("components/message/Message.vue")
+            component: ()=>import("views/message/Message.vue")
         },
         {
             path:'/link',
             name:'link',
-            component: ()=>import("components/link/Link.vue")
+            component: ()=>import("views/link/Link.vue")
         },
         {
             path:'/music',
             name:'music',
-            component: ()=>import("components/music/Music.vue")
+            component: ()=>import("views/music/Music.vue")
         },
         {
             path:'/about',
             name:'about',
-            component: ()=>import("components/about/About.vue")
+            component: ()=>import("views/about/About.vue")
         },
         {
             path:'/content/:id',
             name:'content',
-            component: ()=>import("components/content/Content.vue")
+            component: ()=>import("views/content/Content.vue")
         },
         {
             path:'/login',
             name:'login',
-            component: ()=>import("components/login/Login.vue")
+            component: ()=>import("views/login/Login.vue")
         },
         {
             path:'/person-blog/:id',
             name:'personBlog',
-            component: ()=>import("components/person/PersonBlog.vue")
+            component: ()=>import("views/person/PersonBlog.vue")
         },
         {
             path:'/person-catagory/:id',
             name:'personCatagory',
-            component: ()=>import("components/person/PersonCatagory.vue")
+            component: ()=>import("views/person/PersonCatagory.vue")
         },
         {
             path:'/person-labels/:id',
             name:'personLabels',
-            component: ()=>import("components/person/PersonLabels.vue")
+            component: ()=>import("views/person/PersonLabels.vue")
         },
         {
             path:'/person-info',
             name:'personInfo',
-            component: ()=>import("components/person/PersonInfo.vue")
+            component: ()=>import("views/person/PersonInfo.vue")
         },
         {
             path:'/person-msg',
             name:'personMsg',
-            component: ()=>import("components/person/PersonMsg.vue"),
+            component: ()=>import("views/person/PersonMsg.vue"),
             redirect: '/person-msg/index',
             children: [
                 {
                     path: 'index',
                     name: 'index',
-                    component: ()=>import("components/person/msg/Index.vue"),
+                    component: ()=>import("views/person/msg/Index.vue"),
                 },
                 {
                     path: 'attention',
                     name: 'attention',
-                    component: ()=>import("components/person/msg/Attention.vue"),
+                    component: ()=>import("views/person/msg/Attention.vue"),
                 },
                 {
                     path: 'like',
                     name: 'like',
-                    component: ()=>import("components/person/msg/Like.vue"),
+                    component: ()=>import("views/person/msg/Like.vue"),
                 },
                 {
                     path: 'notice',
                     name: 'notice',
-                    component: ()=>import("components/person/msg/Notice.vue"),
+                    component: ()=>import("views/person/msg/Notice.vue"),
                 }
             ]
         },
         {
             path:'/chat',
             name:'chat',
-            component: ()=>import("components/chat/Chat.vue")
+            component: ()=>import("views/chat/Chat.vue")
         },
         {
             path: '/**',
             name: '404',
-            component: () => import('components/error/404.vue')
+            component: () => import('views/error/404.vue')
         }
 
 
