@@ -19,6 +19,7 @@
     "mavon-editor": "^2.9.0",
     "overlayscrollbars": "^1.13.0",
     "overlayscrollbars-vue": "^0.2.2",
+    "protobufjs": "^7.2.5",
     "v-tag-cloud": "^1.0.3",
     "vue": "^2.6.11",
     "vue-drag-verify-img-chip": "^1.1.1",

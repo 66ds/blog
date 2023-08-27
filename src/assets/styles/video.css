@@ -11,7 +11,7 @@
 
 .barrage-row-move{
     will-change: transform;
-    animation: barrage 5s linear;
+    animation: barrage 5s linear infinite;
     animation-play-state: running;
 }
 
@@ -23,7 +23,7 @@
 
 @keyframes barrage {
     from {
-        transform: translateX(100%);
+        transform: translateX(0);
     }
 }
 

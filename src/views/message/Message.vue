@@ -4,47 +4,23 @@
     <div>
       <span class="totalBarrage">{{ barrageTotalWatchCount }}&nbsp;次播放</span>
       <span class="totalBarrage">&nbsp;·&nbsp;</span>
-      <span class="totalBarrage"
-        >总弹幕数&nbsp;{{ barrageTotalCount }}&nbsp;&nbsp;&nbsp;&nbsp;</span
-      >
+      <span class="totalBarrage">总弹幕数&nbsp;{{ barrageTotalCount }}&nbsp;&nbsp;&nbsp;&nbsp;</span>
       <!-- <span class="totalBarrage">2022-02-03 01:32:46</span> -->
     </div>
 
     <div>
-      <div
-        ref="videoOuterLayer"
-        class="uncheck"
-        @mouseleave="Leave()"
-        @mousemove="MouseMove()"
-      >
-        <div
-          id="video"
-          ref="videoBox"
-          @click="CloseMenuOrPlayVideo($event)"
-          @contextmenu.prevent="OpenMenu($event)"
-        >
+      <div ref="videoOuterLayer" class="uncheck" @mouseleave="Leave()" @mousemove="MouseMove()">
+        <div id="video" ref="videoBox" @click="CloseMenuOrPlayVideo($event)" @contextmenu.prevent="OpenMenu($event)">
           <!--快捷键层-->
           <!-- <hot-key v-show="showHotKey"></hot-key> -->
           <!--视频信息层-->
           <video-info v-if="showVideoInfo"></video-info>
           <context-menu id="menu" ref="menu"></context-menu>
           <!--弹幕层-->
-          <barrage
-            v-if="showBarrage"
-            :barrageList="barrageList"
-            ref="barrage"
-          ></barrage>
+          <barrage v-if="showBarrage" :barrageList="barrageList" ref="barrage"></barrage>
           <!--Video层-->
-          <video
-            id="player"
-            ref="video"
-            :src="src"
-            class="player"
-            preload="auto"
-            @canplay="VideoInit()"
-            @timeupdate="TimeUpdate()"
-            @ended="VideoEnd()"
-          />
+          <video id="player" ref="video" :src="src" class="player" preload="auto" @canplay="VideoInit()"
+            @timeupdate="TimeUpdate()" @ended="VideoEnd()" />
           <!--消息层-->
           <div>
             <span v-if="message" class="msg">{{ msg }}</span>
@@ -56,7 +32,7 @@
         </div>
         <!--发送弹幕组件-->
         <sendBarrage></sendBarrage>
-        <!-- <webSocket ref="webSocket" /> -->
+        <webSocket ref="webSocket" />
       </div>
     </div>
     <el-card class="message-box-card animated fadeIn">
@@ -69,44 +45,26 @@
           务必填写有效的邮箱地址，否则不会收到回复信息的~
         </p>
       </div>
-      <el-form
-        :model="ruleForm"
-        :rules="rules"
-        ref="ruleForm"
-        label-width="70px"
-        class="demo-ruleForm"
-      >
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="70px" class="demo-ruleForm">
         <el-form-item label="内容" prop="desc">
-          <el-input
-            type="textarea"
-            v-model="ruleForm.desc"
-            maxlength="100"
-            show-word-limit
-            :autosize="{ minRows: 4, maxRows: 5 }"
-          ></el-input>
+          <el-input type="textarea" v-model="ruleForm.desc" maxlength="100" show-word-limit
+            :autosize="{ minRows: 4, maxRows: 5 }"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')"
-            >提交</el-button
-          >
+          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
       <div>
         <div class="commnet-total">
-          <span>共{{ totalCount }}条评论</span
-          ><span v-if="totalCount == 0">,快来成为第一个评论的吧~</span>
+          <span>共{{ totalCount }}条评论</span><span v-if="totalCount == 0">,快来成为第一个评论的吧~</span>
         </div>
         <div class="comment">
           <div v-custom-loading="stayList">
             <ul style="list-style: none" v-for="(item, i) in stayList" :key="i">
               <li class="who">
                 <!--                        <span class="page">{{i+1}}.</span>-->
-                <span
-                  class="user"
-                  @click="$router.push('/person-blog/' + item.stayUserId)"
-                  >{{ item.userName }}</span
-                >
+                <span class="user" @click="$router.push('/person-blog/' + item.stayUserId)">{{ item.userName }}</span>
                 <span class="sys">{{ item.staySys }}</span>
                 <span class="exe">{{ item.stayChrome }}</span>
                 <span class="time">{{ item.messageStayTime }}</span>
@@ -114,21 +72,14 @@
               <li class="write">
                 {{ item.messageContent }}
               </li>
-              <div
-                style="border-bottom: 1px solid #ececec"
-                v-if="item.stayMessageEntity != null"
-              >
+              <div style="border-bottom: 1px solid #ececec" v-if="item.stayMessageEntity != null">
                 <li class="who" style="padding-left: 40px">
                   <!--                        <span class="page">{{i+1}}.</span>-->
-                  <span
-                    class="user"
-                    @click="
-                      $router.push(
-                        '/person-blog/' + item.stayMessageEntity.stayUserId
-                      )
-                    "
-                    >{{ item.stayMessageEntity.userName }}</span
-                  >
+                  <span class="user" @click="
+                    $router.push(
+                      '/person-blog/' + item.stayMessageEntity.stayUserId
+                    )
+                    ">{{ item.stayMessageEntity.userName }}</span>
                   <span class="sys">{{ item.stayMessageEntity.staySys }}</span>
                   <span class="exe">{{
                     item.stayMessageEntity.stayChrome
@@ -145,13 +96,8 @@
           </div>
 
           <div class="pagination" style="text-align: center">
-            <el-pagination
-              layout="prev, pager, next"
-              :current-page="query.page"
-              :page-size="query.limit"
-              :total="pageTotal"
-              @current-change="handlePageChange"
-            ></el-pagination>
+            <el-pagination layout="prev, pager, next" :current-page="query.page" :page-size="query.limit"
+              :total="pageTotal" @current-change="handlePageChange"></el-pagination>
           </div>
         </div>
       </div>
@@ -167,6 +113,7 @@ import BarrageMain from "components/video/BarrageMain.vue";
 import BarrageSend from "components/video/BarrageSend.vue";
 import BarrageMenu from "components/video/BarrageMenu.vue";
 import BarrageVideoInfo from "components/video/BarrageVideoInfo.vue";
+import WebSocket from "components/video/BarrageSocket";
 export default {
   data() {
     return {
@@ -237,7 +184,7 @@ export default {
     goToGitee() {
       window.open("https://gitee.com/MonkeyBrothers/barrage", "_blank");
     },
-    changBackGroundColor() {},
+    changBackGroundColor() { },
     VideoInit() {
       let video = this.$refs.video;
       this.$refs.control.Init(video.duration);
@@ -510,6 +457,7 @@ export default {
     "context-menu": BarrageMenu,
     "video-info": BarrageVideoInfo,
     "hot-key": BarrageHotKey,
+    "webSocket": WebSocket
   },
 };
 </script>
@@ -517,6 +465,7 @@ export default {
 <style lang="scss" scoped>
 .message {
   width: 70%;
+
   h2 {
     color: #555;
     width: 100%;
@@ -524,6 +473,7 @@ export default {
     margin: 5px 0;
     font-size: 17px;
   }
+
   .totalBarrage {
     margin-bottom: 18px;
     display: inline-block;
@@ -531,6 +481,7 @@ export default {
     line-height: 1.5;
     font-size: 12px;
   }
+
   .uncheck {
     width: 100%;
     /**禁止文字选中 */
@@ -553,8 +504,10 @@ export default {
     .player-mirror {
       will-change: transform;
       transform: rotateY(180deg);
-      -webkit-transform: rotateY(180deg); /* Safari and Chrome */
-      -moz-transform: rotateY(180deg); /* Firefox */
+      -webkit-transform: rotateY(180deg);
+      /* Safari and Chrome */
+      -moz-transform: rotateY(180deg);
+      /* Firefox */
     }
 
     .player {
@@ -565,6 +518,7 @@ export default {
       position: absolute;
       background-color: black;
     }
+
     .control {
       z-index: 20;
       width: 100%;
@@ -572,10 +526,13 @@ export default {
       background: linear-gradient(rgba(0, 0, 0, 0), #000);
       bottom: 0 !important;
       transition: opacity 1s;
-      position:absolute;
-      -moz-transition: opacity 1s; /* Firefox 4 */
-      -webkit-transition: opacity 1s; /* Safari 和 Chrome */
-      -o-transition: opacity 1s; /* Opera */
+      position: absolute;
+      -moz-transition: opacity 1s;
+      /* Firefox 4 */
+      -webkit-transition: opacity 1s;
+      /* Safari 和 Chrome */
+      -o-transition: opacity 1s;
+      /* Opera */
     }
   }
 
@@ -588,12 +545,14 @@ export default {
     line-height: 36px;
     margin-left: 70px;
   }
+
   .tips {
     line-height: 2;
     padding: 10px 0 20px;
     border-bottom: 1px solid #ccc;
     margin: 0 0 20px;
   }
+
   .comment {
     ul {
       padding-left: 70px;
@@ -615,10 +574,11 @@ export default {
         cursor: pointer;
       }
 
-      .time {
+      .time,
+      .exe,
+      .sys {
         text-align: center;
         font-size: 12px;
-        /*background-color: #ededed;*/
         padding: 0 10px;
         margin-right: 10px;
       }
@@ -680,5 +640,4 @@ export default {
   .message img {
     width: 100%;
   }
-}
-</style>
+}</style>

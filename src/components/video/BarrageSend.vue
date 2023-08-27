@@ -79,6 +79,7 @@ export default {
         return;
       }
       this.$parent.Send(this.barrageFrom, true);
+      //清空内容
       this.barrageFrom.text = "";
       this.menu = false;
     }

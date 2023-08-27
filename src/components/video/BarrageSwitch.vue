@@ -77,7 +77,7 @@ export default {
   color: #fff;
   left: 6px;
   font-size: 12px;
-  margin-top: 1px;
+  margin-top: 4px;
 }
 
 .switch-btn.open {

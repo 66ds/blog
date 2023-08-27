@@ -19,3 +19,16 @@ export const loginError = "登录失败";
 
 // Response codes
 export const code = 0; // 数据正确返回code
+
+//video WebSocket
+const wsUri = "ws://localhost:9999/ws";
+const wsBinaryType = "arraybuffer";
+const videoId = "1294384753222123";
+const userId = "98321837583332345";
+const config = {
+    wsUri:wsUri,
+    wsBinaryType:wsBinaryType,
+    videoId:videoId,
+    userId:userId,
+}
+export default config;

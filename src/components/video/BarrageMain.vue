@@ -59,8 +59,8 @@ export default {
       let duration = 30 - text.length * 0.5;
       let width = document.getElementById("barrage").offsetWidth;
       duration =
-          Math.ceil((width + text.length * 20) / (3000 / duration)) +
-          this.currentTime;
+        Math.ceil((width + text.length * 20) / (3000 / duration)) +
+        this.currentTime;
       //计算弹道数量
       let tunnnel = (document.getElementById("barrage").offsetHeight - 40) / 26;
       tunnnel = Math.floor(tunnnel);
@@ -132,7 +132,7 @@ export default {
       this.danTunnel.bottom = [];
       document.getElementById("barrage").innerHTML = "";
     },
-    DrawBarrage({text, color, type}, send = false) {
+    DrawBarrage({ text, color, type }, send = false) {
       let width = document.getElementById("barrage").offsetWidth;
       var item = document.createElement("span");
       var content = document.createTextNode(text);
@@ -151,8 +151,9 @@ export default {
         this.barrage.push(item);
         document.getElementById("barrage").appendChild(item);
         item.addEventListener("animationend", () => {
-          this.barrage.splice(item);
-          document.getElementById("barrage").removeChild(item);
+          // 当动画结束时，重置滚动位置
+          // this.barrage.splice(item);
+          // document.getElementById("barrage").removeChild(item);
         });
         item.classList.add("barrage-row-move");
       } else if (type === 1) {
@@ -179,6 +180,7 @@ export default {
         item.classList.add("barrage-center-move");
       }
       if (this.paused) {
+        alert("111")
         item.style.animationPlayState = "paused";
       }
     },
